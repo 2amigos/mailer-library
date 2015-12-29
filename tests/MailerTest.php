@@ -87,7 +87,7 @@ class MailerTest extends PHPUnit_Framework_TestCase
             ->shouldReceive('send')
             ->withArgs([$mailMessage, $failedRecipients])
             ->once()
-            ->andReturnUsing(function($message, &$failedRecipients){
+            ->andReturnUsing(function($message, $failedRecipients){
                 $failedRecipients = [];
             });
 

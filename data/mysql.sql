@@ -1,4 +1,4 @@
-DROP TABLE mail_queue;
+DROP TABLE IF EXISTS mail_queue;
 
 CREATE TABLE mail_queue (
   id int(10) UNSIGNED NOT NULL AUTO_INCREMENT,

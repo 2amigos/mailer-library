@@ -13,6 +13,8 @@ services:
 
 before_script:
   - mysql -e 'create database mail_queue_test;'
+  - travis_retry composer self-update
+  - travis_retry composer install --no-interaction --prefer-source --dev
 
 script:
   - phpunit --coverage-text --coverage-clover=coverage.clover

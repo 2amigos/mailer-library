@@ -34,4 +34,5 @@ tools:
         enabled: true
         excluded_dirs: [vendor, tests]
     php_cpd:
-        enabled: false
+        enabled: true
+        excluded_dirs: [vendor, tests, data]

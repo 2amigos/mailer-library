@@ -7,15 +7,15 @@ php:
 install:
   - composer self-update
   - composer install -o
-  
+
 services:
-  - mysql 
-  
+  - mysql
+
 before_script:
   - mysql -e 'create database mail_queue_test;'
 
 script:
-  - vendor/bin/phpunit --coverage-clover=coverage.clover
+  - ./vendor/bin/phpunit --coverage-clover=coverage.clover
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar

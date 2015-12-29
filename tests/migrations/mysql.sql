@@ -5,7 +5,7 @@ CREATE TABLE `mail_queue` (
   `message` MEDIUMTEXT NOT NULL,
   `attempt` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
   `state` CHAR(1) NOT NULL DEFAULT 'N', /* 'N': queued (new), 'A': processing (active), 'C': completed */
-  `sentTime` TIMESTAMP NULL,
+  `sentTime` TIMESTAMP,
   `timeToSend` TIMESTAMP,
   `createdTime` TIMESTAMP,
   `updatedTime` TIMESTAMP,

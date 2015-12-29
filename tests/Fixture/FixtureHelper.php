@@ -1,5 +1,5 @@
 <?php
-namespace Da\Tests\Fixture;
+namespace Da\Mailer\Test\Fixture;
 
 use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
 use Da\Mailer\Model\MailMessage;

@@ -1,8 +1,8 @@
 <?php
-namespace Da\Tests\Security;
+namespace Da\Mailer\Test\Security;
 
 use Da\Mailer\Security\Cypher;
-use Da\Tests\Fixture\FixtureHelper;
+use Da\Mailer\Test\Fixture\FixtureHelper;
 use PHPUnit_Framework_TestCase;
 
 class CypherTest extends PHPUnit_Framework_TestCase

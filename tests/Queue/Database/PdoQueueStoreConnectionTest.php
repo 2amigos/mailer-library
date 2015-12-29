@@ -1,8 +1,8 @@
 <?php
-namespace Da\Tests\Queue\Database;
+namespace Da\Mailer\Test\Queue\Database;
 
 use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreConnection;
-use Da\Tests\Fixture\FixtureHelper;
+use Da\Mailer\Test\Fixture\FixtureHelper;
 use PHPUnit_Framework_TestCase;
 use PDO;
 use ReflectionClass;

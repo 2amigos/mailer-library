@@ -1,8 +1,8 @@
 <?php
 namespace Da\Mailer;
 
-use Da\Helper\ArrayHelper;
-use Da\Helper\PhpViewFileHelper;
+use Da\Mailer\Helper\ArrayHelper;
+use Da\Mailer\Helper\PhpViewFileHelper;
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Transport\TransportFactory;
 use Da\Mailer\Transport\TransportInterface;

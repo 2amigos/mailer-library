@@ -1,5 +1,5 @@
 <?php
-namespace Da\Tests\Transport;
+namespace Da\Mailer\Test\Transport;
 
 use Da\Mailer\Transport\MailTransport;
 use Da\Mailer\Transport\MailTransportFactory;

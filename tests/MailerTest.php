@@ -1,5 +1,5 @@
 <?php
-namespace Da\Tests;
+namespace Da\Mailer\Test;
 
 use Da\Mailer\Mailer;
 use Da\Mailer\Transport\MailTransport;
@@ -9,7 +9,7 @@ use Da\Mailer\Transport\SendMailTransportFactory;
 use Da\Mailer\Transport\SmtpTransport;
 use Da\Mailer\Transport\SmtpTransportFactory;
 use Da\Mailer\Transport\TransportFactory;
-use Da\Tests\Fixture\FixtureHelper;
+use Da\Mailer\Test\Fixture\FixtureHelper;
 use Mockery;
 use PHPUnit_Framework_TestCase;
 use Swift_Events_CommandEvent;

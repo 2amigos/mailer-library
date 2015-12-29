@@ -1,7 +1,7 @@
 <?php
 namespace Da\Mailer\Model;
 
-use Da\Helper\RecipientsHelper;
+use Da\Mailer\Helper\RecipientsHelper;
 use JsonSerializable;
 use Swift_Attachment;
 use Swift_Message;

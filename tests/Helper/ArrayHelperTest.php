@@ -1,7 +1,7 @@
 <?php
-namespace Da\Tests\Helper;
+namespace Da\Mailer\Test\Helper;
 
-use Da\Helper\ArrayHelper;
+use Da\Mailer\Helper\ArrayHelper;
 use PHPUnit_Framework_TestCase;
 
 class Post

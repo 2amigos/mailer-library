@@ -1,7 +1,7 @@
 <?php
 namespace Da\Mailer\Queue\Backend;
 
-use Da\Helper\ArrayHelper;
+use Da\Mailer\Helper\ArrayHelper;
 
 abstract class AbstractQueueStoreConnection
 {

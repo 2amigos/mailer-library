@@ -1,8 +1,8 @@
 <?php
-namespace Da\Tests\Model;
+namespace Da\Mailer\Test\Model;
 
 use Da\Mailer\Model\MailMessage;
-use Da\Tests\Fixture\FixtureHelper;
+use Da\Mailer\Test\Fixture\FixtureHelper;
 use PHPUnit_Framework_TestCase;
 use Swift_Message;
 

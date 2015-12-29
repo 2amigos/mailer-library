@@ -1,5 +1,5 @@
 <?php
-namespace Da\Tests\Model;
+namespace Da\Mailer\Test\Model;
 
 use Da\Mailer\Model\AbstractMailObject;
 use PHPUnit_Framework_TestCase;

@@ -1,5 +1,5 @@
 <?php
-namespace Da\Helper;
+namespace Da\Mailer\Helper;
 
 class RecipientsHelper
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Da\Tests\Validator;
+namespace Da\Mailer\Test\Validator;
 
 use Da\Mailer\Validator\SmtpCredentialsValidator;
 use Exception;

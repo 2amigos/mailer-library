@@ -1,7 +1,7 @@
 <?php
-namespace Da\Tests\Helper;
+namespace Da\Mailer\Test\Helper;
 
-use Da\Helper\RecipientsHelper;
+use Da\Mailer\Helper\RecipientsHelper;
 use PHPUnit_Framework_TestCase;
 
 class RecipientsHelperTest extends PHPUnit_Framework_TestCase

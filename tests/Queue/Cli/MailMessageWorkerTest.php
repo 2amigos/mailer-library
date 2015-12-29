@@ -1,5 +1,5 @@
 <?php
-namespace Da\Tests\Queue\Cli;
+namespace Da\Mailer\Test\Queue\Cli;
 
 use Da\Mailer\Mailer;
 use Da\Mailer\Model\MailMessage;

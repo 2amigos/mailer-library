@@ -1,5 +1,5 @@
 <?php
-namespace Da\Tests\Event;
+namespace Da\Mailer\Test\Event;
 
 use Da\Mailer\Event\Event;
 use Da\Mailer\Event\EventHandlerTrait;

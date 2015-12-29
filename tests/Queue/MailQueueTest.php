@@ -1,12 +1,12 @@
 <?php
-namespace Da\Tests\Queue;
+namespace Da\Mailer\Test\Queue;
 
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
 use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreAdapter;
 use Da\Mailer\Security\Cypher;
-use Da\Tests\AbstractMySqlDatabaseTestCase;
-use Da\Tests\Fixture\FixtureHelper;
+use Da\Mailer\Test\AbstractMySqlDatabaseTestCase;
+use Da\Mailer\Test\Fixture\FixtureHelper;
 use Da\Mailer\Queue\MailQueue;
 
 class MailQueueTest extends AbstractMySqlDatabaseTestCase

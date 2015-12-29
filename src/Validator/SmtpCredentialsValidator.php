@@ -1,7 +1,7 @@
 <?php
 namespace Da\Mailer\Validator;
 
-use Da\Helper\ArrayHelper;
+use Da\Mailer\Helper\ArrayHelper;
 use Exception;
 use Swift_SmtpTransport;
 

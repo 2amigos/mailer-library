@@ -1,8 +1,8 @@
 <?php
-namespace Da\Tests;
+namespace Da\Mailer\Test;
 
 use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreConnection;
-use Da\Tests\Fixture\FixtureHelper;
+use Da\Mailer\Test\Fixture\FixtureHelper;
 use PHPUnit_Extensions_Database_TestCase;
 
 abstract class AbstractMySqlDatabaseTestCase extends PHPUnit_Extensions_Database_TestCase

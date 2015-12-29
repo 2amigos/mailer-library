@@ -1,7 +1,7 @@
 <?php
 namespace Da\tests\Helper;
 
-use Da\Helper\PhpViewFileHelper;
+use Da\Mailer\Helper\PhpViewFileHelper;
 use PHPUnit_Framework_TestCase;
 
 class PhpViewFileHelperTest extends PHPUnit_Framework_TestCase

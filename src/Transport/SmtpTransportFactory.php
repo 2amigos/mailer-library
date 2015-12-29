@@ -1,7 +1,7 @@
 <?php
 namespace Da\Mailer\Transport;
 
-use Da\Helper\ArrayHelper;
+use Da\Mailer\Helper\ArrayHelper;
 
 class SmtpTransportFactory extends AbstractTransportFactory
 {

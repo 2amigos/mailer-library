@@ -6,14 +6,6 @@ use Da\Mailer\Queue\Backend\MailJobInterface;
 use Da\Mailer\Queue\Backend\QueueStoreAdapterInterface;
 use PDO;
 
-/**
- *
- * PdoQueueAdapter.php
- *
- * Date: 24/12/15
- * Time: 13:29
- * @author Antonio Ramirez <amigo.cobos@gmail.com>
- */
 class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
 {
     /**
@@ -25,6 +17,12 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
      */
     protected $connection;
 
+    /**
+     * PdoQueueStoreAdapter constructor.
+     *
+     * @param PdoQueueStoreConnection $connection
+     * @param string $tableName the name of the table in the database where the mail jobs are stored
+     */
     public function __construct(PdoQueueStoreConnection $connection, $tableName = 'mail_queue')
     {
         $this->connection = $connection;
@@ -49,9 +47,11 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
     }
 
     /**
+     * Adds a MailJob to the queue.
+     *
      * @param MailJobInterface|PdoMailJob $mailJob
      *
-     * @return bool
+     * @return bool whether it has been successfully inserted or not
      */
     public function enqueue(MailJobInterface $mailJob)
     {
@@ -67,6 +67,8 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
     }
 
     /**
+     * Returns a MailJob extracted from the database. The row at the database is marked as 'A'ctive or in process.
+     *
      * @return MailJobInterface|PdoMailJob
      */
     public function dequeue()
@@ -102,6 +104,11 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
     }
 
     /**
+     * 'Ack'knowledge the MailJob. Once a MailJob as been processed it could be:
+     *
+     * - Updated its status to 'C'ompleted
+     * - Updated its status to 'N'ew and set its `timeToSend` attribute to a future date
+     *
      * @param MailJobInterface|PdoMailJob $mailJob
      *
      * @return bool
@@ -126,7 +133,6 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
         $query->bindValue(':sentTime', $sentTime);
 
         return $query->execute();
-
     }
 
     /**
@@ -145,5 +151,4 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
 
         return intval($query->fetchColumn(0)) === 0;
     }
-
 }

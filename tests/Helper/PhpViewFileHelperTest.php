@@ -1,6 +1,5 @@
 <?php
-namespace Da\Tests\Helper;
-
+namespace Da\tests\Helper;
 
 use Da\Helper\PhpViewFileHelper;
 use PHPUnit_Framework_TestCase;

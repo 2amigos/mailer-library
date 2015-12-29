@@ -47,7 +47,7 @@ final class MailQueue implements QueueStoreAdapterInterface
      */
     public function enqueue(MailJobInterface $mailJob)
     {
-        if(null !== $this->getCypher()) {
+        if (null !== $this->getCypher()) {
             $mailJob->setMessage($this->getCypher()->encodeMailMessage($mailJob->getMessage()));
         }
         return $this->adapter->enqueue($mailJob);
@@ -60,7 +60,7 @@ final class MailQueue implements QueueStoreAdapterInterface
     {
         $mailJob = $this->adapter->dequeue();
 
-        if(null !== $this->getCypher()) {
+        if (null !== $this->getCypher()) {
             $mailJob->setMessage($this->getCypher()->decodeMailMessage($mailJob->getMessage()));
         }
 
@@ -90,5 +90,4 @@ final class MailQueue implements QueueStoreAdapterInterface
     {
         return $this->adapter->isEmpty();
     }
-
 }

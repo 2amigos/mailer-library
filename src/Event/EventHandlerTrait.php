@@ -1,23 +1,19 @@
 <?php
 namespace Da\Mailer\Event;
 
-/**
- *
- * EventHandlerTrait
- *
- * Provides Event Handling using mediator pattern.
- *
- * Date: 25/12/15
- * Time: 22:54
- * @author Antonio Ramirez <amigo.cobos@gmail.com>
- */
 trait EventHandlerTrait
 {
     /**
-     * @var array $events
+     * @var array $events stack of events attached to the manager
      */
     protected $events = [];
 
+    /**
+     * Adds an Event instance to the stack based on the name.
+     *
+     * @param string $name the identifier of the stack
+     * @param Event $event the event instance to add
+     */
     public function attach($name, Event $event)
     {
         if (!isset($this->events[$name])) {
@@ -27,6 +23,11 @@ trait EventHandlerTrait
         $this->events[$name][] = $event;
     }
 
+    /**
+     * Removes the handlers of stack by its name.
+     *
+     * @param string $name
+     */
     public function detach($name)
     {
         if (array_key_exists($name, $this->events)) {
@@ -34,7 +35,13 @@ trait EventHandlerTrait
         }
     }
 
-    public function trigger($name, $data = null)
+    /**
+     * Fires the handlers of a stack by its name.
+     *
+     * @param string $name the name of the stack to fire
+     * @param array $data
+     */
+    public function trigger($name, array $data = [])
     {
         if (isset($this->events[$name])) {
             foreach ($this->events[$name] as $event) {

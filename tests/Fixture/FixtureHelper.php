@@ -1,19 +1,10 @@
 <?php
-
 namespace Da\Tests\Fixture;
 
 use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Transport\TransportInterface;
 
-/**
- *
- * FixtureHelper.php
- *
- * Date: 25/12/15
- * Time: 15:48
- * @author Antonio Ramirez <amigo.cobos@gmail.com>
- */
 class FixtureHelper
 {
     public static function getMailMessage()
@@ -21,7 +12,8 @@ class FixtureHelper
         return new MailMessage(self::getMailMessageSmtpConfigurationArray());
     }
 
-    public static function getMailJob(){
+    public static function getMailJob()
+    {
         return new PdoMailJob([
             'message' => json_encode(self::getMailMessage())
         ]);

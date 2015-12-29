@@ -3,11 +3,11 @@ namespace Da\Mailer\Transport;
 
 use Swift_SendmailTransport;
 
-/**
- * SendMailTransport.
- */
 class SendMailTransport implements TransportInterface
 {
+    /**
+     * @var Swift_SendmailTransport
+     */
     private $instance;
 
     /**
@@ -24,12 +24,14 @@ class SendMailTransport implements TransportInterface
     }
 
     /**
-     * @return \Swift_Transport
+     * Returns the Swift_SendmailTransport instance.
+     *
+     * @return Swift_SendmailTransport instance
      */
     public function getSwiftTransportInstance()
     {
         if ($this->instance === null) {
-            $this->instance = Swift_SendmailTransport::newInstance($this->commandPath);
+            $this->instance = new Swift_SendmailTransport($this->commandPath);
         }
 
         return $this->instance;

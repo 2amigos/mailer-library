@@ -1,14 +1,8 @@
 <?php
 namespace Da\Mailer\Transport;
 
-/**
- *
- * TransportInterface.php
- *
- * Date: 26/12/15
- * Time: 22:39
- * @author Antonio Ramirez <amigo.cobos@gmail.com>
- */
+use Swift_Transport;
+
 interface TransportInterface
 {
     const TYPE_MAIL = 'mail';
@@ -16,7 +10,9 @@ interface TransportInterface
     const TYPE_SMTP = 'smtp';
 
     /**
-     * @return \Swift_Transport
+     * Returns the Swift_Transport instance.
+     *
+     * @return Swift_Transport
      */
     public function getSwiftTransportInstance();
 }

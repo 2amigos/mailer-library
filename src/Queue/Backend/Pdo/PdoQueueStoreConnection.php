@@ -4,16 +4,13 @@ namespace Da\Mailer\Queue\Backend\Pdo;
 use Da\Mailer\Queue\Backend\AbstractQueueStoreConnection;
 use PDO;
 
-/**
- *
- * PdoConnection.php
- *
- * Date: 24/12/15
- * Time: 13:28
- * @author Antonio Ramirez <amigo.cobos@gmail.com>
- */
 class PdoQueueStoreConnection extends AbstractQueueStoreConnection
 {
+    /**
+     * PdoQueueStoreConnection constructor.
+     *
+     * @param array $configuration
+     */
     public function __construct(array $configuration = [])
     {
         parent::__construct($configuration);
@@ -39,6 +36,8 @@ class PdoQueueStoreConnection extends AbstractQueueStoreConnection
     }
 
     /**
+     * Returns the connection instance.
+     *
      * @return PDO|null
      */
     public function getInstance()

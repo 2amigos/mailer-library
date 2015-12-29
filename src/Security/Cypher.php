@@ -5,10 +5,15 @@ use Da\Mailer\Model\MailMessage;
 use phpseclib\Crypt\AES;
 use phpseclib\Crypt\Base;
 
-
 final class Cypher implements CypherInterface
 {
+    /**
+     * @var AES strategy
+     */
     private $strategy;
+    /**
+     * @var string the key to encode/decode
+     */
     private $key;
 
     /**
@@ -19,15 +24,15 @@ final class Cypher implements CypherInterface
     public function __construct($key)
     {
         $this->key = $key;
-        // initialize cypher with strongest mode and with AES
+        // initialize cypher with strongest mode and with AES. Is an anti-pattern and should be passed through the
+        // constructor as an argument, but this way we ensure the library does have the strongest strategy by default.
         $this->strategy = new AES(Base::MODE_CBC);
+
         $this->strategy->setKeyLength(256);
     }
 
     /**
-     * @param MailMessage $mailMessage
-     *
-     * @return string
+     * @inheritdoc
      */
     public function encodeMailMessage(MailMessage $mailMessage)
     {
@@ -38,9 +43,7 @@ final class Cypher implements CypherInterface
     }
 
     /**
-     * @param $encodedMailMessage
-     *
-     * @return MailMessage
+     * @inheritdoc
      */
     public function decodeMailMessage($encodedMailMessage)
     {
@@ -50,5 +53,4 @@ final class Cypher implements CypherInterface
 
         return new MailMessage($jsonDecodedMailMessageAttributes);
     }
-
 }

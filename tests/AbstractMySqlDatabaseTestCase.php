@@ -5,14 +5,6 @@ use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreConnection;
 use Da\Tests\Fixture\FixtureHelper;
 use PHPUnit_Extensions_Database_TestCase;
 
-/**
- *
- * AbstractMySqlDatabaseTestCase.php
- *
- * Date: 25/12/15
- * Time: 13:25
- * @author Antonio Ramirez <amigo.cobos@gmail.com>
- */
 abstract class AbstractMySqlDatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
 {
 

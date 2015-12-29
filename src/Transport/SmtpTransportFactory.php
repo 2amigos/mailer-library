@@ -5,11 +5,20 @@ use Da\Helper\ArrayHelper;
 
 class SmtpTransportFactory extends AbstractTransportFactory
 {
+
+    /**
+     * @inheritdoc
+     */
     public function __construct(array $options)
     {
         parent::__construct($options);
     }
 
+    /**
+     * Creates a SmtpTransport.
+     *
+     * @return SmtpTransport the instance created
+     */
     public function create()
     {
         $host = ArrayHelper::remove($this->options, 'host');
@@ -18,5 +27,4 @@ class SmtpTransportFactory extends AbstractTransportFactory
 
         return new SmtpTransport($host, $port, $options);
     }
-
 }

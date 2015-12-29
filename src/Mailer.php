@@ -15,25 +15,34 @@ use Swift_Plugins_Loggers_ArrayLogger;
 class Mailer
 {
     /**
-     * @var Swift_Mailer
+     * @var Swift_Mailer the instance.
      */
     private $swift;
     /**
-     * @var TransportInterface|null
+     * @var TransportInterface|null the transport used to send emails.
      */
     private $transport = null;
     /**
-     * @var Swift_Plugins_Loggers_ArrayLogger
+     * @var Swift_Plugins_Loggers_ArrayLogger the plugging used to
      */
     private $logger = null;
+    /**
+     * @var bool whether we enable logging or not. The `$logger` plugin won't be added to the Swift_Mailer instance.
+     */
     private $logging = true;
+    /**
+     * @var bool whether we are testing sendings. If true, emails won't be sent.
+     */
     private $dryRun = false;
+    /**
+     * @var array a list of Swift_Mailer plugins to be registered.
+     */
     private $plugins = [];
 
     /**
      * Constructor.
      *
-     * @param TransportInterface $transport
+     * @param TransportInterface $transport the transport to use for sending emails.
      * @param bool $dryRun
      * @param bool $doLogging
      */
@@ -93,9 +102,6 @@ class Mailer
      *
      * All recipients (with the exception of Bcc) will be able to see the other recipients this message was sent to.
      *
-     * If you need to send to each recipient without disclosing details about the
-     * other recipients see {@link batchSend()}.
-     *
      * Recipient/sender data will be retrieved from the {Swift_Mime_Message} object.
      *
      * The return value is the number of recipients who were accepted for
@@ -119,11 +125,33 @@ class Mailer
     }
 
     /**
-     * @param MailMessage $message
-     * @param array $views
-     * @param array $data
+     * Sends a MailMessage instance.
+     *
+     * View files can be added to the `$views` array argument and if set, they will be parsed via the `PhpViewFileHelper`
+     * helper that this library contains.
+     *
+     * The `$view` argument has the following syntax:
+     *
+     * ```
+     * $view = [
+     *   'text' => '/path/to/plain/text/email.php',
+     *   'html' => '/path/to/html/email.php'
+     * ];
+     * ```
+     * The `PhpViewFileHelper` will use the `$data` array argument to parse the templates.
+     *
+     * The template files must be of `php` type if you wish to use internal system. Otherwise, is highly recommended to
+     * use your own template parser and set the `bodyHtml` and `bodyText` of the `MailMessage` class.
+     *
+     * @param MailMessage $message the MailMessage instance to send
+     * @param array $views the view files for `text` and `html` templates
+     * @param array $data the data to be used for parsing the templates
      *
      * @return array|null
+     *
+     * @see PhpViewFileHelper::render()
+     * @see MailMessage::$bodyHtml
+     * @see MailMessage::$bodyText
      */
     public function send(MailMessage $message, array $views = [], array $data = [])
     {
@@ -150,9 +178,13 @@ class Mailer
     }
 
     /**
+     * Adds a Swift_Mailer plugin to the stack so it can be later registered with `registerPlugins()`
+     *
      * @param Swift_Events_EventListener $plugin
      *
      * @return $this
+     *
+     * @link http://swiftmailer.org/docs/plugins.html
      */
     public function addPlugin(Swift_Events_EventListener $plugin)
     {
@@ -162,7 +194,9 @@ class Mailer
     }
 
     /**
-     * Registers the plugins.
+     * Registers the plugins to the Swift_Mailer instance.
+     *
+     * @link http://swiftmailer.org/docs/plugins.html
      */
     public function registerPlugins()
     {
@@ -171,16 +205,20 @@ class Mailer
                 $this->getSwiftMailerInstance()->registerPlugin($plugin);
             }
         }
-        $this->logger = new Swift_Plugins_Loggers_ArrayLogger();
-        $this->getSwiftMailerInstance()->registerPlugin(new Swift_Plugins_LoggerPlugin($this->logger));
+        if ($this->logging === true) {
+            $this->logger = new Swift_Plugins_Loggers_ArrayLogger();
+            $this->getSwiftMailerInstance()->registerPlugin(new Swift_Plugins_LoggerPlugin($this->logger));
+        }
 
         return $this;
     }
 
     /**
-     * @param MailMessage $mailMessage
+     * Factory method to create an instance of the mailer based on the configuration of a `MailMessage` instance.
      *
-     * @return Mailer
+     * @param MailMessage $mailMessage the instance to create the Mailer from
+     *
+     * @return Mailer instance
      */
     public static function fromMailMessage(MailMessage $mailMessage)
     {

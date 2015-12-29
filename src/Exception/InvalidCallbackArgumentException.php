@@ -5,5 +5,4 @@ use InvalidArgumentException;
 
 class InvalidCallbackArgumentException extends InvalidArgumentException
 {
-
 }

@@ -5,29 +5,44 @@ use Da\Helper\ArrayHelper;
 use Exception;
 use Swift_SmtpTransport;
 
-/**
- * SmtpCredentialsValidator.
- *
- * Validates SMTP Credentials by making use of SwiftMailer
- */
 class SmtpCredentialsValidator
 {
+    /**
+     * @var string the mail server host or ip address
+     */
     private $host;
+    /**
+     * @var string the mail server port
+     */
     private $port;
+    /**
+     * @var string the username to authenticate on the mail server if required
+     */
     private $username;
+    /**
+     * @var string the password to authenticate on the mail server if required
+     */
     private $password;
+    /**
+     * @var string the encryption used
+     */
     private $encryption;
+    /**
+     * @var string the authMode to authenticate if required
+     */
     private $authMode;
 
     /**
+     * SmtpCredentialsValidator constructor.
+     *
      * @param string $host
-     * @param string $port
+     * @param int $port
      * @param string $username
      * @param string $password
      * @param string $encryption
      * @param string $authMode
      */
-    public function __construct($host, $port, $username, $password, $encryption, $authMode)
+    public function __construct($host, $port, $username = null, $password = null, $encryption = null, $authMode = null)
     {
         $this->host = $host;
         $this->port = $port;

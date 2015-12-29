@@ -1,19 +1,11 @@
 <?php
-namespace Da\Tests\Queue\Database;
+namespace Da\tests\Queue\Database;
 
 use Da\Mailer\Model\MailMessage;
 use Da\Tests\Fixture\FixtureHelper;
 use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreAdapter;
 use Da\Tests\AbstractMySqlDatabaseTestCase;
 
-/**
- *
- * PdoQueueStoreAdapterTest.php
- *
- * Date: 25/12/15
- * Time: 14:18
- * @author Antonio Ramirez <amigo.cobos@gmail.com>
- */
 class PdoQueueStoreAdapterTest extends AbstractMySqlDatabaseTestCase
 {
     /**
@@ -52,7 +44,6 @@ class PdoQueueStoreAdapterTest extends AbstractMySqlDatabaseTestCase
         $this->pdoQueueStore->ack($mailJob);
 
         $this->assertTrue($this->pdoQueueStore->dequeue() === null);
-
     }
 
     public function testAcknowledgementToUpdateMailJobs()
@@ -73,7 +64,6 @@ class PdoQueueStoreAdapterTest extends AbstractMySqlDatabaseTestCase
         $this->pdoQueueStore->ack($dequedMailJob);
         sleep(1);
         $this->assertTrue($this->pdoQueueStore->isEmpty() === false);
-
     }
 
     /**

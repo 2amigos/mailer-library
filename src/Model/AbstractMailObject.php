@@ -1,17 +1,17 @@
 <?php
-
 namespace Da\Mailer\Model;
 
 use Da\Mailer\Exception\InvalidCallException;
 use Da\Mailer\Exception\UnknownPropertyException;
 use Exception;
 
-/**
- * MailObject.
- */
 abstract class AbstractMailObject
 {
     /**
+     * Constructor.
+     *
+     * Takes an array of name-value pairs and sets the attribute of the object.
+     *
      * @param array $config
      */
     protected function __construct(array $config = [])

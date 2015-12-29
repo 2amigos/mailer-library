@@ -7,14 +7,6 @@ use PHPUnit_Framework_TestCase;
 use PDO;
 use ReflectionClass;
 
-/**
- *
- * PdoQueueStoreConnectionTest.php
- *
- * Date: 25/12/15
- * Time: 12:07
- * @author Antonio Ramirez <amigo.cobos@gmail.com>
- */
 class PdoQueueStoreConnectionTest extends PHPUnit_Framework_TestCase
 {
     public function testGetConfigurationValue()

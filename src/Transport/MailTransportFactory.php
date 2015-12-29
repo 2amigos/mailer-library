@@ -1,21 +1,23 @@
 <?php
 namespace Da\Mailer\Transport;
 
-/**
- *
- * MailTransportFactory.php
- *
- * Date: 28/12/15
- * Time: 13:12
- * @author Antonio Ramirez <amigo.cobos@gmail.com>
- */
 class MailTransportFactory extends AbstractTransportFactory
 {
+    /**
+     * MailTransportFactory constructor.
+     *
+     * @param array $options
+     */
     public function __construct(array $options)
     {
         parent::__construct($options);
     }
 
+    /**
+     * Creates a MailTransport instance.
+     *
+     * @return MailTransport
+     */
     public function create()
     {
         $extraParams = isset($this->options['options']) ? $this->options['options'] : '';
@@ -25,5 +27,4 @@ class MailTransportFactory extends AbstractTransportFactory
 
         return new MailTransport($extraParams);
     }
-
 }

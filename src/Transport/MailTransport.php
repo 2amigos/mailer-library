@@ -3,11 +3,11 @@ namespace Da\Mailer\Transport;
 
 use Swift_MailTransport;
 
-/**
- * MailTransport.
- */
 class MailTransport implements TransportInterface
 {
+    /**
+     * @var Swift_MailTransport
+     */
     private $instance;
     /**
      * Swift Mailer sets this to "-f%s" by default, where the "%s" is substituted with the address of the sender
@@ -18,7 +18,7 @@ class MailTransport implements TransportInterface
     private $extraParameters;
 
     /**
-     * @param null $extraParameters
+     * @param string|null $extraParameters
      */
     public function __construct($extraParameters = null)
     {
@@ -26,7 +26,9 @@ class MailTransport implements TransportInterface
     }
 
     /**
-     * @return \Swift_Transport
+     * Returns the Swift_MailTransport instance.
+     *
+     * @return Swift_MailTransport
      */
     public function getSwiftTransportInstance()
     {

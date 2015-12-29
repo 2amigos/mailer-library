@@ -22,19 +22,21 @@ class PdoMailJob extends AbstractMailObject implements MailJobInterface
      */
     const STATE_COMPLETED = 'C';
     /**
-     * @var int
+     * @var int the id of the MailJob. It will be filled with the id that the record has on the database
      */
     private $id;
     /**
-     * @var string
+     * @var string the message to store
      */
     private $message;
     /**
-     * @var int
+     * @var string the date value to when to send the email when processing the queue from a daemon. The format is
+     * `Y-m-d H:i:s`
      */
     private $timeToSend;
     /**
-     * @var int number of attempts
+     * @var int number of attempts. Every time a mail fails to be sent, the number of attempts could be incremented.
+     * @see `incrementAttempt()`
      */
     private $attempt = 0;
     /**
@@ -42,7 +44,11 @@ class PdoMailJob extends AbstractMailObject implements MailJobInterface
      */
     private $state = self::STATE_NEW;
 
-    public function __construct(array $config = []) {
+    /**
+     * @inheritdoc
+     */
+    public function __construct(array $config = [])
+    {
         parent::__construct($config);
     }
 

@@ -1,5 +1,4 @@
 <?php
-
 namespace Da\Mailer\Queue\Cli;
 
 use Da\Mailer\Mailer;
@@ -7,19 +6,16 @@ use Da\Mailer\Event\EventHandlerTrait;
 use Da\Mailer\Model\MailMessage;
 use Exception;
 
-/**
- * MailMessageWorker.
- */
 class MailMessageWorker
 {
     use EventHandlerTrait;
 
     /**
-     * @var Mailer
+     * @var Mailer instance to the send the mails
      */
     private $mailer;
     /**
-     * @var MailMessage
+     * @var MailMessage the mail message to be sent
      */
     private $mailMessage;
 
@@ -36,7 +32,14 @@ class MailMessageWorker
     }
 
     /**
+     * Sends the MailMessage as a SwiftMessage. It does triggers the following events:
      *
+     * - onSuccess: If the sending has been successful
+     * - onFailure: If the sending has failed
+     *
+     * The events need to be configured by attaching a handler to them.
+     *
+     * @see EventHandlerTrait
      */
     public function run()
     {

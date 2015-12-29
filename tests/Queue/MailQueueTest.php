@@ -9,14 +9,6 @@ use Da\Tests\AbstractMySqlDatabaseTestCase;
 use Da\Tests\Fixture\FixtureHelper;
 use Da\Mailer\Queue\MailQueue;
 
-/**
- *
- * MailQueueTest.php
- *
- * Date: 28/12/15
- * Time: 1:27
- * @author Antonio Ramirez <amigo.cobos@gmail.com>
- */
 class MailQueueTest extends AbstractMySqlDatabaseTestCase
 {
     /**

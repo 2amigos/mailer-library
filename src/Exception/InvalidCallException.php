@@ -5,5 +5,4 @@ use BadMethodCallException;
 
 class InvalidCallException extends BadMethodCallException
 {
-
 }

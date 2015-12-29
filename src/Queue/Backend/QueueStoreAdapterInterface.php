@@ -1,14 +1,6 @@
 <?php
 namespace Da\Mailer\Queue\Backend;
 
-/**
- *
- * QueueStoreAdapterInterface.php
- *
- * Date: 24/12/15
- * Time: 13:06
- * @author Antonio Ramirez <amigo.cobos@gmail.com>
- */
 interface QueueStoreAdapterInterface
 {
     /**

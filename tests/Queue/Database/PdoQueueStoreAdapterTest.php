@@ -24,7 +24,7 @@ class PdoQueueStoreAdapterTest extends AbstractMySqlDatabaseTestCase
     {
         $mailJob = FixtureHelper::getMailJob();
 
-        $this->assertSame(self::getPdoQueueStoreConnection(), $this->pdoQueueStore->init());
+        $this->assertSame($this->pdoQueueStore, $this->pdoQueueStore->init());
 
         $this->assertTrue($this->pdoQueueStore->enqueue($mailJob));
 

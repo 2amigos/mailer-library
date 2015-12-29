@@ -1,6 +1,9 @@
 
 filter:
-    excluded_paths: [tests/*, data/*]
+    excluded_paths:
+        - '*/tests/*'
+        - '*/data/*'
+        - '*/vendor/*'
 checks:
     php:
         code_rating: true
@@ -19,8 +22,7 @@ checks:
         fix_doc_comments: true
 tools:
     external_code_coverage:
-        timeout: 600
-        runs: 3
+        timeout: '1200'
     php_analyzer: true
     php_code_coverage: false
     php_code_sniffer:
@@ -32,5 +34,4 @@ tools:
         enabled: true
         excluded_dirs: [vendor, tests]
     php_cpd:
-        enabled: true
-        excluded_dirs: [vendor, tests]
+        enabled: false

@@ -172,7 +172,7 @@ class Mailer
      */
     public function resetSwiftMailer()
     {
-        $this->mailer = null;
+        $this->swift = null;
 
         return $this;
     }

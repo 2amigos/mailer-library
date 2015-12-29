@@ -12,7 +12,7 @@ class SmtpCredentialsValidator
      */
     private $host;
     /**
-     * @var string the mail server port
+     * @var string|int the mail server port
      */
     private $port;
     /**
@@ -36,7 +36,7 @@ class SmtpCredentialsValidator
      * SmtpCredentialsValidator constructor.
      *
      * @param string $host
-     * @param int $port
+     * @param string|int $port
      * @param string $username
      * @param string $password
      * @param string $encryption

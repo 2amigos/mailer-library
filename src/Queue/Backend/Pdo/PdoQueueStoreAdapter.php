@@ -31,11 +31,13 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
     }
 
     /**
-     * @return PdoQueueStoreConnection
+     * @inheritdoc
      */
     public function init()
     {
-        return $this->getConnection()->connect();
+        $this->getConnection()->connect();
+
+        return $this;
     }
 
     /**

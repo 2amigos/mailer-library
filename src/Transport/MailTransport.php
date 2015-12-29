@@ -13,7 +13,7 @@ class MailTransport implements TransportInterface
      * Swift Mailer sets this to "-f%s" by default, where the "%s" is substituted with the address of the sender
      * (via a sprintf()) at send time. Set this attribute to modify its default behavior.
      *
-     * @var null
+     * @var string|null
      */
     private $extraParameters;
 

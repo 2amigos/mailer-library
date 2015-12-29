@@ -77,7 +77,7 @@ class PdoMailJob extends AbstractMailObject implements MailJobInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getMessage()
     {
@@ -85,7 +85,7 @@ class PdoMailJob extends AbstractMailObject implements MailJobInterface
     }
 
     /**
-     * @param string $message
+     * @inheritdoc
      */
     public function setMessage($message)
     {
@@ -93,7 +93,7 @@ class PdoMailJob extends AbstractMailObject implements MailJobInterface
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getTimeToSend()
     {
@@ -101,11 +101,11 @@ class PdoMailJob extends AbstractMailObject implements MailJobInterface
     }
 
     /**
-     * @param int $time
+     * @param string $date
      */
-    public function setTimeToSend($time)
+    public function setTimeToSend($date)
     {
-        $this->timeToSend = $time;
+        $this->timeToSend = $date;
     }
 
     /**

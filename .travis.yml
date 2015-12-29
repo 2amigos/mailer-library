@@ -9,7 +9,7 @@ install:
   - composer install -o
 
 before_script:
-  - mysql -e 'create database mail_queue_test;'
+  - mysql -e 'create database mail_queue;'
 
 script:
   - vendor/bin/phpunit --coverage-clover=coverage.clover

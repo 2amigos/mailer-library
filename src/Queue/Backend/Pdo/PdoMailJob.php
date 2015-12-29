@@ -4,6 +4,7 @@ namespace Da\Mailer\Queue\Backend\Pdo;
 use Da\Mailer\Event\EventHandlerTrait;
 use Da\Mailer\Model\AbstractMailObject;
 use Da\Mailer\Queue\Backend\MailJobInterface;
+use Da\Mailer\Model\MailMessage;
 
 class PdoMailJob extends AbstractMailObject implements MailJobInterface
 {
@@ -26,7 +27,7 @@ class PdoMailJob extends AbstractMailObject implements MailJobInterface
      */
     private $id;
     /**
-     * @var string the message to store
+     * @var MailMessage|string the message to store
      */
     private $message;
     /**

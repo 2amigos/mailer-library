@@ -81,20 +81,16 @@ class MailerTest extends PHPUnit_Framework_TestCase
 
     public function testSendSwiftMailer()
     {
-        $failedRecipients = null;
         $mailMessage = FixtureHelper::getMailMessage()->asSwiftMessage();
-        Mockery::mock('Swift_Mailer')
+        Mockery::mock('overload:Swift_Mailer')
+            ->shouldIgnoreMissing()
             ->shouldReceive('send')
-            ->withArgs([$mailMessage, $failedRecipients])
-            ->once()
-            ->andReturnUsing(function($message, $failedRecipients){
-                $failedRecipients = [];
-            });
-
+            ->withAnyArgs()
+            ->once();
         $mailTransport = (new MailTransportFactory([]))->create();
         $mailer = new Mailer($mailTransport);
         date_default_timezone_set('UTC');
-        $this->assertEquals([], $mailer->sendSwiftMessage($mailMessage));
+        $this->assertEquals(null, $mailer->sendSwiftMessage($mailMessage));
     }
 }
 

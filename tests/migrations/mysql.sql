@@ -6,10 +6,10 @@ CREATE TABLE `mail_queue` (
   `attempt` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
   `state` CHAR(1) NOT NULL DEFAULT 'N', /* 'N': queued (new), 'A': processing (active), 'C': completed */
   `sentTime` TIMESTAMP NULL,
-  `timeToSend` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `createdTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedTime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `timeToSend` TIMESTAMP,
+  `createdTime` TIMESTAMP,
+  `updatedTime` TIMESTAMP,
   PRIMARY KEY  (id),
   KEY id (id),
   KEY time_to_send (timeToSend)
-);
+) ENGINE=INNODB;

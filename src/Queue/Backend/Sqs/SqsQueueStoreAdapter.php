@@ -55,6 +55,7 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
 
     /**
      * @param MailJobInterface|SqsMailJob $mailJob
+     * @return bool whether it has been successfully queued or not
      */
     public function enqueue(MailJobInterface $mailJob)
     {
@@ -67,26 +68,45 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
         return $messageId !== null && is_string($messageId);
     }
 
+    /**
+     * Returns a MailJob fetched from Amazon SQS.
+     *
+     * @return MailJobInterface|SqsMailJob
+     */
     public function dequeue()
     {
-        $result = $this->getConnection()->getInstance()->receiveMessage(array(
+        $result = $this->getConnection()->getInstance()->receiveMessage([
             'QueueUrl' => $this->queueUrl,
-        ));
+        ]);
+        $result = $result->getPath('Messages/*');
 
-        var_dump($result->get('Messages'));die;
-
-//        while (($message = $result->getPath('Messages/*')) !== null) {
-//            var_dump($message);
-//        }
+        return new SqsMailJob([
+            'id' => $result['MessageId'],
+            'receiptHandle' => $result['ReceiptHandle'],
+            'message' => $result['Body'],
+        ]);
     }
 
+    /**
+     * @param MailJobInterface|SqsMailJob $mailJob
+     */
     public function ack(MailJobInterface $mailJob)
     {
-
+        if ($mailJob->getDeleted()) {
+            $this->getConnection()->getInstance()->deleteMessage([
+                'QueueUrl' => $this->queueUrl,
+                'ReceiptHandle' => $mailJob->getReceiptHandle(),
+            ]);
+        } elseif ($mailJob->getVisibilityTimeout() !== null) {
+            $this->getConnection()->getInstance()->deleteMessage([
+                'QueueUrl' => $this->queueUrl,
+                'ReceiptHandle' => $mailJob->getReceiptHandle(),
+                'VisibilityTimeout' => $mailJob->getVisibilityTimeout(),
+            ]);
+        }
     }
 
     public function isEmpty()
     {
-
     }
 }

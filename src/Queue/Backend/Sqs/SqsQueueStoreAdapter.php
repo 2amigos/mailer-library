@@ -1,6 +1,7 @@
 <?php
 namespace Da\Mailer\Queue\Backend\Sqs;
 
+use BadMethodCallException;
 use Da\Mailer\Queue\Backend\MailJobInterface;
 use Da\Mailer\Queue\Backend\QueueStoreAdapterInterface;
 
@@ -39,7 +40,10 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
     {
         $this->getConnection()->connect();
 
-        $queue = $this->getConnection()->getInstance()->createQueue(['QueueName' => $this->queueName]);
+        // create new queue or get existing one
+        $queue = $this->getConnection()->getInstance()->createQueue([
+            'QueueName' => $this->queueName,
+        ]);
         $this->queueUrl = $queue->get('QueueUrl');
 
         return $this;
@@ -78,7 +82,10 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
         $result = $this->getConnection()->getInstance()->receiveMessage([
             'QueueUrl' => $this->queueUrl,
         ]);
-        $result = $result->getPath('Messages/*');
+
+        if (($result = $result->getPath('Messages/*')) === null) {
+            return null;
+        }
 
         return new SqsMailJob([
             'id' => $result['MessageId'],
@@ -92,13 +99,17 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
      */
     public function ack(MailJobInterface $mailJob)
     {
+        if ($mailJob->isNewRecord()) {
+            throw new BadMethodCallException('SqsMailJob cannot be a new object to be acknowledged');
+        }
+
         if ($mailJob->getDeleted()) {
             $this->getConnection()->getInstance()->deleteMessage([
                 'QueueUrl' => $this->queueUrl,
                 'ReceiptHandle' => $mailJob->getReceiptHandle(),
             ]);
         } elseif ($mailJob->getVisibilityTimeout() !== null) {
-            $this->getConnection()->getInstance()->deleteMessage([
+            $this->getConnection()->getInstance()->ChangeMessageVisibility([
                 'QueueUrl' => $this->queueUrl,
                 'ReceiptHandle' => $mailJob->getReceiptHandle(),
                 'VisibilityTimeout' => $mailJob->getVisibilityTimeout(),
@@ -108,5 +119,10 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
 
     public function isEmpty()
     {
+        $attributes = $this->getConnection()->getInstance()->getQueueAttributes([
+            'QueueUrl' => $this->queueUrl,
+            'AttributeNames' => ['ApproximateNumberOfMessages'],
+        ]);
+        return $attributes->getPath('Attributes/ApproximateNumberOfMessages') == 0;
     }
 }

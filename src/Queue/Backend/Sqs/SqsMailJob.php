@@ -24,15 +24,15 @@ class SqsMailJob extends AbstractMailObject implements MailJobInterface
      */
     private $message;
     /**
-     * @var integer
+     * @var int
      */
     private $delaySeconds;
     /**
-     * @var integer
+     * @var int
      */
     private $visibilityTimeout;
     /**
-     * @var boolean
+     * @var bool
      */
     private $deleted = false;
 
@@ -53,11 +53,19 @@ class SqsMailJob extends AbstractMailObject implements MailJobInterface
     }
 
     /**
-     * @param string $id
+     * @param string $anId
      */
-    public function setId($id)
+    public function setId($anId)
     {
-        $this->id = $id;
+        $this->id = $anId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNewRecord()
+    {
+        return $this->id === null || $this->receiptHandle === null;
     }
 
     /**
@@ -93,7 +101,7 @@ class SqsMailJob extends AbstractMailObject implements MailJobInterface
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getDelaySeconds()
     {
@@ -101,18 +109,18 @@ class SqsMailJob extends AbstractMailObject implements MailJobInterface
     }
 
     /**
-     * @param integer $delaySeconds
+     * @param int $delaySeconds
      */
     public function setDelaySeconds($delaySeconds)
     {
         if ($delaySeconds < 0 || $delaySeconds > 900) {
-            throw new BadMethodCallException('Delay seconds must be between 0 and 900 seconds!');
+            throw new BadMethodCallException('Delay seconds must be between 0 and 900 seconds');
         }
         $this->delaySeconds = $delaySeconds;
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getVisibilityTimeout()
     {
@@ -120,7 +128,7 @@ class SqsMailJob extends AbstractMailObject implements MailJobInterface
     }
 
     /**
-     * @param integer $visibilityTimeout
+     * @param int $visibilityTimeout
      */
     public function setVisibilityTimeout($visibilityTimeout)
     {
@@ -128,7 +136,7 @@ class SqsMailJob extends AbstractMailObject implements MailJobInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getDeleted()
     {
@@ -136,7 +144,7 @@ class SqsMailJob extends AbstractMailObject implements MailJobInterface
     }
 
     /**
-     * @param boolean $deleted
+     * @param bool $deleted
      */
     public function setDeleted($deleted)
     {

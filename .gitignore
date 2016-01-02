@@ -1,0 +1,7 @@
+/vendor
+/temp
+/build
+/.idea
+composer.phar
+coverage.clover
+phpunit.xml

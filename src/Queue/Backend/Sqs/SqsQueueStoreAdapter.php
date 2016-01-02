@@ -8,11 +8,11 @@ use Da\Mailer\Queue\Backend\QueueStoreAdapterInterface;
 class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
 {
     /**
-     * @var string the name of the queue to store the messages.
+     * @var string the name of the queue to store the messages
      */
     private $queueName;
     /**
-     * @var string
+     * @var string the URL of the queue to store the messages
      */
     private $queueUrl;
     /**
@@ -59,6 +59,7 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
 
     /**
      * @param MailJobInterface|SqsMailJob $mailJob
+     *
      * @return bool whether it has been successfully queued or not
      */
     public function enqueue(MailJobInterface $mailJob)
@@ -96,6 +97,8 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
 
     /**
      * @param MailJobInterface|SqsMailJob $mailJob
+     *
+     * @return bool
      */
     public function ack(MailJobInterface $mailJob)
     {
@@ -108,15 +111,22 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
                 'QueueUrl' => $this->queueUrl,
                 'ReceiptHandle' => $mailJob->getReceiptHandle(),
             ]);
+            return true;
         } elseif ($mailJob->getVisibilityTimeout() !== null) {
-            $this->getConnection()->getInstance()->ChangeMessageVisibility([
+            $this->getConnection()->getInstance()->changeMessageVisibility([
                 'QueueUrl' => $this->queueUrl,
                 'ReceiptHandle' => $mailJob->getReceiptHandle(),
                 'VisibilityTimeout' => $mailJob->getVisibilityTimeout(),
             ]);
+            return true;
         }
+
+        return false;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function isEmpty()
     {
         $attributes = $this->getConnection()->getInstance()->getQueueAttributes([

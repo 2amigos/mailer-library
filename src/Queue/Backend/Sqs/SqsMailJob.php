@@ -28,7 +28,7 @@ class SqsMailJob extends AbstractMailObject implements MailJobInterface
      */
     private $delaySeconds;
     /**
-     * @var int
+     * @var int between 0 and 900 seconds
      */
     private $visibilityTimeout;
     /**
@@ -114,7 +114,7 @@ class SqsMailJob extends AbstractMailObject implements MailJobInterface
     public function setDelaySeconds($delaySeconds)
     {
         if ($delaySeconds < 0 || $delaySeconds > 900) {
-            throw new BadMethodCallException('Delay seconds must be between 0 and 900 seconds');
+            throw new BadMethodCallException('Delay seconds must be between 0 and 900 seconds interval');
         }
         $this->delaySeconds = $delaySeconds;
     }

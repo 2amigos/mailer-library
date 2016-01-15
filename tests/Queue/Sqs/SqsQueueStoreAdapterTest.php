@@ -19,6 +19,7 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        // prepare sqs response collections - begin
         $createQueueResult = new Collection([
             'MessageId' => 'createQueueResultId',
             'QueueUrl' => 'http://queue.url/path/',
@@ -53,6 +54,9 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
         $receiveMessageResult2 = new Collection([
             // no message(s) returned by Amazon SQS
         ]);
+        // prepare sqs response collections - end
+
+        // ------------------------------------------------------------
 
         // prepare queue store 1 - begin
         /** @var SqsClient $sqsClient1 */
@@ -97,6 +101,8 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
 
         $this->sqsQueueStore1 = new SqsQueueStoreAdapter($sqsQueueStoreConnection1, 'testing_queue_1');
         // prepare queue store 1 - end
+
+        // ------------------------------------------------------------
 
         // prepare queue store 2 - begin
         /** @var SqsClient $sqsClient1 */
@@ -159,13 +165,13 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->sqsQueueStore1->enqueue($mailJob));
 
-        $this->assertTrue($this->sqsQueueStore1->isEmpty() === false);
+        $this->assertFalse($this->sqsQueueStore1->isEmpty());
 
         $mailJob = $this->sqsQueueStore1->dequeue();
         $this->assertNull($this->sqsQueueStore1->dequeue());
-        $this->assertEquals('receiveMessageResult1Id', $mailJob->getId());
+        $this->assertSame('receiveMessageResult1Id', $mailJob->getId());
 
-        $this->assertTrue($this->sqsQueueStore1->isEmpty() === true);
+        $this->assertTrue($this->sqsQueueStore1->isEmpty());
 
         $this->assertTrue(!empty($mailJob->getMessage()));
 
@@ -176,7 +182,7 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
         $mailJob->setDeleted(true);
         $this->sqsQueueStore1->ack($mailJob);
 
-        $this->assertTrue($this->sqsQueueStore1->dequeue() === null);
+        $this->assertNull($this->sqsQueueStore1->dequeue());
     }
 
     public function testAcknowledgementToUpdateMailJobs()
@@ -184,15 +190,15 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
         $mailJob = FixtureHelper::getSqsMailJob();
 
         $this->sqsQueueStore2->enqueue($mailJob);
-        $this->assertTrue($this->sqsQueueStore2->isEmpty() === false);
+        $this->assertFalse($this->sqsQueueStore2->isEmpty());
         $dequedMailJob = $this->sqsQueueStore2->dequeue();
         $this->assertNull($this->sqsQueueStore2->dequeue());
-        $this->assertTrue($this->sqsQueueStore2->isEmpty() === true);
+        $this->assertTrue($this->sqsQueueStore2->isEmpty());
         // set visibility timeout to five seconds
         $dequedMailJob->setVisibilityTimeout(5);
         $this->assertEquals(5, $dequedMailJob->getVisibilityTimeout());
         $this->sqsQueueStore2->ack($dequedMailJob);
-        $this->assertTrue($this->sqsQueueStore2->isEmpty() === false);
+        $this->assertFalse($this->sqsQueueStore2->isEmpty());
     }
 
     public function testDoNothingWithMailJob()
@@ -200,12 +206,12 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
         $mailJob = FixtureHelper::getSqsMailJob();
 
         $this->sqsQueueStore2->enqueue($mailJob);
-        $this->assertTrue($this->sqsQueueStore2->isEmpty() === false);
+        $this->assertFalse($this->sqsQueueStore2->isEmpty());
         $dequedMailJob = $this->sqsQueueStore2->dequeue();
         $this->assertNull($this->sqsQueueStore2->dequeue());
-        $this->assertTrue($this->sqsQueueStore2->isEmpty() === true);
+        $this->assertTrue($this->sqsQueueStore2->isEmpty());
         $this->assertFalse($this->sqsQueueStore2->ack($dequedMailJob));
-        $this->assertTrue($this->sqsQueueStore2->isEmpty() === false);
+        $this->assertFalse($this->sqsQueueStore2->isEmpty());
     }
 
     /**

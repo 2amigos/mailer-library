@@ -2,6 +2,7 @@
 namespace Da\Mailer\Test\Fixture;
 
 use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
+use Da\Mailer\Queue\Backend\Sqs\SqsMailJob;
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Transport\TransportInterface;
 
@@ -12,9 +13,16 @@ class FixtureHelper
         return new MailMessage(self::getMailMessageSmtpConfigurationArray());
     }
 
-    public static function getMailJob()
+    public static function getPdoMailJob()
     {
         return new PdoMailJob([
+            'message' => json_encode(self::getMailMessage())
+        ]);
+    }
+
+    public static function getSqsMailJob()
+    {
+        return new SqsMailJob([
             'message' => json_encode(self::getMailMessage())
         ]);
     }
@@ -24,7 +32,7 @@ class FixtureHelper
         return [
             'connectionString' => 'mysql:host=localhost;dbname=mail_queue_test',
             'username' => 'root',
-            'password' => ''
+            'password' => '',
         ];
     }
 

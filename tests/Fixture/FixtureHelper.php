@@ -2,6 +2,7 @@
 namespace Da\Mailer\Test\Fixture;
 
 use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
+use Da\Mailer\Queue\Backend\Sqs\SqsMailJob;
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Transport\TransportInterface;
 
@@ -15,6 +16,13 @@ class FixtureHelper
     public static function getPdoMailJob()
     {
         return new PdoMailJob([
+            'message' => json_encode(self::getMailMessage())
+        ]);
+    }
+
+    public static function getSqsMailJob()
+    {
+        return new SqsMailJob([
             'message' => json_encode(self::getMailMessage())
         ]);
     }

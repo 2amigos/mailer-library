@@ -15,12 +15,10 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
     /**
      * @var SqsQueueStoreAdapter
      */
-    private $sqsQueueStore;
+    private $sqsQueueStore1, $sqsQueueStore2;
 
     protected function setUp()
     {
-        parent::setUp();
-
         $createQueueResult = new Collection([
             'MessageId' => 'createQueueResultId',
             'QueueUrl' => 'http://queue.url/path/',
@@ -56,11 +54,12 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             // no message(s) returned by Amazon SQS
         ]);
 
-        /** @var SqsClient $sqsClient */
-        $sqsClient = Mockery::mock('\Aws\Sqs\SqsClient')
+        // prepare queue store 1 - begin
+        /** @var SqsClient $sqsClient1 */
+        $sqsClient1 = Mockery::mock('\Aws\Sqs\SqsClient')
             ->shouldReceive('createQueue')
                 ->with(Mockery::mustBe([
-                    'QueueName' => 'testing_queue',
+                    'QueueName' => 'testing_queue_1',
                 ]))
                 ->andReturn($createQueueResult)
             ->shouldReceive('sendMessage')
@@ -88,38 +87,84 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
                 ]))
             ->getMock();
 
-        /** @var SqsQueueStoreConnection $sqsQueueStoreConnection */
-        $sqsQueueStoreConnection = Mockery::mock('\Da\Mailer\Queue\Backend\Sqs\SqsQueueStoreConnection')
+        /** @var SqsQueueStoreConnection $sqsQueueStoreConnection1 */
+        $sqsQueueStoreConnection1 = Mockery::mock('\Da\Mailer\Queue\Backend\Sqs\SqsQueueStoreConnection')
             ->shouldReceive('connect')
                 ->andReturnSelf()
             ->shouldReceive('getInstance')
-                ->andReturn($sqsClient)
+                ->andReturn($sqsClient1)
             ->getMock();
 
-        $this->sqsQueueStore = new SqsQueueStoreAdapter($sqsQueueStoreConnection, 'testing_queue');
+        $this->sqsQueueStore1 = new SqsQueueStoreAdapter($sqsQueueStoreConnection1, 'testing_queue_1');
+        // prepare queue store 1 - end
+
+        // prepare queue store 2 - begin
+        /** @var SqsClient $sqsClient1 */
+        $sqsClient2 = Mockery::mock('\Aws\Sqs\SqsClient')
+            ->shouldReceive('createQueue')
+                ->with(Mockery::mustBe([
+                    'QueueName' => 'testing_queue_2',
+                ]))
+                ->andReturn($createQueueResult)
+            ->shouldReceive('sendMessage')
+                ->with(Mockery::mustBe([
+                    'QueueUrl' => 'http://queue.url/path/',
+                    'MessageBody' => json_encode(FixtureHelper::getMailMessage()),
+                    'DelaySeconds' => null,
+                ]))
+                ->andReturn($sendMessageResult)
+            ->shouldReceive('getQueueAttributes')
+                ->with(Mockery::mustBe([
+                    'QueueUrl' => 'http://queue.url/path/',
+                    'AttributeNames' => ['ApproximateNumberOfMessages'],
+                ]))
+                ->andReturn($getQueueAttributesResult1, $getQueueAttributesResult2, $getQueueAttributesResult1)
+            ->shouldReceive('receiveMessage')
+                ->with(Mockery::mustBe([
+                    'QueueUrl' => 'http://queue.url/path/',
+                ]))
+                ->andReturn($receiveMessageResult1, $receiveMessageResult2)
+            ->shouldReceive('changeMessageVisibility')
+                ->with(Mockery::mustBe([
+                    'QueueUrl' => 'http://queue.url/path/',
+                    'ReceiptHandle' => 'receiveMessageResult1Handle',
+                    'VisibilityTimeout' => 5,
+                ]))
+            ->getMock();
+
+        /** @var SqsQueueStoreConnection $sqsQueueStoreConnection1 */
+        $sqsQueueStoreConnection1 = Mockery::mock('\Da\Mailer\Queue\Backend\Sqs\SqsQueueStoreConnection')
+            ->shouldReceive('connect')
+                ->andReturnSelf()
+            ->shouldReceive('getInstance')
+                ->andReturn($sqsClient2)
+            ->getMock();
+
+        $this->sqsQueueStore2 = new SqsQueueStoreAdapter($sqsQueueStoreConnection1, 'testing_queue_2');
+        // prepare queue store 2 - end
     }
 
     public function tearDown()
     {
-        parent::tearDown();
-
         Mockery::close();
+
+        parent::tearDown();
     }
 
     public function testEnqueueDequeueAndAcknowledge()
     {
         $mailJob = FixtureHelper::getSqsMailJob();
 
-        $this->assertSame($this->sqsQueueStore, $this->sqsQueueStore->init());
+        $this->assertSame($this->sqsQueueStore1, $this->sqsQueueStore1->init());
 
-        $this->assertTrue($this->sqsQueueStore->enqueue($mailJob));
+        $this->assertTrue($this->sqsQueueStore1->enqueue($mailJob));
 
-        $this->assertTrue($this->sqsQueueStore->isEmpty() === false);
+        $this->assertTrue($this->sqsQueueStore1->isEmpty() === false);
 
-        $mailJob = $this->sqsQueueStore->dequeue();
-        $this->assertNull($this->sqsQueueStore->dequeue());
+        $mailJob = $this->sqsQueueStore1->dequeue();
+        $this->assertNull($this->sqsQueueStore1->dequeue());
 
-        $this->assertTrue($this->sqsQueueStore->isEmpty() === true);
+        $this->assertTrue($this->sqsQueueStore1->isEmpty() === true);
 
         $this->assertTrue(!empty($mailJob->getMessage()));
 
@@ -128,9 +173,25 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(FixtureHelper::getMailMessage(), $dequeuedMailMessage);
 
         $mailJob->setDeleted(true);
-        $this->sqsQueueStore->ack($mailJob);
+        $this->sqsQueueStore1->ack($mailJob);
 
-        $this->assertTrue($this->sqsQueueStore->dequeue() === null);
+        $this->assertTrue($this->sqsQueueStore1->dequeue() === null);
+    }
+
+    public function testAcknowledgementToUpdateMailJobs()
+    {
+        $mailJob = FixtureHelper::getSqsMailJob();
+
+        $this->sqsQueueStore2->enqueue($mailJob);
+        $this->assertTrue($this->sqsQueueStore2->isEmpty() === false);
+        $dequedMailJob = $this->sqsQueueStore2->dequeue();
+        $this->assertNull($this->sqsQueueStore2->dequeue());
+        $this->assertTrue($this->sqsQueueStore2->isEmpty() === true);
+        // set visibility timeout to five seconds
+        $dequedMailJob->setVisibilityTimeout(5);
+        $this->assertEquals(5, $dequedMailJob->getVisibilityTimeout());
+        $this->sqsQueueStore2->ack($dequedMailJob);
+        $this->assertTrue($this->sqsQueueStore2->isEmpty() === false);
     }
 
     /**
@@ -139,6 +200,6 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
     public function testBadMethodCallExceptionOnAck()
     {
         $mailJob = FixtureHelper::getPdoMailJob();
-        $this->sqsQueueStore->ack($mailJob);
+        $this->sqsQueueStore1->ack($mailJob);
     }
 }

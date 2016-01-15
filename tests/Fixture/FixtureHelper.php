@@ -32,7 +32,7 @@ class FixtureHelper
         return [
             'connectionString' => 'mysql:host=localhost;dbname=mail_queue_test',
             'username' => 'root',
-            'password' => '123123'
+            'password' => '',
         ];
     }
 

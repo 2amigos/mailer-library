@@ -124,7 +124,7 @@ class SqsMailJob extends AbstractMailObject implements MailJobInterface
      */
     public function getVisibilityTimeout()
     {
-        return $this->message;
+        return $this->visibilityTimeout;
     }
 
     /**

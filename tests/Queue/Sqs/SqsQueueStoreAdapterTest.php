@@ -163,6 +163,7 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
 
         $mailJob = $this->sqsQueueStore1->dequeue();
         $this->assertNull($this->sqsQueueStore1->dequeue());
+        $this->assertEquals('receiveMessageResult1Id', $mailJob->getId());
 
         $this->assertTrue($this->sqsQueueStore1->isEmpty() === true);
 
@@ -194,6 +195,19 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->sqsQueueStore2->isEmpty() === false);
     }
 
+    public function testDoNothingWithMailJob()
+    {
+        $mailJob = FixtureHelper::getSqsMailJob();
+
+        $this->sqsQueueStore2->enqueue($mailJob);
+        $this->assertTrue($this->sqsQueueStore2->isEmpty() === false);
+        $dequedMailJob = $this->sqsQueueStore2->dequeue();
+        $this->assertNull($this->sqsQueueStore2->dequeue());
+        $this->assertTrue($this->sqsQueueStore2->isEmpty() === true);
+        $this->assertFalse($this->sqsQueueStore2->ack($dequedMailJob));
+        $this->assertTrue($this->sqsQueueStore2->isEmpty() === false);
+    }
+
     /**
      * @expectedException \BadMethodCallException
      */
@@ -201,5 +215,16 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
     {
         $mailJob = FixtureHelper::getPdoMailJob();
         $this->sqsQueueStore1->ack($mailJob);
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testBadMethodCallExceptionOnSetDelaySeconds()
+    {
+        $mailJob = FixtureHelper::getSqsMailJob();
+        $mailJob->setDelaySeconds(900);
+        $this->assertEquals(900, $mailJob->getDelaySeconds());
+        $mailJob->setDelaySeconds(901);
     }
 }

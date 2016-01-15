@@ -12,7 +12,7 @@ class FixtureHelper
         return new MailMessage(self::getMailMessageSmtpConfigurationArray());
     }
 
-    public static function getMailJob()
+    public static function getPdoMailJob()
     {
         return new PdoMailJob([
             'message' => json_encode(self::getMailMessage())

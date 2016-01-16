@@ -9,6 +9,11 @@ interface QueueStoreAdapterInterface
     public function init();
 
     /**
+     * @return AbstractQueueStoreConnection
+     */
+    public function getConnection();
+
+    /**
      * @param MailJobInterface $mailJob
      *
      * @return bool

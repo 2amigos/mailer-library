@@ -19,7 +19,7 @@ final class PhpViewFileHelper
         ob_start();
         ob_implicit_flush(false);
         extract($params, EXTR_OVERWRITE);
-        require($file);
+        require $file;
 
         return ob_get_clean();
     }

@@ -4,7 +4,7 @@ namespace Da\Mailer\Event;
 trait EventHandlerTrait
 {
     /**
-     * @var array $events stack of events attached to the manager
+     * @var array stack of events attached to the manager
      */
     protected $events = [];
 

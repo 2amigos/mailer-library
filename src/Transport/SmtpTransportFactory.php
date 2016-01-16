@@ -5,9 +5,8 @@ use Da\Mailer\Helper\ArrayHelper;
 
 class SmtpTransportFactory extends AbstractTransportFactory
 {
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function __construct(array $options)
     {

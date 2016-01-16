@@ -178,7 +178,7 @@ class Mailer
     }
 
     /**
-     * Adds a Swift_Mailer plugin to the stack so it can be later registered with `registerPlugins()`
+     * Adds a Swift_Mailer plugin to the stack so it can be later registered with `registerPlugins()`.
      *
      * @param Swift_Events_EventListener $plugin
      *

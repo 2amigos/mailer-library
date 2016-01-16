@@ -63,9 +63,10 @@ abstract class AbstractMailObject
      *
      * @param string $name
      *
+     * @throws Exception if the property is not defined or write-only
+     *
      * @return mixed the property value
      *
-     * @throws Exception if the property is not defined or write-only
      */
     public function __get($name)
     {
@@ -89,7 +90,8 @@ abstract class AbstractMailObject
      *
      * @param string $name the property name or the event name
      *
-     * @return boolean whether the named property is set (not null).
+     * @return bool whether the named property is set (not null).
+     *
      * @see http://php.net/manual/en/function.isset.php
      */
     public function __isset($name)
@@ -114,6 +116,7 @@ abstract class AbstractMailObject
      * @param string $name the property name
      *
      * @throws InvalidCallException if the property is read only.
+     *
      * @see http://php.net/manual/en/function.unset.php
      */
     public function __unset($name)

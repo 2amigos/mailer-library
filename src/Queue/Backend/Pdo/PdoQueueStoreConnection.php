@@ -11,13 +11,13 @@ class PdoQueueStoreConnection extends AbstractQueueStoreConnection
      *
      * @param array $configuration
      */
-    public function __construct(array $configuration = [])
+    public function __construct(array $configuration)
     {
         parent::__construct($configuration);
     }
 
     /**
-     * @inheritdoc
+     * @return PdoQueueStoreConnection
      */
     public function connect()
     {
@@ -38,7 +38,7 @@ class PdoQueueStoreConnection extends AbstractQueueStoreConnection
     /**
      * Returns the connection instance.
      *
-     * @return PDO|null
+     * @return PDO
      */
     public function getInstance()
     {

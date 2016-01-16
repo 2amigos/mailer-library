@@ -3,18 +3,12 @@ namespace Da\Mailer\Queue\Backend\Sqs;
 
 use BadMethodCallException;
 use Da\Mailer\Event\EventHandlerTrait;
-use Da\Mailer\Model\AbstractMailObject;
-use Da\Mailer\Queue\Backend\MailJobInterface;
+use Da\Mailer\Model\MailJob;
 use Da\Mailer\Model\MailMessage;
 
-class SqsMailJob extends AbstractMailObject implements MailJobInterface
+class SqsMailJob extends MailJob
 {
     use EventHandlerTrait;
-
-    /**
-     * @var string
-     */
-    private $id;
     /**
      * @var string
      */
@@ -37,7 +31,7 @@ class SqsMailJob extends AbstractMailObject implements MailJobInterface
     private $deleted = false;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function __construct(array $config = [])
     {
@@ -45,27 +39,11 @@ class SqsMailJob extends AbstractMailObject implements MailJobInterface
     }
 
     /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $anId
-     */
-    public function setId($anId)
-    {
-        $this->id = $anId;
-    }
-
-    /**
      * @return bool
      */
     public function isNewRecord()
     {
-        return $this->id === null || $this->receiptHandle === null;
+        return $this->getId() === null || $this->receiptHandle === null;
     }
 
     /**
@@ -82,22 +60,6 @@ class SqsMailJob extends AbstractMailObject implements MailJobInterface
     public function setReceiptHandle($receiptHandle)
     {
         $this->receiptHandle = $receiptHandle;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setMessage($message)
-    {
-        $this->message = $message;
     }
 
     /**

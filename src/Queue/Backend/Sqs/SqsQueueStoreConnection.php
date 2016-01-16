@@ -1,8 +1,8 @@
 <?php
 namespace Da\Mailer\Queue\Backend\Sqs;
 
-use Da\Mailer\Queue\Backend\AbstractQueueStoreConnection;
 use Aws\Sqs\SqsClient;
+use Da\Mailer\Queue\Backend\AbstractQueueStoreConnection;
 
 class SqsQueueStoreConnection extends AbstractQueueStoreConnection
 {
@@ -17,7 +17,7 @@ class SqsQueueStoreConnection extends AbstractQueueStoreConnection
     }
 
     /**
-     * @inheritdoc
+     * @return $this
      */
     public function connect()
     {

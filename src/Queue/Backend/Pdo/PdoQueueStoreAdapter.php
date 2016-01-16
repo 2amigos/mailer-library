@@ -1,7 +1,7 @@
 <?php
 namespace Da\Mailer\Queue\Backend\Pdo;
 
-use BadMethodCallException;
+use Da\Mailer\Exception\InvalidCallException;
 use Da\Mailer\Queue\Backend\MailJobInterface;
 use Da\Mailer\Queue\Backend\QueueStoreAdapterInterface;
 use PDO;
@@ -31,7 +31,7 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
     }
 
     /**
-     * @inheritdoc
+     * @return PdoQueueStoreAdapter
      */
     public function init()
     {
@@ -106,7 +106,7 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
     }
 
     /**
-     * 'Ack'knowledge the MailJob. Once a MailJob as been processed it could be:
+     * 'Ack'knowledge the MailJob. Once a MailJob as been processed it could be:.
      *
      * - Updated its status to 'C'ompleted
      * - Updated its status to 'N'ew and set its `timeToSend` attribute to a future date
@@ -118,7 +118,7 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
     public function ack(MailJobInterface $mailJob)
     {
         if ($mailJob->isNewRecord()) {
-            throw new BadMethodCallException('PdoMailJob cannot be a new object to be acknowledged');
+            throw new InvalidCallException('PdoMailJob cannot be a new object to be acknowledged');
         }
 
         $sqlText = 'UPDATE `%s`
@@ -138,7 +138,7 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isEmpty()
     {

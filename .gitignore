@@ -1,0 +1,15 @@
+build
+composer.lock
+vendor
+.idea
+
+# cache directories
+Thumbs.db
+
+#netbeans project files
+nbproject
+
+
+# mac deployment helpers
+switch
+index

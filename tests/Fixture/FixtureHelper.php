@@ -1,8 +1,8 @@
 <?php
 namespace Da\Mailer\Test\Fixture;
 
-use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
 use Da\Mailer\Model\MailMessage;
+use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
 use Da\Mailer\Transport\TransportInterface;
 
 class FixtureHelper
@@ -15,7 +15,7 @@ class FixtureHelper
     public static function getMailJob()
     {
         return new PdoMailJob([
-            'message' => json_encode(self::getMailMessage())
+            'message' => json_encode(self::getMailMessage()),
         ]);
     }
 
@@ -24,7 +24,7 @@ class FixtureHelper
         return [
             'connectionString' => 'mysql:host=localhost;dbname=mail_queue_test',
             'username' => 'root',
-            'password' => ''
+            'password' => '',
         ];
     }
 
@@ -42,7 +42,7 @@ class FixtureHelper
             'subject' => 'subject',
             'bodyHtml' => '<b>This is body Html</b>',
             'bodyText' => 'This is body text',
-            'attachments' => [ __DIR__ . '/../data/test_view.php']
+            'attachments' => [__DIR__ . '/../data/test_view.php'],
         ];
     }
 }

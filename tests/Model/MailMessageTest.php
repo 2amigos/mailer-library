@@ -13,7 +13,6 @@ class MailMessageTest extends PHPUnit_Framework_TestCase
         $config = FixtureHelper::getMailMessageSmtpConfigurationArray();
         $mailMessage = FixtureHelper::getMailMessage();
 
-
         foreach ($config as $attribute => $value) {
             $this->assertEquals($config[$attribute], $mailMessage->$attribute);
             $this->assertTrue(isset($mailMessage->$attribute));
@@ -48,5 +47,4 @@ class MailMessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($mailMessage->subject, $swift->getSubject());
         $this->assertEquals($mailMessage->bodyHtml, $swift->getBody());
     }
-
 }

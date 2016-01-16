@@ -7,7 +7,6 @@ use PHPUnit_Extensions_Database_TestCase;
 
 abstract class AbstractMySqlDatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
 {
-
     protected static function getPdoQueueStoreConnection()
     {
         static $pdoQueue;
@@ -20,7 +19,7 @@ abstract class AbstractMySqlDatabaseTestCase extends PHPUnit_Extensions_Database
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function getConnection()
     {
@@ -30,7 +29,7 @@ abstract class AbstractMySqlDatabaseTestCase extends PHPUnit_Extensions_Database
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function getDataSet()
     {
@@ -38,23 +37,21 @@ abstract class AbstractMySqlDatabaseTestCase extends PHPUnit_Extensions_Database
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function setUp()
     {
         $sql = file_get_contents(__DIR__ . '/migrations/mysql.sql');
 
-        $statements = array_map('trim', array_filter(explode(";", $sql)));
+        $statements = array_map('trim', array_filter(explode(';', $sql)));
 
-        foreach($statements as $sqlQuery)
-        {
-            if(empty($sqlQuery)) {
+        foreach ($statements as $sqlQuery) {
+            if (empty($sqlQuery)) {
                 continue;
             }
             $query = self::getPdoQueueStoreConnection()->getInstance()->prepare($sqlQuery);
             $query->execute();
         }
-
 
         parent::setUp();
     }

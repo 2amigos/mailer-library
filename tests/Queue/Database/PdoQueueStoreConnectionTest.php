@@ -3,8 +3,8 @@ namespace Da\Mailer\Test\Queue\Database;
 
 use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreConnection;
 use Da\Mailer\Test\Fixture\FixtureHelper;
-use PHPUnit_Framework_TestCase;
 use PDO;
+use PHPUnit_Framework_TestCase;
 use ReflectionClass;
 
 class PdoQueueStoreConnectionTest extends PHPUnit_Framework_TestCase
@@ -20,7 +20,7 @@ class PdoQueueStoreConnectionTest extends PHPUnit_Framework_TestCase
         $username = 'root';
         $password = 'password';
         $options = [
-            PDO::ATTR_PERSISTENT => true
+            PDO::ATTR_PERSISTENT => true,
         ];
 
         $connection = new PdoQueueStoreConnection(
@@ -28,7 +28,7 @@ class PdoQueueStoreConnectionTest extends PHPUnit_Framework_TestCase
                 'connectionString' => $connectionString,
                 'username' => $username,
                 'password' => $password,
-                'options' => $options
+                'options' => $options,
             ]
         );
 

@@ -1,17 +1,16 @@
 <?php
 namespace Da\Mailer\Test\Queue\Cli;
 
+use Da\Mailer\Event\Event;
 use Da\Mailer\Mailer;
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Cli\MailMessageWorker;
-use Da\Mailer\Event\Event;
 use Mockery;
 use PHPUnit_Framework_TestCase;
 use Swift_Message;
 
 class MailMessageWorkerTest extends PHPUnit_Framework_TestCase
 {
-
     public function testRunMethodOnSuccess()
     {
         $swift = new Swift_Message();
@@ -22,7 +21,7 @@ class MailMessageWorkerTest extends PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($swift);
 
-        $mockedMailer = Mockery::mock( Mailer::class);
+        $mockedMailer = Mockery::mock(Mailer::class);
 
         $mockedMailer
             ->shouldReceive('sendSwiftMessage')
@@ -34,7 +33,7 @@ class MailMessageWorkerTest extends PHPUnit_Framework_TestCase
         $eventResponse = null;
         $failedRecipientsResponse = 0;
 
-        $handler = function(Event $event) use (&$eventResponse, &$failedRecipientsResponse){
+        $handler = function (Event $event) use (&$eventResponse, &$failedRecipientsResponse) {
             $data = $event->getData();
             $eventResponse = $data[0];
             $failedRecipientsResponse = $data[1];
@@ -61,7 +60,7 @@ class MailMessageWorkerTest extends PHPUnit_Framework_TestCase
 
         $mockedMailMessage->to = 'failed@mail.com';
 
-        $mockedMailer = Mockery::mock( Mailer::class);
+        $mockedMailer = Mockery::mock(Mailer::class);
 
         $mockedMailer
             ->shouldReceive('sendSwiftMessage')
@@ -73,7 +72,7 @@ class MailMessageWorkerTest extends PHPUnit_Framework_TestCase
         $eventResponse = null;
         $failedRecipientsResponse = 0;
 
-        $handler = function(Event $event) use (&$eventResponse, &$failedRecipientsResponse){
+        $handler = function (Event $event) use (&$eventResponse, &$failedRecipientsResponse) {
             $data = $event->getData();
             $eventResponse = $data[0];
             $failedRecipientsResponse = $data[1];
@@ -100,7 +99,7 @@ class MailMessageWorkerTest extends PHPUnit_Framework_TestCase
 
         $mockedMailMessage->to = 'failed@mail.com';
 
-        $mockedMailer = Mockery::mock( Mailer::class);
+        $mockedMailer = Mockery::mock(Mailer::class);
 
         $mockedMailer
             ->shouldReceive('sendSwiftMessage')
@@ -112,7 +111,7 @@ class MailMessageWorkerTest extends PHPUnit_Framework_TestCase
         $eventResponse = null;
         $failedRecipientsResponse = 0;
 
-        $handler = function(Event $event) use (&$eventResponse, &$failedRecipientsResponse){
+        $handler = function (Event $event) use (&$eventResponse, &$failedRecipientsResponse) {
             $data = $event->getData();
             $eventResponse = $data[0];
             $failedRecipientsResponse = $data[1];

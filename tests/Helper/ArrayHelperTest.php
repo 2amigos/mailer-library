@@ -10,8 +10,8 @@ class Post
     public $title = 'Star Wars: The Force Awakens';
 }
 
-class ArrayHelperTest extends PHPUnit_Framework_TestCase {
-
+class ArrayHelperTest extends PHPUnit_Framework_TestCase
+{
     public function testGetValueFromObject()
     {
         $post = new Post();
@@ -57,8 +57,8 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase {
             ],
             'version' => [
                 '1.0' => [
-                    'status' => 'released'
-                ]
+                    'status' => 'released',
+                ],
             ],
         ];
         $this->assertEquals($expected, ArrayHelper::getValue($array, $key, $default));
@@ -86,7 +86,7 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase {
                     return $array['date'] . $defaultValue;
                 },
                 '31-12-2116test',
-                'test'
+                'test',
             ],
             [['version', '1.0', 'status'], 'released'],
             [['version', '1.0', 'date'], 'defaultValue', 'defaultValue'],

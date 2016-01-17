@@ -1,5 +1,5 @@
 <?php
-namespace Da\Mailer\Test\Queue\Database;
+namespace Da\Mailer\Test\Queue\Backend\Pdo;
 
 use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreConnection;
 use Da\Mailer\Test\Fixture\FixtureHelper;

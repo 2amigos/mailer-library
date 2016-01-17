@@ -15,6 +15,9 @@ class MailQueueTest extends AbstractMySqlDatabaseTestCase
      * @var MailQueue
      */
     private $mailQueuePdo;
+    /**
+     * @var PdoQueueStoreAdapter
+     */
     private $pdoQueueAdapter;
 
     protected function setUp()
@@ -29,6 +32,7 @@ class MailQueueTest extends AbstractMySqlDatabaseTestCase
         $mailJob = FixtureHelper::getMailJob();
 
         $this->assertSame($this->pdoQueueAdapter, $this->mailQueuePdo->init());
+        $this->assertEquals(self::getPdoQueueStoreConnection(), $this->mailQueuePdo->getConnection());
         $this->assertTrue($this->mailQueuePdo->enqueue($mailJob));
         $this->assertTrue($this->mailQueuePdo->isEmpty() === false);
 

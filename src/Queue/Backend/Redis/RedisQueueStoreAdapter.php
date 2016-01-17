@@ -122,8 +122,8 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
      */
     public function removeReserved(MailJobInterface $mailJob)
     {
-        $payLoad = $this->createPayload($mailJob);
-        $this->getConnection()->getInstance()->zrem($this->queueName . ':reserved', $payLoad);
+        $payload = $this->createPayload($mailJob);
+        $this->getConnection()->getInstance()->zrem($this->queueName . ':reserved', $payload);
     }
 
     /**

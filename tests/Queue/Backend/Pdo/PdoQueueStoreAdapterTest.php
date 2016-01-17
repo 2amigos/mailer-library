@@ -1,5 +1,5 @@
 <?php
-namespace Da\tests\Queue\Database;
+namespace Da\Mailer\Test\Queue\Backend\Pdo;
 
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreAdapter;

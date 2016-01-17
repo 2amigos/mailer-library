@@ -1,5 +1,5 @@
 <?php
-namespace Da\Mailer\Test\Queue\Sqs;
+namespace Da\Mailer\Test\Queue\Backend\Sqs;
 
 use Aws\Sqs\SqsClient;
 use Da\Mailer\Queue\Backend\Sqs\SqsQueueStoreConnection;

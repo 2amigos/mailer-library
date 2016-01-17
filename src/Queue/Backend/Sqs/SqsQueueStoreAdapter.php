@@ -16,7 +16,7 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
      */
     private $queueUrl;
     /**
-     * @var SqsQueueStoreAdapter
+     * @var SqsQueueStoreConnection
      */
     protected $connection;
 

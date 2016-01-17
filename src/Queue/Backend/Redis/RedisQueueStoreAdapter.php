@@ -42,9 +42,7 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
     public function init()
     {
         $this->getConnection()
-            ->connect()
-            ->getInstance()
-            ->sadd('queues', $this->queueName);
+            ->connect();
 
         return $this;
     }
@@ -86,7 +84,7 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
                 ->getInstance()
                 ->zadd($this->queueName . ':reserved', [time() + $this->expireTime, $job]);
 
-            $data = json_decode($job);
+            $data = json_decode($job, true);
 
             return new RedisMailJob(
                 [
@@ -146,7 +144,7 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
         return json_encode(
             [
                 'id' => $mailJob->isNewRecord() ? Random::string(32) : $mailJob->getId(),
-                'attempts' => $mailJob->getAttempt(),
+                'attempt' => $mailJob->getAttempt(),
                 'message' => $mailJob->getMessage(),
             ]
         );

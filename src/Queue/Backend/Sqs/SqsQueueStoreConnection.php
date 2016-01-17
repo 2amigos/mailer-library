@@ -21,9 +21,7 @@ class SqsQueueStoreConnection extends AbstractQueueStoreConnection
      */
     public function connect()
     {
-        if ($this->instance !== null) {
-            $this->instance = null; // close previous connection
-        }
+        $this->disconnect();
         $key = $this->getConfigurationValue('key');
         $secret = $this->getConfigurationValue('secret');
         $region = $this->getConfigurationValue('region');
@@ -40,7 +38,7 @@ class SqsQueueStoreConnection extends AbstractQueueStoreConnection
     /**
      * Returns the connection instance.
      *
-     * @return SqsClient|null
+     * @return SqsClient
      */
     public function getInstance()
     {

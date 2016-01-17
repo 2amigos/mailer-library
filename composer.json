@@ -25,7 +25,8 @@
         "scrutinizer/ocular": "~1.1",
         "squizlabs/php_codesniffer": "~2.3",
         "aws/aws-sdk-php": "2.*",
-        "predis/predis": "^1.0"
+        "predis/predis": "^1.0",
+        "pda/pheanstalk": "^3.1"
     },
     "autoload": {
         "psr-4": {
@@ -42,6 +43,7 @@
     },
     "suggest": {
         "aws/aws-sdk-php": "Allows the use of Amazon SQS as a mail queue system",
-        "predis/predis": "Allows the use of Redis as a mail queue system"
+        "predis/predis": "Allows the use of Redis as a mail queue system",
+        "pda/pheanstalk": "Allows the use of Beanstalkd as mail queue system"
     }
 }

@@ -21,9 +21,7 @@ class PdoQueueStoreConnection extends AbstractQueueStoreConnection
      */
     public function connect()
     {
-        if ($this->instance !== null) {
-            $this->instance = null; // close previous connection
-        }
+        $this->disconnect();
         $connectionString = $this->getConfigurationValue('connectionString');
         $username = $this->getConfigurationValue('username');
         $password = $this->getConfigurationValue('password');

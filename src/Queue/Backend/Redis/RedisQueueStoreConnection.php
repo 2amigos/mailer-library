@@ -7,7 +7,7 @@ use Predis\Client;
 class RedisQueueStoreConnection extends AbstractQueueStoreConnection
 {
     /**
-     * RedisQueueStoreConnection constructor. Function is here to display the php-doc about its connectinon parameters.
+     * RedisQueueStoreConnection constructor.
      *
      * @param array $configuration
      *
@@ -24,9 +24,7 @@ class RedisQueueStoreConnection extends AbstractQueueStoreConnection
      */
     public function connect()
     {
-        if ($this->instance !== null) {
-            $this->instance = null;
-        }
+        $this->disconnect();
         $this->instance = new Client($this->configuration);
 
         return $this;

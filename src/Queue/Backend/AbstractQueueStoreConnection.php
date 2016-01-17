@@ -36,6 +36,14 @@ abstract class AbstractQueueStoreConnection
     }
 
     /**
+     * Disconnects previous connection.
+     */
+    public function disconnect()
+    {
+        $this->instance = null;
+    }
+
+    /**
      * @return AbstractQueueStoreConnection
      */
     abstract public function connect();

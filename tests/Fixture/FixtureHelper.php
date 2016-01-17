@@ -1,6 +1,7 @@
 <?php
 namespace Da\Mailer\Test\Fixture;
 
+use Da\Mailer\Queue\Backend\Sqs\SqsMailJob;
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
 use Da\Mailer\Queue\Backend\Redis\RedisMailJob;
@@ -13,7 +14,7 @@ class FixtureHelper
         return new MailMessage(self::getMailMessageSmtpConfigurationArray());
     }
 
-    public static function getMailJob()
+    public static function getPdoMailJob()
     {
         return new PdoMailJob([
             'message' => json_encode(self::getMailMessage()),
@@ -25,6 +26,13 @@ class FixtureHelper
     {
         return new RedisMailJob([
             'message' => json_encode(self::getMailMessage()),
+        ]);
+    }
+
+    public static function getSqsMailJob()
+    {
+        return new SqsMailJob([
+            'message' => json_encode(self::getMailMessage())
         ]);
     }
 

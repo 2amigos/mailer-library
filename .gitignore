@@ -1,15 +1,10 @@
-build
-composer.lock
-vendor
-.idea
-
-# cache directories
+/vendor
+/build
+/temp
+/.idea
+composer.phar
+coverage.clover
 Thumbs.db
-
-#netbeans project files
 nbproject
-
-
-# mac deployment helpers
 switch
 index

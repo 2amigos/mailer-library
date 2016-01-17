@@ -22,7 +22,7 @@ class PdoQueueStoreAdapterTest extends AbstractMySqlDatabaseTestCase
 
     public function testEnqueueDequeueAndAcknowledge()
     {
-        $mailJob = FixtureHelper::getMailJob();
+        $mailJob = FixtureHelper::getPdoMailJob();
 
         $this->assertSame($this->pdoQueueStore, $this->pdoQueueStore->init());
 
@@ -48,7 +48,7 @@ class PdoQueueStoreAdapterTest extends AbstractMySqlDatabaseTestCase
 
     public function testAcknowledgementToUpdateMailJobs()
     {
-        $mailJob = FixtureHelper::getMailJob();
+        $mailJob = FixtureHelper::getPdoMailJob();
 
         $this->pdoQueueStore->enqueue($mailJob);
         $this->assertTrue($this->pdoQueueStore->isEmpty() === false);
@@ -71,7 +71,7 @@ class PdoQueueStoreAdapterTest extends AbstractMySqlDatabaseTestCase
      */
     public function testBadMethodCallExceptionOnAck()
     {
-        $mailJob = FixtureHelper::getMailJob();
+        $mailJob = FixtureHelper::getPdoMailJob();
         $this->pdoQueueStore->ack($mailJob);
     }
 }

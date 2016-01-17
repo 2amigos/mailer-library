@@ -86,7 +86,7 @@ class SqsMailJob extends MailJob
      */
     public function getVisibilityTimeout()
     {
-        return $this->message;
+        return $this->visibilityTimeout;
     }
 
     /**

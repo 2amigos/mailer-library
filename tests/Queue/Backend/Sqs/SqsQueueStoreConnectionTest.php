@@ -38,6 +38,9 @@ class SqsQueueStoreConnectionTest extends PHPUnit_Framework_TestCase
             'region' => 'eu-north-99',
         ]);
 
+        $this->assertTrue($connection->getInstance() instanceof SqsClient);
+        $this->assertSame($connection, $connection->connect());
+        $this->assertTrue($connection->getInstance() instanceof SqsClient);
         $this->assertSame($connection, $connection->connect());
         $this->assertTrue($connection->getInstance() instanceof SqsClient);
     }

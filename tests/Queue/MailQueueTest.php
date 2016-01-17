@@ -29,7 +29,7 @@ class MailQueueTest extends AbstractMySqlDatabaseTestCase
 
     public function testPdoEnqueDequeueAndAcknowledge()
     {
-        $mailJob = FixtureHelper::getMailJob();
+        $mailJob = FixtureHelper::getPdoMailJob();
 
         $this->assertSame($this->pdoQueueAdapter, $this->mailQueuePdo->init());
         $this->assertEquals(self::getPdoQueueStoreConnection(), $this->mailQueuePdo->getConnection());

@@ -65,9 +65,6 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
         $timestamp = $mailJob->getTimeToSend();
         $payload = $this->createPayload($mailJob);
 
-        if($payload === false) {
-            echo json_last_error_msg(); ob_flush(); die();
-        }
         return $timestamp !== null && $timestamp > time()
             ? $this->getConnection()->getInstance()->zadd($this->queueName . ':delayed', $timestamp, $payload)
             : $this->getConnection()->getInstance()->rpush($this->queueName, $payload);

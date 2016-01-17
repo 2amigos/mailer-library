@@ -65,8 +65,11 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
         $timestamp = $mailJob->getTimeToSend();
         $payload = $this->createPayload($mailJob);
 
+        if($payload === false) {
+            echo json_last_error_msg(); ob_flush(); die();
+        }
         return $timestamp !== null && $timestamp > time()
-            ? $this->getConnection()->getInstance()->zadd($this->queueName . ':delayed', [$timestamp, $payload])
+            ? $this->getConnection()->getInstance()->zadd($this->queueName . ':delayed', $timestamp, $payload)
             : $this->getConnection()->getInstance()->rpush($this->queueName, $payload);
     }
 
@@ -82,7 +85,7 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
         if ($job !== null) {
             $this->getConnection()
                 ->getInstance()
-                ->zadd($this->queueName . ':reserved', [time() + $this->expireTime, $job]);
+                ->zadd($this->queueName . ':reserved', time() + $this->expireTime, $job);
 
             $data = json_decode($job, true);
 
@@ -131,7 +134,7 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
      */
     public function isEmpty()
     {
-        return (int) $this->getConnection()->getInstance()->llen($this->queueName) === 0;
+        return $this->getConnection()->getInstance()->llen($this->queueName) === 0;
     }
 
     /**
@@ -143,7 +146,7 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
     {
         return json_encode(
             [
-                'id' => $mailJob->isNewRecord() ? Random::string(32) : $mailJob->getId(),
+                'id' => $mailJob->isNewRecord() ? sha1(Random::string(32)) : $mailJob->getId(),
                 'attempt' => $mailJob->getAttempt(),
                 'message' => $mailJob->getMessage(),
             ]

@@ -31,7 +31,7 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
     }
 
     /**
-     * @return PdoQueueStoreAdapter
+     * @return PdoQueueStoreAdapter|QueueStoreAdapterInterface
      */
     public function init()
     {

@@ -1,5 +1,5 @@
 <?php
-namespace Da\tests\Queue\Database;
+namespace Da\tests\Queue\Backend\Sqs;
 
 use Da\Mailer\Test\Fixture\FixtureHelper;
 use Da\Mailer\Model\MailMessage;

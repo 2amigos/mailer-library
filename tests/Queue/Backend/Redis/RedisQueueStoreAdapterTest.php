@@ -190,7 +190,7 @@ class RedisQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
      */
     public function testBadMethodCallExceptionOnAck()
     {
-        $mailJob = FixtureHelper::getMailJob();
+        $mailJob = FixtureHelper::getRedisMailJob();
         $connection = new RedisQueueStoreConnection([]);
         $redisQueueStore = new RedisQueueStoreAdapter($connection);
         $redisQueueStore->ack($mailJob);

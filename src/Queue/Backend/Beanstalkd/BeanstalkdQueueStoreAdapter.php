@@ -42,11 +42,13 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return BeanstalkdQueueStoreAdapter
      */
     public function init()
     {
         $this->getConnection()->connect();
+
+        return $this;
     }
 
     /**
@@ -66,9 +68,13 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
     {
         $timestamp = $mailJob->getTimeToSend();
         $payload = $this->createPayload($mailJob);
-        $delay = (int) max(0, $timestamp - time());
+        if ($payload === false) {
+            var_dump(json_last_error_msg());
+            ob_flush();
+        }
+        $delay = (int)max(Pheanstalk::DEFAULT_DELAY, $timestamp - time());
 
-        $this->getConnection()
+        return $this->getConnection()
             ->getInstance()
             ->useTube($this->queueName)
             ->put($payload, Pheanstalk::DEFAULT_PRIORITY, $delay, $this->timeToRun);
@@ -82,9 +88,10 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
 
             return new BeanstalkdMailJob(
                 [
-                    'id' => $job->getId(),
+                    'id' => $data['id'],
                     'attempt' => $data['attempt'],
                     'message' => $data['message'],
+                    'pheanstalkJob' => $job
                 ]
             );
         }
@@ -101,30 +108,30 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
             throw new InvalidCallException('BeanstalkdMailJob cannot be a new object to be acknowledged');
         }
 
+        $pheanstalk = $this->getConnection()->getInstance()->useTube($this->queueName);
         if ($mailJob->isCompleted()) {
-            $this->getConnection()->getInstance()->delete($mailJob->getPheanstalkJob());
+            $pheanstalk->delete($mailJob->getPheanstalkJob());
         } else {
             $timestamp = $mailJob->getTimeToSend();
             $delay = max(0, $timestamp - time());
 
             // add back to the queue as it wasn't completed maybe due to some transitory error
             // could also be failed.
-            $this->getConnection()
-                ->getInstance()
-                ->release($mailJob->getPheanstalkJob(), Pheanstalk::DEFAULT_PRIORITY, $delay);
+            $pheanstalk->release($mailJob->getPheanstalkJob(), Pheanstalk::DEFAULT_PRIORITY, $delay);
         }
     }
 
     /**
-     * TODO: test if is the correct way to find out if the queue is empty.
      *
      * @return bool
      */
     public function isEmpty()
     {
         $stats = $this->getConnection()->getInstance()->statsTube($this->queueName);
+        return (int)$stats->current_jobs_delayed === 0
+        && (int)$stats->current_jobs_urgent === 0
+        && (int)$stats->current_jobs_ready === 0;
 
-        return $stats->current_jobs_ready === 0 && $stats->current_jobs_delayed === 0;
     }
 
     /**
@@ -136,7 +143,7 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
     {
         return json_encode(
             [
-                'id' => $mailJob->isNewRecord() ? Random::string(32) : $mailJob->getId(),
+                'id' => $mailJob->isNewRecord() ? sha1(Random::string(32)) : $mailJob->getId(),
                 'attempt' => $mailJob->getAttempt(),
                 'message' => $mailJob->getMessage(),
             ]

@@ -1,6 +1,7 @@
 <?php
 namespace Da\Mailer\Test\Fixture;
 
+use Da\Mailer\Queue\Backend\Beanstalk\BeanstalkdMailJob;
 use Da\Mailer\Queue\Backend\Sqs\SqsMailJob;
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
@@ -25,6 +26,13 @@ class FixtureHelper
     public static function getRedisMailJob()
     {
         return new RedisMailJob([
+            'message' => json_encode(self::getMailMessage()),
+        ]);
+    }
+
+    public static function getBeanstalkdMailJob()
+    {
+        return new BeanstalkdMailJob([
             'message' => json_encode(self::getMailMessage()),
         ]);
     }

@@ -80,7 +80,7 @@ class MailMessage extends AbstractMailObject implements JsonSerializable
     public $attachments;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function __construct(array $config = [])
     {

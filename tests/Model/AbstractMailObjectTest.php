@@ -82,10 +82,10 @@ class AbstractMailObjectTest extends PHPUnit_Framework_TestCase
 
 class TestMailObject extends AbstractMailObject
 {
-
     private $property;
 
-    public function __construct(array $config = []) {
+    public function __construct(array $config = [])
+    {
         parent::__construct($config);
     }
 
@@ -101,11 +101,9 @@ class TestMailObject extends AbstractMailObject
 
     public function setSetterOnlyProperty()
     {
-
     }
 
     public function getGetterOnlyProperty()
     {
-
     }
 }

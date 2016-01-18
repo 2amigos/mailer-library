@@ -6,7 +6,7 @@ use Da\Mailer\Helper\ArrayHelper;
 abstract class AbstractQueueStoreConnection
 {
     /**
-     * @var mixed $instance the internal connection instance (ie. PDO)
+     * @var mixed the internal connection instance (ie. PDO)
      */
     protected $instance;
     /**
@@ -33,6 +33,14 @@ abstract class AbstractQueueStoreConnection
     protected function getConfigurationValue($key, $default = null)
     {
         return ArrayHelper::getValue($this->configuration, $key, $default);
+    }
+
+    /**
+     * Disconnects previous connection.
+     */
+    public function disconnect()
+    {
+        $this->instance = null;
     }
 
     /**

@@ -2,6 +2,7 @@
 namespace Da\Mailer\Test;
 
 use Da\Mailer\Mailer;
+use Da\Mailer\Test\Fixture\FixtureHelper;
 use Da\Mailer\Transport\MailTransport;
 use Da\Mailer\Transport\MailTransportFactory;
 use Da\Mailer\Transport\SendMailTransport;
@@ -9,7 +10,6 @@ use Da\Mailer\Transport\SendMailTransportFactory;
 use Da\Mailer\Transport\SmtpTransport;
 use Da\Mailer\Transport\SmtpTransportFactory;
 use Da\Mailer\Transport\TransportFactory;
-use Da\Mailer\Test\Fixture\FixtureHelper;
 use Mockery;
 use PHPUnit_Framework_TestCase;
 use Swift_Events_CommandEvent;
@@ -65,7 +65,7 @@ class MailerTest extends PHPUnit_Framework_TestCase
         $plugin = new TestSwiftPlugin();
         $this->assertSame($mailer, $mailer->addPlugin($plugin));
         $this->assertSame($mailer, $mailer->registerPlugins());
-        $this->assertEquals("", $mailer->getLog());
+        $this->assertEquals('', $mailer->getLog());
         // is dry run, should be fine sending as it will return number of message sent
 
         $this->assertEquals(
@@ -100,5 +100,4 @@ class TestSwiftPlugin implements \Swift_Events_CommandListener
     {
         // TODO: Implement commandSent() method.
     }
-
 }

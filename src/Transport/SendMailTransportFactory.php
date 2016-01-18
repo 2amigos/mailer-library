@@ -4,7 +4,7 @@ namespace Da\Mailer\Transport;
 class SendMailTransportFactory extends AbstractTransportFactory
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function __construct(array $options)
     {

@@ -1,8 +1,8 @@
 <?php
 namespace Da\Mailer\Queue\Backend\Sqs;
 
-use Da\Mailer\Queue\Backend\AbstractQueueStoreConnection;
 use Aws\Sqs\SqsClient;
+use Da\Mailer\Queue\Backend\AbstractQueueStoreConnection;
 
 class SqsQueueStoreConnection extends AbstractQueueStoreConnection
 {
@@ -17,13 +17,11 @@ class SqsQueueStoreConnection extends AbstractQueueStoreConnection
     }
 
     /**
-     * @inheritdoc
+     * @return $this
      */
     public function connect()
     {
-        if ($this->instance !== null) {
-            $this->instance = null; // close previous connection
-        }
+        $this->disconnect();
         $key = $this->getConfigurationValue('key');
         $secret = $this->getConfigurationValue('secret');
         $region = $this->getConfigurationValue('region');
@@ -40,7 +38,7 @@ class SqsQueueStoreConnection extends AbstractQueueStoreConnection
     /**
      * Returns the connection instance.
      *
-     * @return SqsClient|null
+     * @return SqsClient
      */
     public function getInstance()
     {

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6fcc3495112ef76d2d0c2f558d9903f4",
-    "content-hash": "fc71c6a12cb961b8a97b04cdc4e07be7",
+    "hash": "28a53fda97a76ce0f5fe06e41d9a8771",
+    "content-hash": "81fcbe6c4bd66de7122ab2d9e50ec326",
     "packages": [
         {
             "name": "phpseclib/phpseclib",
@@ -851,6 +851,56 @@
             "time": "2015-11-07 22:20:37"
         },
         {
+            "name": "pda/pheanstalk",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pda/pheanstalk.git",
+                "reference": "430e77c551479aad0c6ada0450ee844cf656a18b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pda/pheanstalk/zipball/430e77c551479aad0c6ada0450ee844cf656a18b",
+                "reference": "430e77c551479aad0c6ada0450ee844cf656a18b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pheanstalk\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Annesley",
+                    "email": "paul@annesley.cc",
+                    "homepage": "http://paul.annesley.cc/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP client for beanstalkd queue",
+            "homepage": "https://github.com/pda/pheanstalk",
+            "keywords": [
+                "beanstalkd"
+            ],
+            "time": "2015-08-07 21:42:41"
+        },
+        {
             "name": "phpcollection/phpcollection",
             "version": "0.4.0",
             "source": {
@@ -1116,16 +1166,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "3.0.2",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "f7bb5cddf4ffe113eeb737b05241adb947b43f9d"
+                "reference": "64d40a593fc31a8abf4ce3d200147ddf8ca64e52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/f7bb5cddf4ffe113eeb737b05241adb947b43f9d",
-                "reference": "f7bb5cddf4ffe113eeb737b05241adb947b43f9d",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/64d40a593fc31a8abf4ce3d200147ddf8ca64e52",
+                "reference": "64d40a593fc31a8abf4ce3d200147ddf8ca64e52",
                 "shasum": ""
             },
             "require": {
@@ -1148,7 +1198,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0.x-dev"
+                    "dev-master": "3.1.x-dev"
                 }
             },
             "autoload": {
@@ -1174,7 +1224,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-11-12 21:08:20"
+            "time": "2016-01-11 10:05:34"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1356,16 +1406,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.1.3",
+            "version": "5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "c047ff05d2279404af9a7e89e2a7151c32c88022"
+                "reference": "676c25c4ac563869572c878fdaf3db21587f5f3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c047ff05d2279404af9a7e89e2a7151c32c88022",
-                "reference": "c047ff05d2279404af9a7e89e2a7151c32c88022",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/676c25c4ac563869572c878fdaf3db21587f5f3b",
+                "reference": "676c25c4ac563869572c878fdaf3db21587f5f3b",
                 "shasum": ""
             },
             "require": {
@@ -1426,7 +1476,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-12-10 07:54:54"
+            "time": "2016-01-11 10:11:10"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1483,6 +1533,56 @@
                 "xunit"
             ],
             "time": "2015-12-08 08:47:06"
+        },
+        {
+            "name": "predis/predis",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nrk/predis.git",
+                "reference": "84060b9034d756b4d79641667d7f9efe1aeb8e04"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nrk/predis/zipball/84060b9034d756b4d79641667d7f9efe1aeb8e04",
+                "reference": "84060b9034d756b4d79641667d7f9efe1aeb8e04",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "suggest": {
+                "ext-curl": "Allows access to Webdis when paired with phpiredis",
+                "ext-phpiredis": "Allows faster serialization and deserialization of the Redis protocol"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Predis\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Alessandri",
+                    "email": "suppakilla@gmail.com",
+                    "homepage": "http://clorophilla.net"
+                }
+            ],
+            "description": "Flexible and feature-complete PHP client library for Redis",
+            "homepage": "http://github.com/nrk/predis",
+            "keywords": [
+                "nosql",
+                "predis",
+                "redis"
+            ],
+            "time": "2015-07-30 18:34:15"
         },
         {
             "name": "scrutinizer/ocular",
@@ -2073,16 +2173,16 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.1",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "a5eb815363c0388e83247e7e9853e5dbc14999cc"
+                "reference": "ee278f7c851533e58ca307f66305ccb9188aceda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/a5eb815363c0388e83247e7e9853e5dbc14999cc",
-                "reference": "a5eb815363c0388e83247e7e9853e5dbc14999cc",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/ee278f7c851533e58ca307f66305ccb9188aceda",
+                "reference": "ee278f7c851533e58ca307f66305ccb9188aceda",
                 "shasum": ""
             },
             "require": {
@@ -2129,7 +2229,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-30 20:15:42"
+            "time": "2016-01-13 10:28:07"
         },
         {
             "name": "symfony/polyfill-mbstring",

@@ -32,7 +32,7 @@ final class Cypher implements CypherInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function encodeMailMessage(MailMessage $mailMessage)
     {
@@ -43,12 +43,12 @@ final class Cypher implements CypherInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function decodeMailMessage($encodedMailMessage)
     {
         $this->strategy->setKey($this->key);
-        $decryptedMailMessage = $this->strategy->decrypt(base64_decode($encodedMailMessage));
+        $decryptedMailMessage = $this->strategy->decrypt(base64_decode($encodedMailMessage, true));
         $jsonDecodedMailMessageAttributes = json_decode($decryptedMailMessage, true);
 
         return new MailMessage($jsonDecodedMailMessageAttributes);

@@ -1,9 +1,11 @@
 <?php
 namespace Da\Mailer\Test\Fixture;
 
-use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
+use Da\Mailer\Queue\Backend\Beanstalk\BeanstalkdMailJob;
 use Da\Mailer\Queue\Backend\Sqs\SqsMailJob;
 use Da\Mailer\Model\MailMessage;
+use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
+use Da\Mailer\Queue\Backend\Redis\RedisMailJob;
 use Da\Mailer\Transport\TransportInterface;
 
 class FixtureHelper
@@ -16,7 +18,22 @@ class FixtureHelper
     public static function getPdoMailJob()
     {
         return new PdoMailJob([
-            'message' => json_encode(self::getMailMessage())
+            'message' => json_encode(self::getMailMessage()),
+            'timeToSend' => date('Y-m-d H:i:s', time())
+        ]);
+    }
+
+    public static function getRedisMailJob()
+    {
+        return new RedisMailJob([
+            'message' => json_encode(self::getMailMessage()),
+        ]);
+    }
+
+    public static function getBeanstalkdMailJob()
+    {
+        return new BeanstalkdMailJob([
+            'message' => json_encode(self::getMailMessage()),
         ]);
     }
 
@@ -30,7 +47,7 @@ class FixtureHelper
     public static function getMySqlConnectionConfiguration()
     {
         return [
-            'connectionString' => 'mysql:host=localhost;dbname=mail_queue_test',
+            'connectionString' => 'mysql:host=127.0.0.1;dbname=mail_queue_test',
             'username' => 'root',
             'password' => '',
         ];
@@ -50,7 +67,7 @@ class FixtureHelper
             'subject' => 'subject',
             'bodyHtml' => '<b>This is body Html</b>',
             'bodyText' => 'This is body text',
-            'attachments' => [ __DIR__ . '/../data/test_view.php']
+            'attachments' => [__DIR__ . '/../data/test_view.php'],
         ];
     }
 }

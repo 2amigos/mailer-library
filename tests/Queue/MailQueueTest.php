@@ -4,10 +4,10 @@ namespace Da\Mailer\Test\Queue;
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
 use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreAdapter;
+use Da\Mailer\Queue\MailQueue;
 use Da\Mailer\Security\Cypher;
 use Da\Mailer\Test\AbstractMySqlDatabaseTestCase;
 use Da\Mailer\Test\Fixture\FixtureHelper;
-use Da\Mailer\Queue\MailQueue;
 
 class MailQueueTest extends AbstractMySqlDatabaseTestCase
 {
@@ -15,6 +15,9 @@ class MailQueueTest extends AbstractMySqlDatabaseTestCase
      * @var MailQueue
      */
     private $mailQueuePdo;
+    /**
+     * @var PdoQueueStoreAdapter
+     */
     private $pdoQueueAdapter;
 
     protected function setUp()
@@ -29,6 +32,7 @@ class MailQueueTest extends AbstractMySqlDatabaseTestCase
         $mailJob = FixtureHelper::getPdoMailJob();
 
         $this->assertSame($this->pdoQueueAdapter, $this->mailQueuePdo->init());
+        $this->assertEquals(self::getPdoQueueStoreConnection(), $this->mailQueuePdo->getConnection());
         $this->assertTrue($this->mailQueuePdo->enqueue($mailJob));
         $this->assertTrue($this->mailQueuePdo->isEmpty() === false);
 
@@ -66,6 +70,5 @@ class MailQueueTest extends AbstractMySqlDatabaseTestCase
 
         $this->assertTrue($dequeuedMailJob->isNewRecord() === false);
         $this->assertEquals($mailMessage, $dequeuedMailJob->getMessage());
-
     }
 }

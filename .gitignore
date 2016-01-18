@@ -1,7 +1,10 @@
 /vendor
-/temp
 /build
+/temp
 /.idea
 composer.phar
 coverage.clover
-phpunit.xml
+Thumbs.db
+nbproject
+switch
+index

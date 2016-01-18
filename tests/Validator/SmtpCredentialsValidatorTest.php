@@ -29,7 +29,7 @@ class SmtpCredentialsValidatorTest extends PHPUnit_Framework_TestCase
                 'username' => 'Obiwoan',
                 'password' => 'Kenovi',
                 'encryption' => 'ssl',
-                'authMode' => 'Plain'
+                'authMode' => 'Plain',
             ]
         );
 
@@ -53,7 +53,7 @@ class SmtpCredentialsValidatorTest extends PHPUnit_Framework_TestCase
                 'username' => 'Obiwoan',
                 'password' => 'Kenovi',
                 'encryption' => 'ssl',
-                'authMode' => 'Plain'
+                'authMode' => 'Plain',
             ]
         );
 

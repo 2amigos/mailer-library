@@ -22,8 +22,8 @@ class TransportFactoryTest extends PHPUnit_Framework_TestCase
                 'username' => 'Obiwoan',
                 'password' => 'Kenovi',
                 'encryption' => 'ssl',
-                'authMode' => 'Plain'
-            ]
+                'authMode' => 'Plain',
+            ],
         ];
         $mailConfig = ['options' => '-f%s'];
         $sendMailConfig = ['options' => '/usr/sbin/sendmail -s'];
@@ -37,7 +37,7 @@ class TransportFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($smtp instanceof SmtpTransport);
 
         /**
-         * @var \Swift_SmtpTransport $swift
+         * @var \Swift_SmtpTransport
          */
         $swift = $smtp->getSwiftTransportInstance();
 
@@ -57,7 +57,7 @@ class TransportFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($mail instanceof MailTransport);
 
         /**
-         * @var \Swift_MailTransport $swift
+         * @var \Swift_MailTransport
          */
         $swift = $mail->getSwiftTransportInstance();
 
@@ -71,7 +71,7 @@ class TransportFactoryTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($sendMail instanceof SendMailTransport);
         /**
-         * @var \Swift_SendMailTransport $swift
+         * @var \Swift_SendMailTransport
          */
         $swift = $sendMail->getSwiftTransportInstance();
 
@@ -84,14 +84,14 @@ class TransportFactoryTest extends PHPUnit_Framework_TestCase
         $sendMail = (new SendMailTransportFactory([]))->create();
 
         /**
-         * @var \Swift_MailTransport $swift
+         * @var \Swift_MailTransport
          */
         $swift = $mail->getSwiftTransportInstance();
 
         $this->assertEquals('-f%s', $swift->getExtraParams());
 
         /**
-         * @var \Swift_SendMailTransport $swift
+         * @var \Swift_SendMailTransport
          */
         $swift = $sendMail->getSwiftTransportInstance();
 

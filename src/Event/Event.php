@@ -14,7 +14,7 @@ class Event
      */
     private $data;
     /**
-     * @var callable $handler
+     * @var callable
      */
     private $handler;
 

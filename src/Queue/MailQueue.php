@@ -2,6 +2,7 @@
 
 namespace Da\Mailer\Queue;
 
+use Da\Mailer\Queue\Backend\AbstractQueueStoreConnection;
 use Da\Mailer\Queue\Backend\MailJobInterface;
 use Da\Mailer\Queue\Backend\QueueStoreAdapterInterface;
 use Da\Mailer\Security\Cypher;
@@ -27,6 +28,14 @@ final class MailQueue implements QueueStoreAdapterInterface
     }
 
     /**
+     * @return AbstractQueueStoreConnection
+     */
+    public function getConnection()
+    {
+        return $this->adapter->getConnection();
+    }
+
+    /**
      * @param CypherInterface $cypher
      */
     public function setCypher(CypherInterface $cypher)
@@ -43,18 +52,19 @@ final class MailQueue implements QueueStoreAdapterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function enqueue(MailJobInterface $mailJob)
     {
         if (null !== $this->getCypher()) {
             $mailJob->setMessage($this->getCypher()->encodeMailMessage($mailJob->getMessage()));
         }
+
         return $this->adapter->enqueue($mailJob);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function dequeue()
     {
@@ -68,7 +78,7 @@ final class MailQueue implements QueueStoreAdapterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function init()
     {
@@ -76,7 +86,7 @@ final class MailQueue implements QueueStoreAdapterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function ack(MailJobInterface $mailJob)
     {

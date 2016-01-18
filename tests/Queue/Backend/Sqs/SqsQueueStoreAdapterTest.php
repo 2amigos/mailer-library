@@ -1,5 +1,5 @@
 <?php
-namespace Da\tests\Queue\Database;
+namespace Da\tests\Queue\Backend\Sqs;
 
 use Da\Mailer\Test\Fixture\FixtureHelper;
 use Da\Mailer\Model\MailMessage;
@@ -27,6 +27,7 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
 
         $sendMessageResult = new Collection([
             'MessageId' => 'sendMessageResultId',
+
         ]);
 
         $getQueueAttributesResult1 = new Collection([
@@ -48,6 +49,7 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
                     'MessageId' => 'receiveMessageResult1Id',
                     'ReceiptHandle' => 'receiveMessageResult1Handle',
                     'Body' => json_encode(FixtureHelper::getMailMessage()),
+                    'Attempt' => 1
                 ],
             ],
         ]);
@@ -67,11 +69,6 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
                 ]))
                 ->andReturn($createQueueResult)
             ->shouldReceive('sendMessage')
-                ->with(Mockery::mustBe([
-                    'QueueUrl' => 'http://queue.url/path/',
-                    'MessageBody' => json_encode(FixtureHelper::getMailMessage()),
-                    'DelaySeconds' => null,
-                ]))
                 ->andReturn($sendMessageResult)
             ->shouldReceive('getQueueAttributes')
                 ->with(Mockery::mustBe([
@@ -113,11 +110,6 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
                 ]))
                 ->andReturn($createQueueResult)
             ->shouldReceive('sendMessage')
-                ->with(Mockery::mustBe([
-                    'QueueUrl' => 'http://queue.url/path/',
-                    'MessageBody' => json_encode(FixtureHelper::getMailMessage()),
-                    'DelaySeconds' => null,
-                ]))
                 ->andReturn($sendMessageResult)
             ->shouldReceive('getQueueAttributes')
                 ->with(Mockery::mustBe([

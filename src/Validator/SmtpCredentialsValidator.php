@@ -78,7 +78,7 @@ class SmtpCredentialsValidator
     }
 
     /**
-     * Creates and instance from an array
+     * Creates and instance from an array.
      *
      * @param $config
      *

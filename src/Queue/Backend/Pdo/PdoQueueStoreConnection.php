@@ -11,19 +11,17 @@ class PdoQueueStoreConnection extends AbstractQueueStoreConnection
      *
      * @param array $configuration
      */
-    public function __construct(array $configuration = [])
+    public function __construct(array $configuration)
     {
         parent::__construct($configuration);
     }
 
     /**
-     * @inheritdoc
+     * @return PdoQueueStoreConnection
      */
     public function connect()
     {
-        if ($this->instance !== null) {
-            $this->instance = null; // close previous connection
-        }
+        $this->disconnect();
         $connectionString = $this->getConfigurationValue('connectionString');
         $username = $this->getConfigurationValue('username');
         $password = $this->getConfigurationValue('password');
@@ -38,7 +36,7 @@ class PdoQueueStoreConnection extends AbstractQueueStoreConnection
     /**
      * Returns the connection instance.
      *
-     * @return PDO|null
+     * @return PDO
      */
     public function getInstance()
     {

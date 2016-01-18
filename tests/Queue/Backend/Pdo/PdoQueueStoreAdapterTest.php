@@ -1,10 +1,10 @@
 <?php
-namespace Da\tests\Queue\Database;
+namespace Da\Mailer\Test\Queue\Backend\Pdo;
 
 use Da\Mailer\Model\MailMessage;
-use Da\Mailer\Test\Fixture\FixtureHelper;
 use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreAdapter;
 use Da\Mailer\Test\AbstractMySqlDatabaseTestCase;
+use Da\Mailer\Test\Fixture\FixtureHelper;
 
 class PdoQueueStoreAdapterTest extends AbstractMySqlDatabaseTestCase
 {

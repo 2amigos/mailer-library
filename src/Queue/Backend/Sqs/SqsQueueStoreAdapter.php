@@ -1,7 +1,7 @@
 <?php
 namespace Da\Mailer\Queue\Backend\Sqs;
 
-use BadMethodCallException;
+use Da\Mailer\Exception\InvalidCallException;
 use Da\Mailer\Queue\Backend\MailJobInterface;
 use Da\Mailer\Queue\Backend\QueueStoreAdapterInterface;
 
@@ -16,7 +16,7 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
      */
     private $queueUrl;
     /**
-     * @var SqsQueueStoreAdapter
+     * @var SqsQueueStoreConnection
      */
     protected $connection;
 
@@ -34,7 +34,7 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
     }
 
     /**
-     * @inheritdoc
+     * @return SqsQueueStoreAdapter
      */
     public function init()
     {
@@ -68,8 +68,10 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
             'QueueUrl' => $this->queueUrl,
             'MessageBody' => $mailJob->getMessage(),
             'DelaySeconds' => $mailJob->getDelaySeconds(),
+            'Attempt' => $mailJob->getAttempt(),
         ]);
         $messageId = $result->get('MessageId');
+
         return $messageId !== null && is_string($messageId);
     }
 
@@ -92,6 +94,7 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
             'id' => $result['MessageId'],
             'receiptHandle' => $result['ReceiptHandle'],
             'message' => $result['Body'],
+            'attempt' => $result['Attempt'],
         ]);
     }
 
@@ -103,7 +106,7 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
     public function ack(MailJobInterface $mailJob)
     {
         if ($mailJob->isNewRecord()) {
-            throw new BadMethodCallException('SqsMailJob cannot be a new object to be acknowledged');
+            throw new InvalidCallException('SqsMailJob cannot be a new object to be acknowledged');
         }
 
         if ($mailJob->getDeleted()) {
@@ -111,6 +114,7 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
                 'QueueUrl' => $this->queueUrl,
                 'ReceiptHandle' => $mailJob->getReceiptHandle(),
             ]);
+
             return true;
         } elseif ($mailJob->getVisibilityTimeout() !== null) {
             $this->getConnection()->getInstance()->changeMessageVisibility([
@@ -118,6 +122,7 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
                 'ReceiptHandle' => $mailJob->getReceiptHandle(),
                 'VisibilityTimeout' => $mailJob->getVisibilityTimeout(),
             ]);
+
             return true;
         }
 
@@ -125,7 +130,7 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isEmpty()
     {
@@ -133,6 +138,7 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
             'QueueUrl' => $this->queueUrl,
             'AttributeNames' => ['ApproximateNumberOfMessages'],
         ]);
+
         return $attributes->getPath('Attributes/ApproximateNumberOfMessages') == 0;
     }
 }

@@ -68,11 +68,7 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
     {
         $timestamp = $mailJob->getTimeToSend();
         $payload = $this->createPayload($mailJob);
-        if ($payload === false) {
-            var_dump(json_last_error_msg());
-            ob_flush();
-        }
-        $delay = (int)max(Pheanstalk::DEFAULT_DELAY, $timestamp - time());
+        $delay = (int) max(Pheanstalk::DEFAULT_DELAY, $timestamp - time());
 
         return $this->getConnection()
             ->getInstance()
@@ -91,7 +87,7 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
                     'id' => $data['id'],
                     'attempt' => $data['attempt'],
                     'message' => $data['message'],
-                    'pheanstalkJob' => $job
+                    'pheanstalkJob' => $job,
                 ]
             );
         }
@@ -128,10 +124,10 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
     public function isEmpty()
     {
         $stats = $this->getConnection()->getInstance()->statsTube($this->queueName);
-        return (int)$stats->current_jobs_delayed === 0
-        && (int)$stats->current_jobs_urgent === 0
-        && (int)$stats->current_jobs_ready === 0;
 
+        return (int) $stats->current_jobs_delayed === 0
+        && (int) $stats->current_jobs_urgent === 0
+        && (int) $stats->current_jobs_ready === 0;
     }
 
     /**

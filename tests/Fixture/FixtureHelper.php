@@ -1,11 +1,11 @@
 <?php
 namespace Da\Mailer\Test\Fixture;
 
-use Da\Mailer\Queue\Backend\Beanstalk\BeanstalkdMailJob;
-use Da\Mailer\Queue\Backend\Sqs\SqsMailJob;
 use Da\Mailer\Model\MailMessage;
+use Da\Mailer\Queue\Backend\Beanstalk\BeanstalkdMailJob;
 use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
 use Da\Mailer\Queue\Backend\Redis\RedisMailJob;
+use Da\Mailer\Queue\Backend\Sqs\SqsMailJob;
 use Da\Mailer\Transport\TransportInterface;
 
 class FixtureHelper
@@ -19,7 +19,7 @@ class FixtureHelper
     {
         return new PdoMailJob([
             'message' => json_encode(self::getMailMessage()),
-            'timeToSend' => date('Y-m-d H:i:s', time())
+            'timeToSend' => date('Y-m-d H:i:s', time()),
         ]);
     }
 
@@ -40,7 +40,7 @@ class FixtureHelper
     public static function getSqsMailJob()
     {
         return new SqsMailJob([
-            'message' => json_encode(self::getMailMessage())
+            'message' => json_encode(self::getMailMessage()),
         ]);
     }
 

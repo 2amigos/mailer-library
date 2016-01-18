@@ -23,7 +23,7 @@ class BeanstalkdQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             [
                 'id' => '123456789',
                 'attempt' => $this->mailJob->getAttempt(),
-                'message' => $this->mailJob->getMessage()
+                'message' => $this->mailJob->getMessage(),
             ]
         );
     }
@@ -34,10 +34,10 @@ class BeanstalkdQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             'test', [
                 'current-jobs-delayed' => 0,
                 'current-jobs-urgent' => 0,
-                'current-jobs-ready' => 0
+                'current-jobs-ready' => 0,
             ]
         );
-        $statsTubeResponse1= new ArrayResponse('test', ['current-jobs-delayed' => 1,]);
+        $statsTubeResponse1 = new ArrayResponse('test', ['current-jobs-delayed' => 1]);
         $payload = json_decode($this->payload, true);
         $payload['job'] = new Job(1, 'demo');
         $btJob2 = Mockery::mock('\Pheanstalk\Job')
@@ -140,7 +140,6 @@ class BeanstalkdQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
         $btQueueStore->ack($mailJob);
     }
 
-
     /**
      * @expectedException \Da\Mailer\Exception\InvalidCallException
      */
@@ -154,12 +153,12 @@ class BeanstalkdQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testNonCompletedAck()
     {
-        $statsTubeResponse1 = new ArrayResponse('test', ['current-jobs-delayed' => 1,]);
+        $statsTubeResponse1 = new ArrayResponse('test', ['current-jobs-delayed' => 1]);
         $statsTubeResponse2 = new ArrayResponse(
             'test', [
                 'current-jobs-delayed' => 0,
                 'current-jobs-urgent' => 0,
-                'current-jobs-ready' => 0
+                'current-jobs-ready' => 0,
             ]
         );
         $payload = json_decode($this->payload, true);
@@ -198,7 +197,6 @@ class BeanstalkdQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             ->getMock();
 
         $btQueueStore = new BeanstalkdQueueStoreAdapter($btConnection);
-
 
         $this->assertSame($btQueueStore, $btQueueStore->init());
         $this->assertTrue($btQueueStore->enqueue($this->mailJob) > 1);

@@ -5,8 +5,8 @@ use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Backend\Redis\RedisQueueStoreAdapter;
 use Da\Mailer\Queue\Backend\Redis\RedisQueueStoreConnection;
 use Da\Mailer\Test\Fixture\FixtureHelper;
-use PHPUnit_Framework_TestCase;
 use Mockery;
+use PHPUnit_Framework_TestCase;
 
 class RedisQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class RedisQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
         $this->payload = json_encode([
             'id' => '123456789',
             'attempt' => $this->mailJob->getAttempt(),
-            'message' => $this->mailJob->getMessage()
+            'message' => $this->mailJob->getMessage(),
         ]);
     }
 
@@ -35,8 +35,9 @@ class RedisQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             ->shouldReceive('llen')
                 ->twice()
                 ->andReturnUsing(
-                    function (){
+                    function () {
                         static $f = false;
+
                         return $f = !$f ? 1 : 0;
                     }
                 )
@@ -44,8 +45,9 @@ class RedisQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             ->andReturn(1)
             ->shouldReceive('lpop')
             ->with(Mockery::mustBe('mail_queue'))
-            ->andReturnUsing(function() use ($payload) {
+            ->andReturnUsing(function () use ($payload) {
                 static $f = false;
+
                 return $f = !$f ? $payload : null;
             })
             ->shouldReceive('transaction')
@@ -142,8 +144,9 @@ class RedisQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             ->shouldReceive('llen')
             ->twice()
             ->andReturnUsing(
-                function (){
+                function () {
                     static $f = false;
+
                     return $f = !$f ? 1 : 0;
                 }
             )
@@ -208,8 +211,9 @@ class RedisQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             ->shouldReceive('llen')
             ->twice()
             ->andReturnUsing(
-                function (){
+                function () {
                     static $f = false;
+
                     return $f = !$f ? 1 : 0;
                 }
             )
@@ -217,8 +221,9 @@ class RedisQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             ->andReturn(1)
             ->shouldReceive('lpop')
             ->with(Mockery::mustBe('mail_queue'))
-            ->andReturnUsing(function() use ($payload) {
+            ->andReturnUsing(function () use ($payload) {
                 static $f = false;
+
                 return $f = !$f ? $payload : null;
             })
             ->shouldReceive('transaction')

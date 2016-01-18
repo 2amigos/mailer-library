@@ -1,14 +1,14 @@
 <?php
 namespace Da\tests\Queue\Backend\Sqs;
 
-use Da\Mailer\Test\Fixture\FixtureHelper;
+use Aws\Sqs\SqsClient;
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Backend\Sqs\SqsQueueStoreAdapter;
 use Da\Mailer\Queue\Backend\Sqs\SqsQueueStoreConnection;
-use Aws\Sqs\SqsClient;
+use Da\Mailer\Test\Fixture\FixtureHelper;
 use Guzzle\Common\Collection;
-use PHPUnit_Framework_TestCase;
 use Mockery;
+use PHPUnit_Framework_TestCase;
 
 class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
 {
@@ -49,7 +49,7 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
                     'MessageId' => 'receiveMessageResult1Id',
                     'ReceiptHandle' => 'receiveMessageResult1Handle',
                     'Body' => json_encode(FixtureHelper::getMailMessage()),
-                    'Attempt' => 1
+                    'Attempt' => 1,
                 ],
             ],
         ]);

@@ -1,9 +1,8 @@
 
 filter:
-    excluded_paths:
-        - '*/tests/*'
-        - '*/data/*'
-        - '*/vendor/*'
+    excluded_paths: [tests/*, data/*, vendor/*]
+    paths: [src/*]
+
 checks:
     php:
         code_rating: true

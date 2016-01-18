@@ -76,6 +76,9 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
             ->put($payload, Pheanstalk::DEFAULT_PRIORITY, $delay, $this->timeToRun);
     }
 
+    /**
+     * @return BeanstalkdMailJob|null
+     */
     public function dequeue()
     {
         $job = $this->getConnection()->getInstance()->watchOnly($this->queueName)->reserve(0);

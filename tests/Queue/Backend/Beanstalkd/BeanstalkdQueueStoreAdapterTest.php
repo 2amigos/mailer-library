@@ -30,7 +30,14 @@ class BeanstalkdQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testEnqueueDequeueAndAcknowledge()
     {
-
+        $statsTubeResponse2 = new ArrayResponse(
+            'test', [
+                'current-jobs-delayed' => 0,
+                'current-jobs-urgent' => 0,
+                'current-jobs-ready' => 0
+            ]
+        );
+        $statsTubeResponse1= new ArrayResponse('test', ['current-jobs-delayed' => 1,]);
         $payload = json_decode($this->payload, true);
         $payload['job'] = new Job(1, 'demo');
         $btJob2 = Mockery::mock('\Pheanstalk\Job')
@@ -47,35 +54,10 @@ class BeanstalkdQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             ->andReturnSelf()
             ->shouldReceive('statsTube')
             ->twice()
-            ->andReturnUsing(
-                function () {
-                    static $f;
-                    if ($f === null) {
-                        $f = true;
-                    }
-                    $f = !$f;
-
-                    return $f
-                        ? new ArrayResponse(
-                            'test', [
-                                'current-jobs-delayed' => 0,
-                                'current-jobs-urgent' => 0,
-                                'current-jobs-ready' => 0
-                            ]
-                        )
-                        : new ArrayResponse('test', ['current-jobs-delayed' => 1,]);
-                }
-            )
+            ->andReturn($statsTubeResponse1, $statsTubeResponse2)
             ->shouldReceive('reserve')
             ->with(0)
-            ->andReturnUsing(function() use ($btJob2) {
-                static $f;
-                if($f === null) {
-                    $f = false;
-                }
-                $f = !$f;
-                return $f ? $btJob2 : null;
-            })
+            ->andReturn($btJob2, null)
             ->shouldReceive('delete')
             ->andReturn(1)
             ->getMock();
@@ -131,14 +113,7 @@ class BeanstalkdQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             ->andReturnSelf()
             ->shouldReceive('reserve')
             ->with(0)
-            ->andReturnUsing(function() use ($btJob2) {
-                static $f;
-                if($f === null) {
-                    $f = true;
-                }
-                $f = !$f;
-                return $f ? $btJob2 : null;
-            })
+            ->andReturn(null, $btJob2)
             ->shouldReceive('delete')
             ->andReturn(1)
             ->getMock();
@@ -179,6 +154,14 @@ class BeanstalkdQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testNonCompletedAck()
     {
+        $statsTubeResponse1 = new ArrayResponse('test', ['current-jobs-delayed' => 1,]);
+        $statsTubeResponse2 = new ArrayResponse(
+            'test', [
+                'current-jobs-delayed' => 0,
+                'current-jobs-urgent' => 0,
+                'current-jobs-ready' => 0
+            ]
+        );
         $payload = json_decode($this->payload, true);
         $payload['job'] = new Job(1, 'demo');
         $btJob2 = Mockery::mock('\Pheanstalk\Job')
@@ -194,24 +177,7 @@ class BeanstalkdQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             ->andReturn(3)
             ->shouldReceive('statsTube')
             ->twice()
-            ->andReturnUsing(
-                function () {
-                    static $f;
-                    if($f === null){
-                        $f = true;
-                    }
-                    $f = !$f;
-                    return $f
-                        ? new ArrayResponse(
-                            'test', [
-                                'current-jobs-delayed' => 0,
-                                'current-jobs-urgent' => 0,
-                                'current-jobs-ready' => 0
-                            ]
-                        )
-                        : new ArrayResponse('test', ['current-jobs-delayed' => 1,]);
-                }
-            )
+            ->andReturn($statsTubeResponse1, $statsTubeResponse2)
             ->shouldReceive('watchOnly')
             ->with(Mockery::mustBe('mail_queue'))
             ->andReturnSelf()

@@ -15,7 +15,6 @@
     "require": {
         "php": ">=5.6.4",
         "phpseclib/phpseclib": "^2.0",
-        "videlalvaro/php-amqplib": "^2.6",
         "swiftmailer/swiftmailer": "@stable"
     },
     "require-dev": {
@@ -26,7 +25,8 @@
         "squizlabs/php_codesniffer": "~2.3",
         "aws/aws-sdk-php": "2.*",
         "predis/predis": "^1.0",
-        "pda/pheanstalk": "^3.1"
+        "pda/pheanstalk": "^3.1",
+        "php-amqplib/php-amqplib": "^2.6"
     },
     "autoload": {
         "psr-4": {
@@ -44,6 +44,7 @@
     "suggest": {
         "aws/aws-sdk-php": "Allows the use of Amazon SQS as a mail queue system",
         "predis/predis": "Allows the use of Redis as a mail queue system",
-        "pda/pheanstalk": "Allows the use of Beanstalkd as mail queue system"
+        "pda/pheanstalk": "Allows the use of Beanstalkd as mail queue system",
+        "php-amqplib/php-amqplib": "Allows the use of AMQP protocol required to use RabbitMq as a mail queue system"
     }
 }

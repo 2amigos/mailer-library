@@ -1,21 +1,15 @@
-# Pdo Backend Usage 
+# Beanstalkd Backend Usage 
 
-## Add the storage table to your database
+This assumes you have beanstalkd running on your computer and on port 11300.
 
- This backend requires that you create a table like the one specified in the `data` folder. It defaults to `mail_queue` 
- name but you can name it the way you want it as long as its structure remains the same and then you specify that 
- custom name on the adapter. 
- 
- Currently we have a `mysql.sql` only, feel free to add your PDO compatible database to it. 
-  
 ## Add email job to the queue 
 
 ```php 
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\MailQueue;
-use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
-use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreAdapter;
-use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreConnection;
+use Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdMailJob;
+use Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdQueueStoreAdapter;
+use Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdQueueStoreConnection;
 use PDO;
 
 $message = new MailMessage([
@@ -24,17 +18,15 @@ $message = new MailMessage([
     'subject' => 'What is up?',
 ]);
 
-$conn = new PdoQueueStoreConnection([
-    'connectionString' => 'mysql:host=localhost;dbname=test',
-    'username' => 'root',
-    'password' => 'password'
-], [PDO::ATTR_PERSISTENT => true]);
+$conn = new BeanstalkdQueueStoreConnection([
+    'host' => 'localhost',
+    'port' => 'root']);
 
-$adapter = new PdoQueueStoreAdapter($conn);
+$adapter = new BeanstalkdQueueStoreAdapter($conn);
 
 $queue = new MailQueue($adapter);
 
-$job = new PdoMailJob([
+$job = new BeanstalkdMailJob([
     'message' => json_encode($message),
 ]);
 
@@ -47,16 +39,16 @@ if (!$queue->enqueue($job)) {
 
 ```php
 use Da\Mailer\Queue\MailQueue;
-use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreAdapter;
-use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreConnection;
+use Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdQueueStoreAdapter;
+use Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdQueueStoreConnection;
 
-$conn = new PdoQueueStoreConnection([
+$conn = new BeanstalkdQueueStoreConnection([
     'connectionString' => 'mysql:host=localhost;dbname=test',
     'username' => 'root',
     'password' => 'password'
 ], [PDO::ATTR_PERSISTENT => true]);
 
-$adapter = new PdoQueueStoreAdapter($conn);
+$adapter = new BeanstalkdQueueStoreAdapter($conn);
 
 $queue = new MailQueue($adapter);
 

@@ -70,7 +70,7 @@ if (($job = $queue->dequeue()) !== null) {
 }
 ```
 
-## Send email job with `MailMessageWorker' 
+## Send email job with `MailMessageWorker` 
 
 This could be an example using `MailMessageWorker` and a `MailJob` with specific transport configurations in it. Very 
 useful if the mail jobs in the queue do belong to your customers and they can specify their SMTP configuration details 

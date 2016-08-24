@@ -3,7 +3,20 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/2amigos/mailer-library/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/2amigos/mailer-library/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/2amigos/mailer-library/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/2amigos/mailer-library/?branch=master)
 
-[![2amigOS!](https://s.gravatar.com/avatar/55363394d72945ff7ed312556ec041e0?s=80)](http://www.2amigos.us)  
+Many times we face the requirement to implement a queue mail functionality in our projects. There were queue and  
+mailing libraries but there were none that could actually suit our needs and moreover, we always had to sync their 
+functionality together. 
+
+The `Mailer` library was built to fulfill the gaps that we have faced when implementing queue and/or mailing systems. It 
+features: 
+
+- message encryption/decryption just in case a mail message contains data that should not be publicly exposed. Perfect 
+  for SAS systems. 
+- queueing on different backends (currently supporting beanstalkd, pdo, redis and sqs) so we are not forced to use a 
+  queue storage due to the narrowed capabilities of the framework and/or libraries
+- unified system. Basic to Middle size projects do have mailing but they do not require another type of queue system.
+  That's the reason the queue system is not standalone and is coupled with this system.
+
 
 ## Installation
 
@@ -26,7 +39,6 @@ to the `require` section of your `composer.json` file.
 ## Usage 
 
 - [Beanstalkd Backend](src/Queue/Backend/Beanstalkd/README.md)
-- [SQS Backend](src/Queue/Backend/Sqs/README.md)
 - [Pdo Backend](src/Queue/Backend/Pdo/README.md)
 - [RabbitMq Backend](src/Queue/Backend/RabbitMq/README.md)
 - [Redis Backend](src/Queue/Backend/Redis/README.md)

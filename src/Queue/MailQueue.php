@@ -44,7 +44,7 @@ final class MailQueue implements QueueStoreAdapterInterface
     }
 
     /**
-     * @return Cypher
+     * @return CypherInterface
      */
     public function getCypher()
     {

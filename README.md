@@ -25,13 +25,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```bash
-$ composer require 2amigos/google-places-library
+$ composer require 2amigos/mailer
 ```
 
 or add
 
 ```
-"2amigos/google-places-library": "*"
+"2amigos/mailer": "^1.0"
 ```
 
 to the `require` section of your `composer.json` file.

@@ -57,7 +57,7 @@ if (($job = $queue->dequeue()) !== null) {
     // ... send it using `mail()` function for example 
     // ... or by using MailMessageWorker 
 
-    $job->setDeleted(true);
+    $job->markAsCompleted();
     $queue->ack($job);
 }
 ```
@@ -88,4 +88,8 @@ $worker->attach('onSuccess', $callableHere);
 $worker->attach('onFailure', $anotherCallable);
 
 $worker->run();
+
+// this could be added in the 'onSuccess' event handler
+$mailJob->markAsCompleted();
+$queue->ack($job);
 ```

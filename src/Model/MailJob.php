@@ -80,6 +80,9 @@ class MailJob extends AbstractMailObject implements MailJobInterface
         return $this->attempt;
     }
 
+    /**
+     * @param $attempt
+     */
     public function setAttempt($attempt)
     {
         $this->attempt = $attempt;
@@ -93,11 +96,17 @@ class MailJob extends AbstractMailObject implements MailJobInterface
         $this->attempt += 1;
     }
 
+    /**
+     * @return bool
+     */
     public function markAsCompleted()
     {
         return $this->completed = true;
     }
 
+    /**
+     * @return bool
+     */
     public function isCompleted()
     {
         return $this->completed === true;

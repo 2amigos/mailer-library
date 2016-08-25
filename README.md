@@ -3,11 +3,11 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/2amigos/mailer-library/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/2amigos/mailer-library/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/2amigos/mailer-library/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/2amigos/mailer-library/?branch=master)
 
-Many times we face the requirement to implement a queue mail functionality in our projects. There were queue and  
-mailing libraries but there were none that could actually suit our needs and moreover, we always had to sync their 
+Many times we face a requirement to implement queue mail functionality in our projects. There are queue and  
+mailing libraries, but there seemed to be none that could actually suit our needs and moreover, we always had to sync their 
 functionality together. 
 
-The `Mailer` library was built to fulfill the gaps that we have faced when implementing queue and/or mailing systems. It 
+The `Mailer` library was built to fill the gaps that we have faced when implementing queue and/or mailing systems. It 
 features: 
 
 - message encryption/decryption just in case a mail message contains data that should not be publicly exposed. Perfect 
@@ -25,13 +25,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```bash
-$ composer require 2amigos/google-places-library
+$ composer require 2amigos/mailer
 ```
 
 or add
 
 ```
-"2amigos/google-places-library": "*"
+"2amigos/mailer": "^1.0"
 ```
 
 to the `require` section of your `composer.json` file.

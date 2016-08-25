@@ -2,6 +2,7 @@
 
 namespace Da\Mailer\Queue;
 
+use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Backend\AbstractQueueStoreConnection;
 use Da\Mailer\Queue\Backend\MailJobInterface;
 use Da\Mailer\Queue\Backend\QueueStoreAdapterInterface;
@@ -56,8 +57,9 @@ final class MailQueue implements QueueStoreAdapterInterface
      */
     public function enqueue(MailJobInterface $mailJob)
     {
-        if (null !== $this->getCypher()) {
-            $mailJob->setMessage($this->getCypher()->encodeMailMessage($mailJob->getMessage()));
+        $message = $mailJob->getMessage();
+        if (null !== $this->getCypher() && $message instanceof MailMessage) {
+            $mailJob->setMessage($this->getCypher()->encodeMailMessage($message));
         }
 
         return $this->adapter->enqueue($mailJob);

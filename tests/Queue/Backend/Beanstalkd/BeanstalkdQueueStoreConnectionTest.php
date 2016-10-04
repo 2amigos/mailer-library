@@ -1,5 +1,5 @@
 <?php
-namespace Da\Mailer\Test\Queue\Backend\Redis;
+namespace Da\Mailer\Test\Queue\Backend\Beanstalkd;
 
 use Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdQueueStoreConnection;
 use Pheanstalk\Pheanstalk;

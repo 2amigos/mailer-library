@@ -2,7 +2,7 @@
 namespace Da\Mailer\Test\Fixture;
 
 use Da\Mailer\Model\MailMessage;
-use Da\Mailer\Queue\Backend\Beanstalk\BeanstalkdMailJob;
+use Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdMailJob;
 use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
 use Da\Mailer\Queue\Backend\Redis\RedisMailJob;
 use Da\Mailer\Queue\Backend\Sqs\SqsMailJob;

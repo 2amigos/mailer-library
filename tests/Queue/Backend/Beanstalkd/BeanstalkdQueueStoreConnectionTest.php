@@ -1,7 +1,7 @@
 <?php
 namespace Da\Mailer\Test\Queue\Backend\Redis;
 
-use Da\Mailer\Queue\Backend\Beanstalk\BeanstalkdQueueStoreConnection;
+use Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdQueueStoreConnection;
 use Pheanstalk\Pheanstalk;
 use PHPUnit_Framework_TestCase;
 use ReflectionClass;

@@ -1,5 +1,5 @@
 <?php
-namespace Da\Mailer\Queue\Backend\Beanstalk;
+namespace Da\Mailer\Queue\Backend\Beanstalkd;
 
 use Da\Mailer\Model\MailJob;
 use Pheanstalk\Job as PheanstalkJob;

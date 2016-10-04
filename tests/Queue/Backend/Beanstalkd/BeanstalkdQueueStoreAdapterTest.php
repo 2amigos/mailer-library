@@ -1,9 +1,9 @@
 <?php
-namespace Da\Mailer\Test\Queue\Backend\Redis;
+namespace Da\Mailer\Test\Queue\Backend\Beanstalkd;
 
 use Da\Mailer\Model\MailMessage;
-use Da\Mailer\Queue\Backend\Beanstalk\BeanstalkdQueueStoreAdapter;
-use Da\Mailer\Queue\Backend\Beanstalk\BeanstalkdQueueStoreConnection;
+use Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdQueueStoreAdapter;
+use Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdQueueStoreConnection;
 use Da\Mailer\Test\Fixture\FixtureHelper;
 use Mockery;
 use Pheanstalk\Job;
@@ -62,7 +62,7 @@ class BeanstalkdQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             ->andReturn(1)
             ->getMock();
 
-        $btStoreConnection = Mockery::mock('\Da\Mailer\Queue\Backend\Beanstalk\BeanstalkdQueueStoreConnection')
+        $btStoreConnection = Mockery::mock('\Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdQueueStoreConnection')
             ->shouldReceive('connect')
             ->andReturnSelf()
             ->shouldReceive('getInstance')
@@ -118,7 +118,7 @@ class BeanstalkdQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             ->andReturn(1)
             ->getMock();
 
-        $btConnection = Mockery::mock('\Da\Mailer\Queue\Backend\Beanstalk\BeanstalkdQueueStoreConnection')
+        $btConnection = Mockery::mock('\Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdQueueStoreConnection')
             ->shouldReceive('connect')
             ->andReturnSelf()
             ->shouldReceive('getInstance')
@@ -189,7 +189,7 @@ class BeanstalkdQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             ->andReturn(1)
             ->getMock();
 
-        $btConnection = Mockery::mock('\Da\Mailer\Queue\Backend\Beanstalk\BeanstalkdQueueStoreConnection')
+        $btConnection = Mockery::mock('\Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdQueueStoreConnection')
             ->shouldReceive('connect')
             ->andReturnSelf()
             ->shouldReceive('getInstance')

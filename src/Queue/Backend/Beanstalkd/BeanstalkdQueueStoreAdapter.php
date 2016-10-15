@@ -13,15 +13,23 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
     /**
      * @var string the queue name
      */
-    private $queueName;
+    protected $queueName;
     /**
      * @var int the time to run. Defaults to Pheanstalkd::DEFAULT_TTR.
      */
-    private $timeToRun;
+    protected $timeToRun;
     /**
      * @var BeanstalkdQueueStoreConnection
      */
     protected $connection;
+    /**
+     * @var int Reserves/locks a ready job in a watched tube. A timeout value of 0 will cause the server to immediately
+     * return either a response or TIMED_OUT.  A positive value of timeout will limit the amount of time the client will
+     * block on the reserve request until a job becomes available.
+     *
+     * We highly recommend a non-zero value. Defaults to 5.
+     */
+    protected $reserveTimeout;
 
     /**
      * BeanstalkdQueueStoreAdapter constructor.
@@ -29,15 +37,18 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
      * @param BeanstalkdQueueStoreConnection $connection
      * @param string $queueName
      * @param int $timeToRun
+     * @param int $reserveTimeOut
      */
     public function __construct(
         BeanstalkdQueueStoreConnection $connection,
         $queueName = 'mail_queue',
-        $timeToRun = Pheanstalk::DEFAULT_TTR
+        $timeToRun = Pheanstalk::DEFAULT_TTR,
+        $reserveTimeOut = 5
     ) {
         $this->connection = $connection;
         $this->queueName = $queueName;
         $this->timeToRun = $timeToRun;
+        $this->reserveTimeout = $reserveTimeOut;
         $this->init();
     }
 
@@ -81,7 +92,7 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
      */
     public function dequeue()
     {
-        $job = $this->getConnection()->getInstance()->watchOnly($this->queueName)->reserve(0);
+        $job = $this->getConnection()->getInstance()->watch($this->queueName)->reserve($this->reserveTimeout);
         if ($job instanceof PheanstalkJob) {
             $data = json_decode($job->getData(), true);
 

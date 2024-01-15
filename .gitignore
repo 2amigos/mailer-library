@@ -8,5 +8,5 @@ Thumbs.db
 nbproject
 switch
 index
-./.env
+.env
 .phpunit.result.cache

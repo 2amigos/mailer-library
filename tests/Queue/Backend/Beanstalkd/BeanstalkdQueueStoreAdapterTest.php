@@ -8,14 +8,14 @@ use Da\Mailer\Test\Fixture\FixtureHelper;
 use Mockery;
 use Pheanstalk\Job;
 use Pheanstalk\Response\ArrayResponse;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class BeanstalkdQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
+class BeanstalkdQueueStoreAdapterTest extends TestCase
 {
     private $mailJob;
     private $payload;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mailJob = FixtureHelper::getBeanstalkdMailJob();

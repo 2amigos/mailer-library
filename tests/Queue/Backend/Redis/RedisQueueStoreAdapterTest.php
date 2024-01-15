@@ -6,14 +6,14 @@ use Da\Mailer\Queue\Backend\Redis\RedisQueueStoreAdapter;
 use Da\Mailer\Queue\Backend\Redis\RedisQueueStoreConnection;
 use Da\Mailer\Test\Fixture\FixtureHelper;
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RedisQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
+class RedisQueueStoreAdapterTest extends TestCase
 {
     private $mailJob;
     private $payload;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mailJob = FixtureHelper::getRedisMailJob();

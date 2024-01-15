@@ -1,37 +1,36 @@
 <?php
 namespace Da\Mailer\Transport;
 
-use Swift_SendmailTransport;
+use Symfony\Component\Mailer\Transport\Dsn;
 
 class SendMailTransport implements TransportInterface
 {
     /**
-     * @var Swift_SendmailTransport
+     * @var \Symfony\Component\Mailer\Transport\SendmailTransport
      */
     private $instance;
 
     /**
-     * @var string the command path to sendmail. Defaults to '/usr/sbin/sendmail -bs'
+     * @var string
      */
-    private $commandPath;
+    private string $dsn;
 
-    /**
-     * @param string $commandPath
-     */
-    public function __construct($commandPath = '/usr/sbin/sendmail -bs')
+    public function __construct(string $dsn)
     {
-        $this->commandPath = $commandPath;
+        $this->dsn = $dsn;
     }
 
     /**
      * Returns the Swift_SendmailTransport instance.
      *
-     * @return Swift_SendmailTransport instance
+     * @return \Symfony\Component\Mailer\Transport\SendmailTransport instance
      */
-    public function getSwiftTransportInstance()
+    public function getInstance(): \Symfony\Component\Mailer\Transport\SendmailTransport
     {
         if ($this->instance === null) {
-            $this->instance = new Swift_SendmailTransport($this->commandPath);
+            $sendMailFactory = new \Symfony\Component\Mailer\Transport\SendmailTransportFactory();
+
+            $this->instance = $sendMailFactory->create(Dsn::fromString($this->dsn));
         }
 
         return $this->instance;

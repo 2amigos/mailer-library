@@ -1,10 +1,10 @@
 <?php
 namespace Da\Mailer\Model;
 
-use Da\Mailer\Helper\RecipientsHelper;
+use Da\Mailer\Builder\MailJobBuilder;
+use Da\Mailer\Builder\QueueBuilder;
+use Da\Mailer\Mail\Dto\File;
 use JsonSerializable;
-use Swift_Attachment;
-use Swift_Message;
 
 class MailMessage extends AbstractMailObject implements JsonSerializable
 {
@@ -88,45 +88,12 @@ class MailMessage extends AbstractMailObject implements JsonSerializable
     }
 
     /**
-     * Converts the object into a Swift_Message instance.
-     *
-     * @return Swift_Message
+     * @param array $config
+     * @return MailMessage
      */
-    public function asSwiftMessage()
+    public static function make(array $config)
     {
-        $message = (new Swift_Message());
-
-        if (isset($this->bodyHtml)) {
-            $message->setBody($this->bodyHtml, 'text/html');
-        }
-
-        if (isset($this->bodyText)) {
-            $method = isset($this->bodyHtml) ? 'addPart' : 'setBody';
-            $message->$method($this->bodyText, 'text/plain');
-        }
-        foreach (['from', 'to', 'cc', 'bcc'] as $attribute) {
-            if (isset($this->$attribute)) {
-                $method = 'set' . ucfirst($attribute);
-                $message->$method(RecipientsHelper::sanitize($this->$attribute));
-            }
-        }
-
-        $message->setSubject($this->subject);
-
-        if (is_array($this->attachments)) {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            foreach ($this->attachments as $filePath) {
-                $attachment = Swift_Attachment::fromPath($filePath);
-                $mime = finfo_file($finfo, $filePath);
-                if ($mime !== false) {
-                    $attachment->setContentType($mime);
-                }
-                $message->attach($attachment);
-            }
-            finfo_close($finfo);
-        }
-
-        return $message;
+        return new self($config);
     }
 
     /**
@@ -142,5 +109,37 @@ class MailMessage extends AbstractMailObject implements JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @return void
+     * @throws \Da\Mailer\Exception\UndefinedMessageBrokerException
+     */
+    public function enqueue()
+    {
+        $job = MailJobBuilder::make(['message' => json_encode($this)]);
+
+        QueueBuilder::make()->enqueue($job);
+    }
+
+    private function setAttachments()
+    {
+        // does not allow directly setting
+    }
+
+    /**
+     * @param string $path
+     * @param string|null $name
+     * @return void
+     */
+    public function addAttachment(string $path, ?string $name = null): void
+    {
+        if (! is_null($this->attachments)) {
+            $this->attachments = [File::make($path, $name)];
+
+            return;
+        }
+
+        $this->attachments[] = File::make($path, $name);
     }
 }

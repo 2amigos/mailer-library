@@ -3,9 +3,9 @@ namespace Da\Mailer\Test\Event;
 
 use Da\Mailer\Event\Event;
 use Da\Mailer\Event\EventHandlerTrait;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class EventTest extends PHPUnit_Framework_TestCase
+class EventTest extends TestCase
 {
     /**
      * @expectedException \Da\Mailer\Exception\InvalidCallbackArgumentException

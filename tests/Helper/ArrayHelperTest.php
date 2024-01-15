@@ -2,15 +2,15 @@
 namespace Da\Mailer\Test\Helper;
 
 use Da\Mailer\Helper\ArrayHelper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class Post
+class Post extends TestCase
 {
     public $id = 'VII';
     public $title = 'Star Wars: The Force Awakens';
 }
 
-class ArrayHelperTest extends PHPUnit_Framework_TestCase
+class ArrayHelperTest extends TestCase
 {
     public function testGetValueFromObject()
     {

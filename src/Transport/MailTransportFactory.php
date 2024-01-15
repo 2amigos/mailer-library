@@ -1,6 +1,10 @@
 <?php
 namespace Da\Mailer\Transport;
 
+use Symfony\Component\Mailer\Transport\Dsn;
+use Symfony\Component\Mailer\Transport\NativeTransportFactory;
+use Symfony\Component\Mailer\Transport\TransportInterface;
+
 class MailTransportFactory extends AbstractTransportFactory
 {
     /**
@@ -16,15 +20,12 @@ class MailTransportFactory extends AbstractTransportFactory
     /**
      * Creates a MailTransport instance.
      *
-     * @return MailTransport
+     * @return TransportInterface
      */
     public function create()
     {
-        $extraParams = isset($this->options['options']) ? $this->options['options'] : '';
-        if (empty($extraParams) || !is_string($extraParams)) {
-            $extraParams = '-f%s';
-        }
+        $dsn = Dsn::fromString($this->options['dns']);
 
-        return new MailTransport($extraParams);
+        return (new NativeTransportFactory(null, null, null))->create($dsn);
     }
 }

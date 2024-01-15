@@ -13,7 +13,7 @@ class PdoQueueStoreAdapterTest extends AbstractMySqlDatabaseTestCase
      */
     private $pdoQueueStore;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

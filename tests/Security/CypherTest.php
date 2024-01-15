@@ -3,9 +3,9 @@ namespace Da\Mailer\Test\Security;
 
 use Da\Mailer\Security\Cypher;
 use Da\Mailer\Test\Fixture\FixtureHelper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class CypherTest extends PHPUnit_Framework_TestCase
+class CypherTest extends TestCase
 {
     public function testEncryptionDecryptionOfMailMessage()
     {

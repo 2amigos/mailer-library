@@ -2,13 +2,13 @@
 namespace Da\Mailer\Test\Model;
 
 use Da\Mailer\Model\AbstractMailObject;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class AbstractMailObjectTest extends PHPUnit_Framework_TestCase
+class AbstractMailObjectTest extends TestCase
 {
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new TestMailObject(['property' => 'Darth Vader']);
     }

@@ -9,9 +9,9 @@ use Da\Mailer\Transport\SmtpTransport;
 use Da\Mailer\Transport\SmtpTransportFactory;
 use Da\Mailer\Transport\TransportFactory;
 use Da\Mailer\Transport\TransportInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class TransportFactoryTest extends PHPUnit_Framework_TestCase
+class TransportFactoryTest extends TestCase
 {
     public function testCreateTransport()
     {

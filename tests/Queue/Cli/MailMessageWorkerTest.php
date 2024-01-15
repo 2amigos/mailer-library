@@ -6,10 +6,10 @@ use Da\Mailer\Mailer;
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Cli\MailMessageWorker;
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Swift_Message;
 
-class MailMessageWorkerTest extends PHPUnit_Framework_TestCase
+class MailMessageWorkerTest extends TestCase
 {
     public function testRunMethodOnSuccess()
     {

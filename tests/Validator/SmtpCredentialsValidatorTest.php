@@ -4,14 +4,14 @@ namespace Da\Mailer\Test\Validator;
 use Da\Mailer\Validator\SmtpCredentialsValidator;
 use Exception;
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Swift_SmtpTransport;
 
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class SmtpCredentialsValidatorTest extends PHPUnit_Framework_TestCase
+class SmtpCredentialsValidatorTest extends TestCase
 {
     public function testValidationPassed()
     {

@@ -3,10 +3,10 @@ namespace Da\Mailer\Test\Model;
 
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Test\Fixture\FixtureHelper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Swift_Message;
 
-class MailMessageTest extends PHPUnit_Framework_TestCase
+class MailMessageTest extends TestCase
 {
     public function testMailMessageMagicMethods()
     {

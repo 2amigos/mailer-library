@@ -3,10 +3,10 @@ namespace Da\Mailer\Test\Queue\Backend\Beanstalkd;
 
 use Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdQueueStoreConnection;
 use Pheanstalk\Pheanstalk;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class BeanstalkdQueueStoreConnectionTest extends PHPUnit_Framework_TestCase
+class BeanstalkdQueueStoreConnectionTest extends TestCase
 {
     public function testGetConfigurationValue()
     {

@@ -8,16 +8,16 @@ use Da\Mailer\Queue\Backend\Sqs\SqsQueueStoreConnection;
 use Da\Mailer\Test\Fixture\FixtureHelper;
 use Guzzle\Common\Collection;
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
+class SqsQueueStoreAdapterTest extends TestCase
 {
     /**
      * @var SqsQueueStoreAdapter
      */
     private $sqsQueueStore1, $sqsQueueStore2;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // prepare sqs response collections - begin
         $createQueueResult = new Collection([
@@ -142,7 +142,7 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
         // prepare queue store 2 - end
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Mockery::close();
 

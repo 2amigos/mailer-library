@@ -11,7 +11,7 @@ use Da\Mailer\Transport\SmtpTransport;
 use Da\Mailer\Transport\SmtpTransportFactory;
 use Da\Mailer\Transport\TransportFactory;
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Swift_Events_CommandEvent;
 use Swift_Mailer;
 
@@ -19,7 +19,7 @@ use Swift_Mailer;
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class MailerTest extends PHPUnit_Framework_TestCase
+class MailerTest extends TestCase
 {
     public function testFromMailMessageMethod()
     {

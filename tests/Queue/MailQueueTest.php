@@ -20,7 +20,7 @@ class MailQueueTest extends AbstractMySqlDatabaseTestCase
      */
     private $pdoQueueAdapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->pdoQueueAdapter = new PdoQueueStoreAdapter(self::getPdoQueueStoreConnection());

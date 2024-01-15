@@ -6,7 +6,7 @@ use Da\Mailer\Queue\Backend\MailJobInterface;
 use Da\Mailer\Queue\Backend\QueueStoreAdapterInterface;
 use Pheanstalk\Job as PheanstalkJob;
 use Pheanstalk\Pheanstalk;
-use phpseclib\Crypt\Random;
+use phpseclib3\Crypt\Random;
 
 class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
 {

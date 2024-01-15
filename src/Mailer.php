@@ -1,39 +1,23 @@
 <?php
 namespace Da\Mailer;
 
-use Da\Mailer\Helper\ArrayHelper;
+use Da\Mailer\Builder\MessageBuilder;
 use Da\Mailer\Helper\PhpViewFileHelper;
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Transport\TransportFactory;
 use Da\Mailer\Transport\TransportInterface;
-use Swift_Events_EventListener;
-use Swift_Mailer;
-use Swift_Message;
-use Swift_Plugins_LoggerPlugin;
-use Swift_Plugins_Loggers_ArrayLogger;
+use Symfony\Component\Mailer\SentMessage;
 
 class Mailer
 {
-    /**
-     * @var Swift_Mailer the instance.
-     */
-    private $swift;
     /**
      * @var TransportInterface|null the transport used to send emails.
      */
     private $transport = null;
     /**
-     * @var Swift_Plugins_Loggers_ArrayLogger the plugging used to
-     */
-    private $logger = null;
-    /**
      * @var bool whether we enable logging or not. The `$logger` plugin won't be added to the Swift_Mailer instance.
      */
     private $logging = true;
-    /**
-     * @var bool whether we are testing sendings. If true, emails won't be sent.
-     */
-    private $dryRun = false;
     /**
      * @var array a list of Swift_Mailer plugins to be registered.
      */
@@ -43,14 +27,12 @@ class Mailer
      * Constructor.
      *
      * @param TransportInterface $transport the transport to use for sending emails.
-     * @param bool $dryRun
-     * @param bool $doLogging
+     * @param bool $logging
      */
-    public function __construct(TransportInterface $transport, $dryRun = false, $doLogging = true)
+    public function __construct(TransportInterface $transport, $logging = true)
     {
         $this->transport = $transport;
-        $this->dryRun = $dryRun;
-        $this->logging = $doLogging;
+        $this->logging = $logging;
     }
 
     /**
@@ -58,7 +40,7 @@ class Mailer
      *
      * @return null|TransportInterface
      */
-    public function getTransport()
+    public function getTransport(): TransportInterface
     {
         return $this->transport;
     }
@@ -66,16 +48,11 @@ class Mailer
     /**
      * Returns the swift mailer.
      *
-     * @return null|\Swift_Mailer
+     * @return null|\Symfony\Component\Mailer\Transport\TransportInterface
      */
-    public function getSwiftMailerInstance()
+    public function getTransportInstance()
     {
-        if ($this->swift === null) {
-            $swiftTransport = $this->getTransport()->getSwiftTransportInstance();
-            $this->swift = new Swift_Mailer($swiftTransport);
-        }
-
-        return $this->swift;
+        return $this->getTransport()->getInstance();
     }
 
     /**
@@ -91,37 +68,11 @@ class Mailer
      *
      * @param TransportInterface $transport
      */
-    public function updateTransport(TransportInterface $transport)
+    public function setTransport(TransportInterface $transport)
     {
         $this->transport = $transport;
+
         $this->resetSwiftMailer();
-    }
-
-    /**
-     * Sends a Swift_Mime_Message as it would be sent in an mail client.
-     *
-     * All recipients (with the exception of Bcc) will be able to see the other recipients this message was sent to.
-     *
-     * Recipient/sender data will be retrieved from the {Swift_Mime_Message} object.
-     *
-     * The return value is the number of recipients who were accepted for
-     * delivery.
-     *
-     * @param Swift_Message $message
-     *
-     * @return array|null
-     */
-    public function sendSwiftMessage(Swift_Message $message)
-    {
-        if ($this->dryRun) {
-            return count($message->getTo());
-        }
-
-        $failedRecipients = null;
-
-        $this->getSwiftMailerInstance()->send($message, $failedRecipients);
-
-        return $failedRecipients;
     }
 
     /**
@@ -147,24 +98,26 @@ class Mailer
      * @param array $views the view files for `text` and `html` templates
      * @param array $data the data to be used for parsing the templates
      *
-     * @return array|null
+     * @return SentMessage|null
      *
      * @see PhpViewFileHelper::render()
      * @see MailMessage::$bodyHtml
      * @see MailMessage::$bodyText
      */
-    public function send(MailMessage $message, array $views = [], array $data = [])
+    public function send(MailMessage $message, array $views = [], array $data = []): ?SentMessage
     {
-        foreach (['text', 'html'] as $view) {
+        $message = MessageBuilder::make($message);
+
+        var_dump($this->getTransportInstance()->send($message));
+        die;
+        /*foreach (['text', 'html'] as $view) {
             $viewFile = ArrayHelper::getValue($views, $view);
             if ($viewFile !== null) {
                 $content = PhpViewFileHelper::render($viewFile, $data);
                 $attribute = 'body' . ucfirst($view);
                 $message->$attribute = $content;
             }
-        }
-
-        return $this->sendSwiftMessage($message->asSwiftMessage());
+        }*/
     }
 
     /**
@@ -173,42 +126,6 @@ class Mailer
     public function resetSwiftMailer()
     {
         $this->swift = null;
-
-        return $this;
-    }
-
-    /**
-     * Adds a Swift_Mailer plugin to the stack so it can be later registered with `registerPlugins()`.
-     *
-     * @param Swift_Events_EventListener $plugin
-     *
-     * @return $this
-     *
-     * @link http://swiftmailer.org/docs/plugins.html
-     */
-    public function addPlugin(Swift_Events_EventListener $plugin)
-    {
-        $this->plugins[] = $plugin;
-
-        return $this;
-    }
-
-    /**
-     * Registers the plugins to the Swift_Mailer instance.
-     *
-     * @link http://swiftmailer.org/docs/plugins.html
-     */
-    public function registerPlugins()
-    {
-        foreach ($this->plugins as $plugin) {
-            if ($plugin instanceof Swift_Events_EventListener) {
-                $this->getSwiftMailerInstance()->registerPlugin($plugin);
-            }
-        }
-        if ($this->logging === true) {
-            $this->logger = new Swift_Plugins_Loggers_ArrayLogger();
-            $this->getSwiftMailerInstance()->registerPlugin(new Swift_Plugins_LoggerPlugin($this->logger));
-        }
 
         return $this;
     }

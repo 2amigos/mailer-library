@@ -93,11 +93,3 @@ class MailerTest extends TestCase
         $this->assertEquals(null, $mailer->sendSwiftMessage($mailMessage));
     }
 }
-
-class TestSwiftPlugin implements \Swift_Events_CommandListener
-{
-    public function commandSent(Swift_Events_CommandEvent $evt)
-    {
-        // TODO: Implement commandSent() method.
-    }
-}

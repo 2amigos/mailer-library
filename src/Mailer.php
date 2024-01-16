@@ -15,13 +15,9 @@ class Mailer
      */
     private $transport = null;
     /**
-     * @var bool whether we enable logging or not. The `$logger` plugin won't be added to the Swift_Mailer instance.
+     * @var bool
      */
     private $logging = true;
-    /**
-     * @var array a list of Swift_Mailer plugins to be registered.
-     */
-    private $plugins = [];
 
     /**
      * Constructor.
@@ -46,7 +42,7 @@ class Mailer
     }
 
     /**
-     * Returns the swift mailer.
+     * Returns the Symfony Mailer Transport instance.
      *
      * @return null|\Symfony\Component\Mailer\Transport\TransportInterface
      */
@@ -60,7 +56,8 @@ class Mailer
      */
     public function getLog()
     {
-        return $this->logging && $this->logger !== null ? $this->logger->dump() : null;
+        // TODO Add log mechanism
+        return null;
     }
 
     /**
@@ -71,8 +68,6 @@ class Mailer
     public function setTransport(TransportInterface $transport)
     {
         $this->transport = $transport;
-
-        $this->resetSwiftMailer();
     }
 
     /**
@@ -108,26 +103,7 @@ class Mailer
     {
         $message = MessageBuilder::make($message);
 
-        var_dump($this->getTransportInstance()->send($message));
-        die;
-        /*foreach (['text', 'html'] as $view) {
-            $viewFile = ArrayHelper::getValue($views, $view);
-            if ($viewFile !== null) {
-                $content = PhpViewFileHelper::render($viewFile, $data);
-                $attribute = 'body' . ucfirst($view);
-                $message->$attribute = $content;
-            }
-        }*/
-    }
-
-    /**
-     * Resets the swift mailer back to null.
-     */
-    public function resetSwiftMailer()
-    {
-        $this->swift = null;
-
-        return $this;
+        return $this->getTransportInstance()->send($message);
     }
 
     /**

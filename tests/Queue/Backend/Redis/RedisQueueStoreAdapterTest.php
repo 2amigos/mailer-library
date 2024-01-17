@@ -24,6 +24,13 @@ class RedisQueueStoreAdapterTest extends TestCase
         ]);
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        Mockery::close();
+    }
+
     public function testEnqueueDequeueAndAcknowledge()
     {
         $payload = $this->payload;
@@ -188,11 +195,10 @@ class RedisQueueStoreAdapterTest extends TestCase
         $this->assertTrue($redisQueueStore->isEmpty());
     }
 
-    /**
-     * @expectedException \Da\Mailer\Exception\InvalidCallException
-     */
     public function testBadMethodCallExceptionOnAck()
     {
+        $this->expectException(\Da\Mailer\Exception\InvalidCallException::class);
+
         $mailJob = FixtureHelper::getRedisMailJob();
         $connection = new RedisQueueStoreConnection([]);
         $redisQueueStore = new RedisQueueStoreAdapter($connection);

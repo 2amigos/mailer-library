@@ -11,6 +11,6 @@ class PhpViewFileHelperTest extends TestCase
         $view = __DIR__ . '/../data/test_view.php';
         $content = PhpViewFileHelper::render($view, ['force' => 'force', 'with' => 'with', 'you' => 'you']);
 
-        $this->assertEquals("The force be with you!\n", $content);
+        $this->assertEquals("The force be with you!\n", str_replace("\r\n", "\n", $content));
     }
 }

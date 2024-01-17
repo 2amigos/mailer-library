@@ -32,19 +32,4 @@ class MailMessageTest extends TestCase
 
         $this->assertEquals($mailMessage, $decodedMailMessage);
     }
-
-    public function testAsSwiftMessageMethod()
-    {
-        $mailMessage = FixtureHelper::getMailMessage();
-        $swift = $mailMessage->asSwiftMessage();
-
-        $this->assertTrue($swift instanceof Swift_Message);
-
-        $this->assertEquals([$mailMessage->to => null], $swift->getTo());
-        $this->assertEquals([$mailMessage->from => null], $swift->getFrom());
-        $this->assertEquals([$mailMessage->cc => null], $swift->getCc());
-        $this->assertEquals([$mailMessage->bcc => null], $swift->getBcc());
-        $this->assertEquals($mailMessage->subject, $swift->getSubject());
-        $this->assertEquals($mailMessage->bodyHtml, $swift->getBody());
-    }
 }

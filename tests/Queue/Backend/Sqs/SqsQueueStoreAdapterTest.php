@@ -206,20 +206,18 @@ class SqsQueueStoreAdapterTest extends TestCase
         $this->assertFalse($this->sqsQueueStore2->isEmpty());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testBadMethodCallExceptionOnAck()
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $mailJob = FixtureHelper::getPdoMailJob();
         $this->sqsQueueStore1->ack($mailJob);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testBadMethodCallExceptionOnSetDelaySeconds()
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $mailJob = FixtureHelper::getSqsMailJob();
         $mailJob->setDelaySeconds(900);
         $this->assertEquals(900, $mailJob->getDelaySeconds());

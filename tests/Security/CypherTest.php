@@ -9,7 +9,7 @@ class CypherTest extends TestCase
 {
     public function testEncryptionDecryptionOfMailMessage()
     {
-        $cypher = new Cypher('In my experience there is no such thing as luck.');
+        $cypher = new Cypher('In my experience there is no Luc', 'It can be useful');
         $mailMessage = FixtureHelper::getMailMessage();
 
         $encodedMailMessage = $cypher->encodeMailMessage($mailMessage);

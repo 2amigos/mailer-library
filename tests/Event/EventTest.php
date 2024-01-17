@@ -7,12 +7,11 @@ use PHPUnit\Framework\TestCase;
 
 class EventTest extends TestCase
 {
-    /**
-     * @expectedException \Da\Mailer\Exception\InvalidCallbackArgumentException
-     */
     public function testInvalidCallbackArgumentException()
     {
-        $event = new Event('not a callback');
+        $this->expectException(\Da\Mailer\Exception\InvalidCallbackArgumentException::class);
+
+        new Event('not a callback');
     }
 
     public function testEventHandlerTraitMethods()

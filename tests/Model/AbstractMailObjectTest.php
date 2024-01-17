@@ -30,43 +30,39 @@ class AbstractMailObjectTest extends TestCase
         $this->assertEquals($value, $object->property);
     }
 
-    /**
-     * @expectedException \Da\Mailer\Exception\InvalidCallException
-     */
     public function testUnsetInvalidCallException()
     {
+        $this->expectException(\Da\Mailer\Exception\InvalidCallException::class);
+
         unset($this->object->getterOnlyProperty);
     }
 
-    /**
-     * @expectedException \Da\Mailer\Exception\InvalidCallException
-     */
     public function testGetInvalidCallException()
     {
+        $this->expectException(\Da\Mailer\Exception\InvalidCallException::class);
+
         $test = $this->object->setterOnlyProperty;
     }
 
-    /**
-     * @expectedException \Da\Mailer\Exception\UnknownPropertyException
-     */
     public function testGetUnknownPropertyException()
     {
+        $this->expectException(\Da\Mailer\Exception\UnknownPropertyException::class);
+
         $test = $this->object->unkownProperty;
     }
 
-    /**
-     * @expectedException \Da\Mailer\Exception\InvalidCallException
-     */
     public function testSetInvalidCallException()
     {
+        $this->expectException(\Da\Mailer\Exception\InvalidCallException::class);
+
         $this->object->getterOnlyProperty = 'I am your father!';
     }
 
-    /**
-     * @expectedException \Da\Mailer\Exception\UnknownPropertyException
-     */
     public function testSetUnknownPropertyException()
     {
+        $this->expectException(\Da\Mailer\Exception\UnknownPropertyException::class);
+
+
         $this->object->lukeResponse = 'Nooooooooo!';
     }
 

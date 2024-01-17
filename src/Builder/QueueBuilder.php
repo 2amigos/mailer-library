@@ -28,7 +28,7 @@ class QueueBuilder extends Buildable
     {
         $config = self::getConfig();
 
-        $messageBroker = $config['config']['message_broker'];
+        $messageBroker = $broker ?? $config['config']['message_broker'];
         $queueAdapter = self::getBrokerAdapter($messageBroker);
 
         return new MailQueue($queueAdapter);

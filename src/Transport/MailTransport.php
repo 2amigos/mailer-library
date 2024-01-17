@@ -2,41 +2,31 @@
 namespace Da\Mailer\Transport;
 
 use Swift_MailTransport;
+use Symfony\Component\Mailer\Transport\Dsn;
+use Symfony\Component\Mailer\Transport\NativeTransportFactory;
 
 class MailTransport implements TransportInterface
 {
     /**
-     * @var Swift_MailTransport
+     * @var \Symfony\Component\Mailer\Transport\TransportInterface
      */
     private $instance;
-    /**
-     * Swift Mailer sets this to "-f%s" by default, where the "%s" is substituted with the address of the sender
-     * (via a sprintf()) at send time. Set this attribute to modify its default behavior.
-     *
-     * @var string|null
-     */
-    private $extraParameters;
 
-    /**
-     * @param string|null $extraParameters
-     */
-    public function __construct($extraParameters = null)
+    private string $dsn;
+
+    public function __construct(string $dsn)
     {
-        $this->extraParameters = $extraParameters;
+        $this->dsn = $dsn;
     }
 
     /**
-     * Returns the Swift_MailTransport instance.
-     *
-     * @return Swift_MailTransport
+     * @return \Symfony\Component\Mailer\Transport\TransportInterface
      */
-    public function getSwiftTransportInstance()
+    public function getInstance(): \Symfony\Component\Mailer\Transport\TransportInterface
     {
         if ($this->instance === null) {
-            $this->instance = new Swift_MailTransport();
-            if ($this->extraParameters !== null) {
-                $this->instance->setExtraParams($this->extraParameters);
-            }
+            $dsn = Dsn::fromString($this->dsn);
+            $this->instance = (new NativeTransportFactory())->create($dsn);
         }
 
         return $this->instance;

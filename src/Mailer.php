@@ -63,7 +63,7 @@ class Mailer
     /**
      * Modifies the transport used.
      *
-     * @param TransportInterface $transport
+     * @param \Symfony\Component\Mailer\Transport\TransportInterface $transport
      */
     public function setTransport(TransportInterface $transport)
     {

@@ -73,7 +73,7 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
     /**
      * @param BeanstalkdMailJob|MailJobInterface $mailJob
      *
-     * @return int
+     * @return \Pheanstalk\Job
      */
     public function enqueue(MailJobInterface $mailJob)
     {
@@ -89,10 +89,11 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
 
     /**
      * @return BeanstalkdMailJob|null
+     * @throws \Pheanstalk\Exception\DeadlineSoonException
      */
     public function dequeue()
     {
-        $job = $this->getConnection()->getInstance()->watch($this->queueName)->reserve($this->reserveTimeout);
+        $job = $this->getConnection()->getInstance()->watch($this->queueName)->reserveWithTimeout($this->reserveTimeout);
         if ($job instanceof PheanstalkJob) {
             $data = json_decode($job->getData(), true);
 
@@ -111,6 +112,7 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
 
     /**
      * @param BeanstalkdMailJob|MailJobInterface $mailJob
+     * @return null
      */
     public function ack(MailJobInterface $mailJob)
     {
@@ -121,14 +123,18 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
         $pheanstalk = $this->getConnection()->getInstance()->useTube($this->queueName);
         if ($mailJob->isCompleted()) {
             $pheanstalk->delete($mailJob->getPheanstalkJob());
-        } else {
-            $timestamp = $mailJob->getTimeToSend();
-            $delay = max(0, $timestamp - time());
 
-            // add back to the queue as it wasn't completed maybe due to some transitory error
-            // could also be failed.
-            $pheanstalk->release($mailJob->getPheanstalkJob(), Pheanstalk::DEFAULT_PRIORITY, $delay);
+            return null;
         }
+
+        $timestamp = $mailJob->getTimeToSend();
+        $delay = max(0, $timestamp - time());
+
+        // add back to the queue as it wasn't completed maybe due to some transitory error
+        // could also be failed.
+        $pheanstalk->release($mailJob->getPheanstalkJob(), Pheanstalk::DEFAULT_PRIORITY, $delay);
+
+        return null;
     }
 
     /**

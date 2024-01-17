@@ -9,6 +9,7 @@ use Exception;
 class MailerBuilder extends Buildable
 {
     /**
+     * @param string|null $broker
      * @return Mailer
      * @throws Exception
      */
@@ -16,7 +17,7 @@ class MailerBuilder extends Buildable
     {
         $config = self::getConfig();
 
-        $transportType = $config['config']['transport'];
+        $transportType = $broker ?? $config['config']['transport'];
         $connectionValues = $config['transports'][$transportType];
         $transport = TransportFactory::create($connectionValues, $transportType)->create();
 

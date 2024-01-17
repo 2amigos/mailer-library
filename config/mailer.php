@@ -1,5 +1,11 @@
 <?php
-$env = Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
+if (defined('IS_TESTING') && IS_TESTING === true) {
+    $envFile = '.env.testing';
+} else {
+    $envFile = '.env';
+}
+
+$env = Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR, $envFile);
 $env->load();
 
 return [
@@ -29,7 +35,9 @@ return [
 
         'pdo' => [
             'user' => getenv('PDO_USER'),
-            'password' => getenv('PDO_PASSWORD')
+            'password' => getenv('PDO_PASSWORD'),
+            'host' => getenv('PDO_HOST'),
+            'port' => getenv('PDO_PORT')
         ],
 
         'rabbitmq' => [
@@ -54,7 +62,7 @@ return [
             'dsn' => getenv('SENDMAIL_DSN')
         ],
         'mail' => [
-            'dsn' => getenv('MAILER_DNS')
+            'dsn' => getenv('MAIL_DSN')
         ]
     ],
     'mail-charset' => getenv('MAIL_CHARSET') ?? 'utf-8',

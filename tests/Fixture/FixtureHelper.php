@@ -1,12 +1,13 @@
 <?php
 namespace Da\Mailer\Test\Fixture;
 
+use Da\Mailer\Enum\TransportType;
+use Da\Mailer\Helper\ConfigReader;
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Backend\Beanstalkd\BeanstalkdMailJob;
 use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
 use Da\Mailer\Queue\Backend\Redis\RedisMailJob;
 use Da\Mailer\Queue\Backend\Sqs\SqsMailJob;
-use Da\Mailer\Transport\TransportInterface;
 
 class FixtureHelper
 {
@@ -46,10 +47,13 @@ class FixtureHelper
 
     public static function getMySqlConnectionConfiguration()
     {
+        $config = ConfigReader::get();
+        $pdo = $config['brokers']['pdo'];
+
         return [
-            'connectionString' => 'mysql:host=127.0.0.1;dbname=mail_queue_test',
-            'username' => 'root',
-            'password' => '',
+            'connectionString' => 'mysql:host=' . $pdo['host'] . ';dbname=mail_queue_test',
+            'username' => $pdo['user'],
+            'password' => $pdo['password'] ?: '',
         ];
     }
 
@@ -57,7 +61,7 @@ class FixtureHelper
     {
         return [
             'transportOptions' => [],
-            'transportType' => TransportInterface::TYPE_SMTP,
+            'transportType' => TransportType::SMTP,
             'host' => '127.0.0.1',
             'port' => 21,
             'from' => 'me@me.com',

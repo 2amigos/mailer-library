@@ -56,7 +56,7 @@ class MailQueueTest extends AbstractMySqlDatabaseTestCase
     {
         $mailMessage = FixtureHelper::getMailMessage();
         $mailJob = new PdoMailJob(['message' => $mailMessage]);
-        $cypher = new Cypher('I find your lack of faith disturbing.');
+        $cypher = new Cypher('I find your lack of faith.......', 'I know your plan');
 
         $this->mailQueuePdo->setCypher($cypher);
         $this->assertSame($cypher, $this->mailQueuePdo->getCypher());

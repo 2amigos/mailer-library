@@ -100,6 +100,10 @@ class MessageBuilderTest extends TestCase
             __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'text-body.txt',
                 'text-file,text'
             );
+        $mailMessage->addAttachment(
+            __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'text-body.html',
+            'html-file,text'
+        );
         $message = MessageBuilder::make($mailMessage);
 
         $this->assertEquals("file text body!\n", $message->getAttachments()[0]->getBody());

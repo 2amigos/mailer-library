@@ -10,3 +10,4 @@ switch
 index
 .env
 .phpunit.result.cache
+.composer.lock

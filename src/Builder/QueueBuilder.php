@@ -29,6 +29,7 @@ class QueueBuilder extends Buildable
         $config = self::getConfig();
 
         $messageBroker = $broker ?? $config['config']['message_broker'];
+
         $queueAdapter = self::getBrokerAdapter($messageBroker);
 
         return new MailQueue($queueAdapter);
@@ -42,7 +43,7 @@ class QueueBuilder extends Buildable
     protected static function getBrokerAdapter($messageBroker)
     {
         $config = self::getConfig();
-        $connectionValues = $config['brokers'][$messageBroker];
+        $connectionValues = $config['brokers'][$messageBroker] ?? [];
 
         switch($messageBroker) {
             case MessageBrokerEnum::BROKER_REDIS:

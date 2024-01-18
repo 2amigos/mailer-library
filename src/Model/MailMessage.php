@@ -77,7 +77,7 @@ class MailMessage extends AbstractMailObject implements JsonSerializable
     /**
      * @var array|null the file paths to attach to the Swift_Message instance if `asSwiftMessage()` is called
      */
-    public $attachments;
+    protected $attachments;
 
     /**
      * {@inheritdoc}
@@ -122,11 +122,6 @@ class MailMessage extends AbstractMailObject implements JsonSerializable
         QueueBuilder::make()->enqueue($job);
     }
 
-    private function setAttachments()
-    {
-        // does not allow directly setting
-    }
-
     /**
      * @param string $path
      * @param string|null $name
@@ -134,12 +129,20 @@ class MailMessage extends AbstractMailObject implements JsonSerializable
      */
     public function addAttachment(string $path, ?string $name = null): void
     {
-        if (! is_null($this->attachments)) {
+        if (is_null($this->attachments)) {
             $this->attachments = [File::make($path, $name)];
 
             return;
         }
 
         $this->attachments[] = File::make($path, $name);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttachments(): array
+    {
+        return $this->attachments ?? [];
     }
 }

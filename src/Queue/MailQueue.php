@@ -35,7 +35,7 @@ final class MailQueue implements QueueStoreAdapterInterface
      */
     public static function make()
     {
-        return QueueBuilder::build();
+        return QueueBuilder::make();
     }
 
     /**

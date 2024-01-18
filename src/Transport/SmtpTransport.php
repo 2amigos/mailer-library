@@ -8,7 +8,7 @@ use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
 class SmtpTransport implements TransportInterface
 {
     /**
-     * @var \Symfony\Component\Mailer\Transport\TransportInterface
+     * @var EsmtpTransport
      */
     private $instance;
     /**
@@ -48,7 +48,7 @@ class SmtpTransport implements TransportInterface
             $password = $this->options['password'] ?? null;
 
             $this->instance = (new EsmtpTransportFactory())->create(
-                new Dsn($this->getScheme(), $this->host, $user, $password, $this->port, $this->options)
+                new Dsn('smtp', $this->host, $user, $password, $this->port, $this->options)
             );
         }
 
@@ -57,8 +57,8 @@ class SmtpTransport implements TransportInterface
 
     private function getScheme()
     {
-        return isset($this->options['tls'])
-            ? $this->options['tls'] ? 'smtps' : 'smtp'
+        return $this->options['tls']
+            ? 'smtps'
             : 'smtp';
     }
 }

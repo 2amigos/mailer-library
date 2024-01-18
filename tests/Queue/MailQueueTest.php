@@ -71,4 +71,11 @@ class MailQueueTest extends AbstractMySqlDatabaseTestCase
         $this->assertTrue($dequeuedMailJob->isNewRecord() === false);
         $this->assertEquals($mailMessage, $dequeuedMailJob->getMessage());
     }
+
+    public function testMake()
+    {
+        $mailerQueue = MailQueue::make();
+
+        $this->assertInstanceOf(MailQueue::class, $mailerQueue);
+    }
 }

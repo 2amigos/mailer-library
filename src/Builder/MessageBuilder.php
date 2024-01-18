@@ -26,8 +26,38 @@ class MessageBuilder extends Buildable
         self::setBcc($mailMessage, $message);
         self::setHtml($mailMessage, $message);
         self::setText($mailMessage, $message);
+        self::setAttachments($mailMessage, $message);
 
         return $message;
+    }
+
+    /**
+     * @param string|array|EmailAddress $emails
+     * @param string $method
+     * @param Email $message
+     * @return void
+     */
+    protected static function setEmail($emails, string $method, Email $message)
+    {
+        if (is_string($emails)) {
+            $message->{$method}($emails);
+
+            return;
+        }
+
+        if (is_array($emails)) {
+            foreach ($emails as $email) {
+                if ($email instanceof EmailAddress) {
+                    $email = $email->parseToMailer();
+                }
+
+                $message->{'add' . strtoupper($method)}($email);
+            }
+
+            return;
+        }
+
+        $message->{$method}($emails->parseToMailer());
     }
 
     /**
@@ -37,16 +67,7 @@ class MessageBuilder extends Buildable
      */
     public static function setFrom(MailMessage $mailMessage, Email $message): void
     {
-        /** @var string|EmailAddress $from */
-        $from = $mailMessage->from;
-
-        if (is_string($from)) {
-            $message->from($from);
-
-            return;
-        }
-
-        $message->from($from->getEmail(), $from->getName());
+        self::setEmail($mailMessage->from, 'from', $message);
     }
 
     /**
@@ -56,16 +77,7 @@ class MessageBuilder extends Buildable
      */
     public static function setTo(MailMessage $mailMessage, Email $message): void
     {
-        /** @var string|EmailAddress $to */
-        $to = $mailMessage->to;
-
-        if (is_string($to)) {
-            $message->to($to);
-
-            return;
-        }
-
-        $message->to($to->getEmail(), $to->getName());
+        self::setEmail($mailMessage->to, 'to', $message);
     }
 
     /**
@@ -75,20 +87,9 @@ class MessageBuilder extends Buildable
      */
     protected static function setCc(MailMessage $mailMessage, Email $message)
     {
-        /** @var string|null|EmailAddress $cc */
-        $cc = $mailMessage->cc;
-
-        if (empty($cc)) {
-            return;
+        if (! is_null($mailMessage->cc)) {
+            self::setEmail($mailMessage->cc, 'cc', $message);
         }
-
-        if (is_string($cc)) {
-            $message->cc($cc);
-
-            return;
-        }
-
-        $message->cc($cc->getEmail(), $cc->getName());
     }
 
     /**
@@ -98,20 +99,9 @@ class MessageBuilder extends Buildable
      */
     protected static function setBcc(MailMessage $mailMessage, Email $message)
     {
-        /** @var string|null|EmailAddress $bcc */
-        $bcc = $mailMessage->cc;
-
-        if (empty($bcc)) {
-            return;
+        if (! is_null($mailMessage->bcc)) {
+            self::setEmail($mailMessage->bcc, 'bcc', $message);
         }
-
-        if (is_string($bcc)) {
-            $message->bcc($bcc);
-
-            return;
-        }
-
-        $message->bcc($bcc->getEmail(), $bcc->getName());
     }
 
     /**
@@ -158,7 +148,7 @@ class MessageBuilder extends Buildable
     protected static function setAttachments(MailMessage $mailMessage, Email $message)
     {
         /** @var File $attachment */
-        foreach ($mailMessage->attachments ?? [] as $attachment) {
+        foreach ($mailMessage->getAttachments() as $attachment) {
             $message->attachFromPath($attachment->getPath(), $attachment->getName());
         }
     }

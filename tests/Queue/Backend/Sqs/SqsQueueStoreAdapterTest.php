@@ -6,7 +6,6 @@ use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Backend\Sqs\SqsQueueStoreAdapter;
 use Da\Mailer\Queue\Backend\Sqs\SqsQueueStoreConnection;
 use Da\Mailer\Test\Fixture\FixtureHelper;
-use Guzzle\Common\Collection;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
@@ -20,30 +19,29 @@ class SqsQueueStoreAdapterTest extends TestCase
     protected function setUp(): void
     {
         // prepare sqs response collections - begin
-        $createQueueResult = new Collection([
+        $createQueueResult = [
             'MessageId' => 'createQueueResultId',
             'QueueUrl' => 'http://queue.url/path/',
-        ]);
+        ];
 
-        $sendMessageResult = new Collection([
+        $sendMessageResult = [
             'MessageId' => 'sendMessageResultId',
+        ];
 
-        ]);
-
-        $getQueueAttributesResult1 = new Collection([
+        $getQueueAttributesResult1 = [
             'MessageId' => 'getQueueAttributesResult1Id',
             'Attributes' => [
                 'ApproximateNumberOfMessages' => 1,
             ],
-        ]);
-        $getQueueAttributesResult2 = new Collection([
+        ];
+        $getQueueAttributesResult2 = [
             'MessageId' => 'getQueueAttributesResult2Id',
             'Attributes' => [
                 'ApproximateNumberOfMessages' => 0,
             ],
-        ]);
+        ];
 
-        $receiveMessageResult1 = new Collection([
+        $receiveMessageResult1 = [
             'Messages' => [
                 [
                     'MessageId' => 'receiveMessageResult1Id',
@@ -52,10 +50,10 @@ class SqsQueueStoreAdapterTest extends TestCase
                     'Attempt' => 1,
                 ],
             ],
-        ]);
-        $receiveMessageResult2 = new Collection([
+        ];
+        $receiveMessageResult2 = [
             // no message(s) returned by Amazon SQS
-        ]);
+        ];
         // prepare sqs response collections - end
 
         // ------------------------------------------------------------

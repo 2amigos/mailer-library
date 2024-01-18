@@ -105,18 +105,14 @@ class RabbitMqQueueStoreAdapter implements QueueStoreAdapterInterface
      */
     public function ack(MailJobInterface $mailJob)
     {
-        try {
-            /** @var AMQPChannel $chanel */
-            $chanel = $this->getConnection()->getInstance();
-            if ($mailJob->isCompleted()) {
-                $chanel->basic_ack($mailJob->getDeliveryTag(), false);
-                return;
-            }
-
-            $chanel->basic_nack($mailJob->getDeliveryTag(), false, true);
-        } catch (\Exception $exception) {
-            $chanel->basic_reject($mailJob->getDeliveryTag(), false);
+        /** @var AMQPChannel $chanel */
+        $chanel = $this->getConnection()->getInstance();
+        if ($mailJob->isCompleted()) {
+            $chanel->basic_ack($mailJob->getDeliveryTag(), false);
+            return;
         }
+
+        $chanel->basic_nack($mailJob->getDeliveryTag(), false, true);
     }
 
     /**

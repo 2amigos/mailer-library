@@ -7,25 +7,72 @@ use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Cli\MailMessageWorker;
 use Mockery;
 use PHPUnit\Framework\TestCase;
-use Swift_Message;
+use Symfony\Component\Mailer\SentMessage;
 
 class MailMessageWorkerTest extends TestCase
 {
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        Mockery::close();
+    }
+
     public function testRunMethodOnSuccess()
     {
-        //TODO Rebuild test
-        $this->assertTrue(1 === 1);
+        $mailMessage = Mockery::mock(MailMessage::class);
+        $sentMessage = Mockery::mock(SentMessage::class);
+
+        /** @var Mailer $mailer */
+        $mailer = Mockery::mock(Mailer::class)
+            ->shouldReceive(['send' => $sentMessage])
+            ->getMock();
+
+        $worker = new MailMessageWorker($mailer, $mailMessage);
+
+        $worker->attach('onSuccess', new Event(function($evt) {
+            $this->assertInstanceOf(SentMessage::class, $evt->getData()[1]);
+        }));
+
+        $worker->run();
     }
 
     public function testRunMethodOnFailure()
     {
-        //TODO Rebuild test
-        $this->assertTrue(1 === 1);
+        $mailMessage = Mockery::mock(MailMessage::class);
+        $sentMessage = null;
+
+        /** @var Mailer $mailer */
+        $mailer = Mockery::mock(Mailer::class)
+            ->shouldReceive(['send' => $sentMessage])
+            ->getMock();
+
+        $worker = new MailMessageWorker($mailer, $mailMessage);
+
+        $worker->attach('onFailure', new Event(function($evt) {
+            $this->assertNull($evt->getData()[1]);
+        }));
+
+        $worker->run();
     }
 
     public function testRunMethodOnFailureDueToException()
     {
-        //TODO Rebuild test
-        $this->assertTrue(1 === 1);
+        $mailMessage = Mockery::mock(MailMessage::class);
+        $sentMessage = Mockery::mock(SentMessage::class);
+
+        /** @var Mailer $mailer */
+        $mailer = Mockery::mock(Mailer::class)
+            ->shouldReceive(['send' => $sentMessage])
+            ->andThrow(new \Exception())
+            ->getMock();
+
+        $worker = new MailMessageWorker($mailer, $mailMessage);
+
+        $worker->attach('onFailure', new Event(function($evt) {
+            $this->assertNull($evt->getData()[1]);
+        }));
+
+        $worker->run();
     }
 }

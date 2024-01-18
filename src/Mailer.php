@@ -95,9 +95,10 @@ class Mailer
      *
      * @return SentMessage|null
      *
-     * @see PhpViewFileHelper::render()
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      * @see MailMessage::$bodyHtml
      * @see MailMessage::$bodyText
+     * @see PhpViewFileHelper::render()
      */
     public function send(MailMessage $message, array $views = [], array $data = []): ?SentMessage
     {

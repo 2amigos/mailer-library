@@ -2,6 +2,8 @@
 
 namespace Da\Mailer\Mail\Dto;
 
+use Symfony\Component\Mime\Address;
+
 class EmailAddress
 {
     /**
@@ -46,6 +48,14 @@ class EmailAddress
      */
     public function getName(): ?string
     {
-        return $this->email;
+        return $this->name;
+    }
+
+    /**
+     * @return Address
+     */
+    public function parseToMailer(): Address
+    {
+        return new Address($this->getEmail(), $this->getName());
     }
 }

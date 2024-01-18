@@ -10,7 +10,11 @@ class MailMessageTest extends TestCase
 {
     public function testMailMessageMagicMethods()
     {
-        $config = FixtureHelper::getMailMessageSmtpConfigurationArray();
+        $config = array_filter(
+            FixtureHelper::getMailMessageSmtpConfigurationArray(),
+            fn ($index) => $index !== 'attachments',
+            ARRAY_FILTER_USE_KEY
+        );
         $mailMessage = FixtureHelper::getMailMessage();
 
         foreach ($config as $attribute => $value) {

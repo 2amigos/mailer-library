@@ -22,7 +22,7 @@ class MailJobBuilder extends Buildable
     public static function make($jobAttributes = null, ?string $broker = null): MailJob
     {
         $config = self::getConfig();
-        $messageBroker = $config['config']['message_broker'];
+        $messageBroker = $broker ?? $config['config']['message_broker'];
 
         switch($messageBroker) {
             case MessageBrokerEnum::BROKER_REDIS:

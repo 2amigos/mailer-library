@@ -4,66 +4,66 @@ if (defined('IS_TESTING') && IS_TESTING === true) {
 } else {
     $envFile = '.env';
 }
-
-$env = Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR, $envFile);
+$env = Dotenv\Dotenv::createImmutable(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR, $envFile);
 $env->load();
 
 return [
     'config' => [
-        'message_broker' => getenv('MESSAGE_BROKER'),
-        'transport' => getenv('MAIL_TRANSPORT'),
+        'message_broker' => $_ENV['MESSAGE_BROKER'],
+        'transport' => $_ENV['MAIL_TRANSPORT']
     ],
 
     'brokers' => [
         'redis' => [
-            'host' => getenv('REDIS_HOST'),
-            'port' => getenv('REDS_PORT'),
-            'user' => getenv('REDIS_USER'),
-            'password' => getenv('REDIS_PASSWORD')
+            'host' => $_ENV['REDIS_HOST'],
+            'port' => $_ENV['REDS_PORT'],
+            'user' => $_ENV['REDIS_USER'],
+            'password' => $_ENV['REDIS_PASSWORD']
         ],
 
         'sqs' => [
-            'key' => getenv('SQS_KEY'),
-            'secret' => getenv('SQS_SECRET'),
-            'region' => getenv('SQS_REGION')
+            'key' => $_ENV['SQS_KEY'],
+            'secret' => $_ENV['SQS_SECRET'],
+            'region' => $_ENV['SQS_REGION']
         ],
 
         'beanstalkd' => [
-            'host' => getenv('BEANSTALKD_HOST'),
-            'port' => getenv('BEANSTALKD_PORT')
+            'host' => $_ENV['BEANSTALKD_HOST'],
+            'port' => $_ENV['BEANSTALKD_PORT']
         ],
 
         'pdo' => [
-            'user' => getenv('PDO_USER'),
-            'password' => getenv('PDO_PASSWORD'),
-            'host' => getenv('PDO_HOST'),
-            'port' => getenv('PDO_PORT')
+            'username' => $_ENV['PDO_USER'],
+            'password' => $_ENV['PDO_PASSWORD'],
+            'host' => $_ENV['PDO_HOST'],
+            'port' => $_ENV['PDO_PORT'] ?: 3306,
+            'db' => $_ENV['PDO_DBNAME']
         ],
 
         'rabbitmq' => [
-            'host' => getenv('RABBITMQ_HOST'),
-            'port' => getenv('RABBITMQ_PORT'),
-            'user' => getenv('RABBITMQ_USER'),
-            'password' => getenv('RABBITMQ_PASSWORD'),
+            'host' => $_ENV['RABBITMQ_HOST'],
+            'port' => $_ENV['RABBITMQ_PORT'],
+            'user' => $_ENV['RABBITMQ_USER'],
+            'password' => $_ENV['RABBITMQ_PASSWORD']
         ]
     ],
 
     'transports' => [
         'smtp' => [
-            'host' => getenv('MAILER_SMTP_HOST'),
-            'port' => getenv('MAILER_SMTP_PORT'),
+            'host' => $_ENV['MAILER_SMTP_HOST'],
+            'port' => $_ENV['MAILER_SMTP_PORT'],
             'options' => [
-                'username' => getenv('MAILER_SMTP_USER'),
-                'password' => getenv('MAILER_SMTP_PASSWORD'),
-                'tls' => getEnv('MAILSER_SMTP_TLS')
+                'username' => $_ENV['MAILER_SMTP_USER'],
+                'password' => $_ENV['MAILER_SMTP_PASSWORD'],
+                'tls' => $_ENV['MAILER_SMTP_TLS']
             ]
         ],
         'sendMail' => [
-            'dsn' => getenv('SENDMAIL_DSN')
+            'dsn' => $_ENV['SENDMAIL_DSN']
         ],
         'mail' => [
-            'dsn' => getenv('MAIL_DSN')
+            'dsn' => $_ENV['MAIL_DSN']
         ]
     ],
-    'mail-charset' => getenv('MAIL_CHARSET') ?? 'utf-8',
+    'mail-charset' => $_ENV['MAIL_CHARSET'] ?: 'utf-8'
 ];

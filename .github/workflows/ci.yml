@@ -8,7 +8,7 @@ jobs:
         env:
             DB_DATABASE: mail_queue_test
             DB_USER: root
-            DB_PASSWORD: 123456789
+            DB_PASSWORD: root
 
         steps:
             - name: checkout repo

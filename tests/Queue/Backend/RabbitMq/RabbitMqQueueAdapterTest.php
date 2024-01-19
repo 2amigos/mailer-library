@@ -37,7 +37,7 @@ class RabbitMqQueueAdapterTest extends TestCase
             'message' => $this->mailJob->getMessage(),
             'delivery_tag' => null,
         ]));
-        $message->setDeliveryTag(1);
+        $message->delivery_info['delivery_tag'] = 1;
 
         $rabbitMqClient2 = \Mockery::mock(AMQPChannel::class)
             ->makePartial()
@@ -56,7 +56,7 @@ class RabbitMqQueueAdapterTest extends TestCase
             'message' => $this->mailJob->getMessage(),
             'delivery_tag' => 1,
         ]));
-        $message2->setDeliveryTag(null);
+        $message2->delivery_info['delivery_tag'] = 1;
 
         $rabbitMqClient3 = \Mockery::mock(AMQPChannel::class)
             ->makePartial()

@@ -5,6 +5,10 @@ jobs:
     test:
         name: PHPUnit
         runs-on: ubuntu-latest
+        env:
+            DB_DATABASE: mail_queue_test
+            DB_USER: root
+            DB_PASSWORD: 123456789
 
         steps:
             - name: checkout repo
@@ -17,6 +21,12 @@ jobs:
 
             - name: Install dependencies
               run: composer install
+
+
+            -   name: Set up MySQL
+                    run: |
+                        sudo /etc/init.d/mysql start
+                        mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
 
             - name: Run unit tests
               run: ./vendor/bin/phpunit --coverage-clover ./tests/_output/coverage.xml

@@ -21,7 +21,7 @@ class PdoQueueStoreConnection extends AbstractQueueStoreConnection
     {
         if (! isset($this->configuration['dsn'])) {
             $this->configuration['dsn'] = sprintf(
-                "mysql:host=%s;dbname=%s;port=%p",
+                "mysql:host=%s;dbname=%s;port=%s",
                 $this->configuration['host'] ?? '',
                 $this->configuration['db'] ?? '',
                 $this->configuration['port'] ?? 3306

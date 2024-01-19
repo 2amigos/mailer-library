@@ -90,7 +90,7 @@ class RabbitMqQueueStoreAdapter implements QueueStoreAdapterInterface
         /** @var AMQPMessage $message */
         $message = $chanel->basic_get($this->queueName);
 
-        $data = json_decode($message->getBody(), true);
+        $data = json_decode($message->body, true);
 
         return new RabbitMqJob([
             'id' => $data['id'],

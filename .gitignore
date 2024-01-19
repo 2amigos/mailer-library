@@ -11,3 +11,4 @@ index
 .env
 .phpunit.result.cache
 .composer.lock
+.phpunit.cache

@@ -12,3 +12,4 @@ index
 .phpunit.result.cache
 .composer.lock
 .phpunit.cache
+composer.lock

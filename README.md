@@ -1,5 +1,4 @@
 # Mailer 
-
 [![tests](https://github.com/2amigos/mailer-library/actions/workflows/ci.yml/badge.svg)](https://github.com/2amigos/mailer-library/actions/workflows/ci.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/d0e8d6e968944592a95a0911d8f178ff)](https://app.codacy.com/gh/2amigos/mailer-library/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/d0e8d6e968944592a95a0911d8f178ff)](https://app.codacy.com/gh/2amigos/mailer-library/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)

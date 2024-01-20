@@ -10,7 +10,7 @@
   
 ## Add email job to the queue 
 
-```php 
+```php
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\MailQueue;
 use Da\Mailer\Queue\Backend\Pdo\PdoMailJob;
@@ -22,6 +22,7 @@ $message = new MailMessage([
     'from' => 'sarah.connor@gmail.com',
     'to' => 'john.connor@gmail.com',
     'subject' => 'What is up?',
+    'bodyText' => 'New mailing'
 ]);
 
 $conn = new PdoQueueStoreConnection([
@@ -88,7 +89,7 @@ $mailMessage = json_decode($mailJob->getMessage()); /* ... if you have json enco
 $transport = TransportFactory::create($mailMessage->transportOptions, $mailMessage->transportType);
 $mailer = new Mailer($transport);
 
-$worker = new MailMessageWorker($transport, $mailMessage);
+$worker = new MailMessageWorker($mailer, $mailMessage);
 
 // you could set the event handlers for `onFailure` or `onSuccess` here to do a different action according to the 
 // results of the work

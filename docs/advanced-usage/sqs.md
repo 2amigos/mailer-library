@@ -13,6 +13,7 @@ $message = new MailMessage([
     'from' => 'sarah.connor@gmail.com',
     'to' => 'john.connor@gmail.com',
     'subject' => 'What is up?',
+    'bodyText' => 'New mailing'
 ]);
 
 $conn = new SqsQueueStoreConnection([
@@ -73,13 +74,17 @@ $mailer = new Mailer($transport);
 
 $mailJob = /* ... get mail job here ... */;
 
-$result = $mailer->send(
-    new MailMessage(json_decode($mailJob->getMessage(), true)),
-    ['html' => __DIR__ . '/path/to/templates/mail.php'],
-    ['variable' => 'Some testing variable passed to mail view']
-);
+$status = null;
 
-if (!$result) {
+try {
+    $result = $mailer->send(
+        new MailMessage(json_decode($mailJob->getMessage(), true))
+    );
+} catch (Exception $e) {
+    // log exception
+}
+
+if (is_null($status)) {
     // ... cannot send email
 }
 ```

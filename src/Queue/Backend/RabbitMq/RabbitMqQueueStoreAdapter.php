@@ -65,13 +65,17 @@ class RabbitMqQueueStoreAdapter implements QueueStoreAdapterInterface
      */
     public function enqueue(MailJobInterface $mailJob)
     {
-        /** @var AMQPChannel $chanel */
-        $chanel = $this->getConnection()->getInstance();
-        $chanel->queue_declare($this->queueName, false, false, false, false);
-        $message = new AMQPMessage($this->createPayload($mailJob));
-        $chanel->basic_publish($message, '', $this->queueName);
+        try {
+            /** @var AMQPChannel $chanel */
+            $chanel = $this->getConnection()->getInstance();
+            $chanel->queue_declare($this->queueName, false, false, false, false);
+            $message = new AMQPMessage($this->createPayload($mailJob));
+            $chanel->basic_publish($message, '', $this->queueName);
 
-        return true;
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Transport;
 
 use Swift_MailTransport;
@@ -11,9 +12,7 @@ class MailTransport implements TransportInterface
      * @var \Symfony\Component\Mailer\Transport\TransportInterface
      */
     private $instance;
-
     private string $dsn;
-
     public function __construct(string $dsn)
     {
         $this->dsn = $dsn;

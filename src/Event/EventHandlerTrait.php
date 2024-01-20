@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Event;
 
 trait EventHandlerTrait
@@ -7,8 +8,7 @@ trait EventHandlerTrait
      * @var array stack of events attached to the manager
      */
     protected $events = [];
-
-    /**
+/**
      * Adds an Event instance to the stack based on the name.
      *
      * @param string $name the identifier of the stack

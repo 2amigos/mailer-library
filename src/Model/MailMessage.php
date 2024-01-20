@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Model;
 
 use Da\Mailer\Builder\MailJobBuilder;
@@ -33,53 +34,52 @@ class MailMessage extends AbstractMailObject implements JsonSerializable
      * ```
      */
     public $transportOptions = [];
-    /**
+/**
      * @var string the transport type. It could be TransportInterface::TYPE_SMTP, TransportInterface::TYPE_MAIL, o
      * TransportInterface::TYPE_SEND_MAIL.
      */
     public $transportType;
-    /**
+/**
      * @var string the mail server address.
      */
     public $host;
-    /**
+/**
      * @var int the mail server port.
      */
     public $port;
-    /**
+/**
      * @var array|string the from address/es
      */
     public $from;
-    /**
+/**
      * @var array|string the to address/es
      */
     public $to;
-    /**
+/**
      * @var array|string the cc address/es
      */
     public $cc;
-    /**
+/**
      * @var array|string the bcc address/es
      */
     public $bcc;
-    /**
+/**
      * @var string the subject of the mail message
      */
     public $subject;
-    /**
+/**
      * @var string the body html of the mail message
      */
     public $bodyHtml;
-    /**
+/**
      * @var string the body
      */
     public $bodyText;
-    /**
+/**
      * @var array|null the file paths to attach to the Swift_Message instance if `asSwiftMessage()` is called
      */
     protected $attachments;
-
-    /**
+/**
      * {@inheritdoc}
      */
     public function __construct(array $config = [])
@@ -118,7 +118,6 @@ class MailMessage extends AbstractMailObject implements JsonSerializable
     public function enqueue()
     {
         $job = MailJobBuilder::make(['message' => json_encode($this)]);
-
         QueueBuilder::make()->enqueue($job);
     }
 
@@ -131,7 +130,6 @@ class MailMessage extends AbstractMailObject implements JsonSerializable
     {
         if (is_null($this->attachments)) {
             $this->attachments = [File::make($path, $name)];
-
             return;
         }
 

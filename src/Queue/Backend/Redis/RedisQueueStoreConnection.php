@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Queue\Backend\Redis;
 
 use Da\Mailer\Queue\Backend\AbstractQueueStoreConnection;
@@ -26,7 +27,6 @@ class RedisQueueStoreConnection extends AbstractQueueStoreConnection
     {
         $this->disconnect();
         $this->instance = new Client($this->configuration);
-
         return $this;
     }
 

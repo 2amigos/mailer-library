@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Transport;
 
 use Da\Mailer\Transport\TransportInterface;

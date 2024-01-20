@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Model;
 
 use Da\Mailer\Exception\InvalidCallException;

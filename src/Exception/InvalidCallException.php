@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Exception;
 
 use BadMethodCallException;

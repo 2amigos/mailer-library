@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Transport;
 
 use Symfony\Component\Mailer\Transport\Dsn;
@@ -11,20 +12,19 @@ class SmtpTransport implements TransportInterface
      * @var EsmtpTransport
      */
     private $instance;
-    /**
+/**
      * @var string the mail server host name or ip
      */
     private $host;
-    /**
+/**
      * @var int the mail server port
      */
     private $port;
-    /**
+/**
      * @var array the extra options for the Smtp transport -ie username, password, encryption, authMode
      */
     private $options = [];
-
-    /**
+/**
      * SmtpTransport constructor.
      *
      * @param string $host the mail server name or ip address
@@ -46,10 +46,7 @@ class SmtpTransport implements TransportInterface
         if ($this->instance === null) {
             $user = $this->options['username'] ?? null;
             $password = $this->options['password'] ?? null;
-
-            $this->instance = (new EsmtpTransportFactory())->create(
-                new Dsn('smtp', $this->host, $user, $password, $this->port, $this->options)
-            );
+            $this->instance = (new EsmtpTransportFactory())->create(new Dsn('smtp', $this->host, $user, $password, $this->port, $this->options));
         }
 
         return $this->instance;

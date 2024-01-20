@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Queue\Backend\Sqs;
 
 use Da\Mailer\Exception\InvalidCallException;
@@ -11,16 +12,15 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
      * @var string the name of the queue to store the messages
      */
     private $queueName;
-    /**
+/**
      * @var string the URL of the queue to store the messages
      */
     private $queueUrl;
-    /**
+/**
      * @var SqsQueueStoreConnection
      */
     protected $connection;
-
-    /**
+/**
      * PdoQueueStoreAdapter constructor.
      *
      * @param SqsQueueStoreConnection $connection
@@ -39,13 +39,11 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
     public function init()
     {
         $this->getConnection()->connect();
-
-        // create new queue or get existing one
+// create new queue or get existing one
         $queue = $this->getConnection()->getInstance()->createQueue([
             'QueueName' => $this->queueName,
         ]);
         $this->queueUrl = $queue['QueueUrl'];
-
         return $this;
     }
 
@@ -71,7 +69,6 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
             'Attempt' => $mailJob->getAttempt(),
         ]);
         $messageId = $result['MessageId'];
-
         return $messageId !== null && is_string($messageId);
     }
 
@@ -85,13 +82,11 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
         $result = $this->getConnection()->getInstance()->receiveMessage([
             'QueueUrl' => $this->queueUrl,
         ]);
-
         if (empty($result['Messages'])) {
             return null;
         }
 
         $result = array_shift($result['Messages']);
-
         return new SqsMailJob([
             'id' => $result['MessageId'],
             'receiptHandle' => $result['ReceiptHandle'],
@@ -116,7 +111,6 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
                 'QueueUrl' => $this->queueUrl,
                 'ReceiptHandle' => $mailJob->getReceiptHandle(),
             ]);
-
             return true;
         } elseif ($mailJob->getVisibilityTimeout() !== null) {
             $this->getConnection()->getInstance()->changeMessageVisibility([
@@ -124,7 +118,6 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
                 'ReceiptHandle' => $mailJob->getReceiptHandle(),
                 'VisibilityTimeout' => $mailJob->getVisibilityTimeout(),
             ]);
-
             return true;
         }
 
@@ -140,7 +133,6 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
             'QueueUrl' => $this->queueUrl,
             'AttributeNames' => ['ApproximateNumberOfMessages'],
         ]);
-
         return $response['Attributes']['ApproximateNumberOfMessages'] === 0;
     }
 }

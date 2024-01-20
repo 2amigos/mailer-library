@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Model;
 
 use Da\Mailer\Queue\Backend\MailJobInterface;
@@ -9,22 +10,21 @@ class MailJob extends AbstractMailObject implements MailJobInterface
      * @var mixed
      */
     private $id;
-    /**
+/**
      * @var MailMessage|string
      */
     private $message;
-    /**
+/**
      * @var int number of attempts. Every time a mail fails to be sent, the number of attempts could be incremented.
      *
      * @see `incrementAttempt()`
      */
     private $attempt = 0;
-    /**
+/**
      * @var bool whether the job has been completed
      */
     private $completed = false;
-
-    /**
+/**
      * {@inheritdoc}
      */
     public function __construct(array $config = [])

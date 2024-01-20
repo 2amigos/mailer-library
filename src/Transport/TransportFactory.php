@@ -1,8 +1,10 @@
 <?php
+
 namespace Da\Mailer\Transport;
 
 use Da\Mailer\Enum\TransportType;
 use Da\Mailer\Exception\InvalidTransportTypeArgumentException;
+
 class TransportFactory
 {
     /**

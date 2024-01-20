@@ -37,7 +37,6 @@ class RabbitMqQueueConnection extends AbstractQueueStoreConnection
             $this->configuration['port'],
             $this->configuration['user'],
             $this->configuration['password']
-
         );
 
         $this->instance = $this->connection->channel();

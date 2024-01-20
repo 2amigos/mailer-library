@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Queue\Backend;
 
 use Da\Mailer\Helper\ArrayHelper;
@@ -9,12 +10,11 @@ abstract class AbstractQueueStoreConnection
      * @var mixed the internal connection instance (ie. PDO)
      */
     protected $instance;
-    /**
+/**
      * @var array
      */
     protected $configuration = [];
-
-    /**
+/**
      * AbstractQueueStoreConnection constructor.
      *
      * @param array $configuration
@@ -47,8 +47,7 @@ abstract class AbstractQueueStoreConnection
      * @return AbstractQueueStoreConnection
      */
     abstract public function connect();
-
-    /**
+/**
      * @return mixed
      */
     abstract public function getInstance();

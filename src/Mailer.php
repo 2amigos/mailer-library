@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer;
 
 use Da\Mailer\Builder\MessageBuilder;
@@ -14,12 +15,11 @@ class Mailer
      * @var TransportInterface|null the transport used to send emails.
      */
     private $transport = null;
-    /**
+/**
      * @var bool
      */
     private $logging = true;
-
-    /**
+/**
      * Constructor.
      *
      * @param TransportInterface $transport the transport to use for sending emails.
@@ -103,7 +103,6 @@ class Mailer
     public function send(MailMessage $message, array $views = [], array $data = []): ?SentMessage
     {
         $message = MessageBuilder::make($message);
-
         return $this->getTransportInstance()->send($message);
     }
 
@@ -121,9 +120,7 @@ class Mailer
             'port' => $mailMessage->port,
             'options' => $mailMessage->transportOptions,
         ];
-
         $factory = TransportFactory::create($options, $mailMessage->transportType);
-
         return new Mailer($factory->create());
     }
 }

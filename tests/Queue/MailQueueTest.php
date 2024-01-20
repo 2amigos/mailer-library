@@ -20,7 +20,7 @@ class MailQueueTest extends AbstractMySqlDatabaseTestCase
      */
     private $pdoQueueAdapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->pdoQueueAdapter = new PdoQueueStoreAdapter(self::getPdoQueueStoreConnection());
@@ -56,7 +56,7 @@ class MailQueueTest extends AbstractMySqlDatabaseTestCase
     {
         $mailMessage = FixtureHelper::getMailMessage();
         $mailJob = new PdoMailJob(['message' => $mailMessage]);
-        $cypher = new Cypher('I find your lack of faith disturbing.');
+        $cypher = new Cypher('I find your lack of faith.......', 'I know your plan');
 
         $this->mailQueuePdo->setCypher($cypher);
         $this->assertSame($cypher, $this->mailQueuePdo->getCypher());
@@ -70,5 +70,12 @@ class MailQueueTest extends AbstractMySqlDatabaseTestCase
 
         $this->assertTrue($dequeuedMailJob->isNewRecord() === false);
         $this->assertEquals($mailMessage, $dequeuedMailJob->getMessage());
+    }
+
+    public function testMake()
+    {
+        $mailerQueue = MailQueue::make();
+
+        $this->assertInstanceOf(MailQueue::class, $mailerQueue);
     }
 }

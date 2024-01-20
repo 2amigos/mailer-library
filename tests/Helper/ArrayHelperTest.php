@@ -2,15 +2,10 @@
 namespace Da\Mailer\Test\Helper;
 
 use Da\Mailer\Helper\ArrayHelper;
-use PHPUnit_Framework_TestCase;
+use Da\Mailer\Test\classes\Post;
+use PHPUnit\Framework\TestCase;
 
-class Post
-{
-    public $id = 'VII';
-    public $title = 'Star Wars: The Force Awakens';
-}
-
-class ArrayHelperTest extends PHPUnit_Framework_TestCase
+class ArrayHelperTest extends TestCase
 {
     public function testGetValueFromObject()
     {
@@ -64,7 +59,7 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, ArrayHelper::getValue($array, $key, $default));
     }
 
-    public function valueProvider()
+    public static function valueProvider()
     {
         return [
             ['name', 'test'],

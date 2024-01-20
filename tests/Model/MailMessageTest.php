@@ -3,14 +3,18 @@ namespace Da\Mailer\Test\Model;
 
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Test\Fixture\FixtureHelper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Swift_Message;
 
-class MailMessageTest extends PHPUnit_Framework_TestCase
+class MailMessageTest extends TestCase
 {
     public function testMailMessageMagicMethods()
     {
-        $config = FixtureHelper::getMailMessageSmtpConfigurationArray();
+        $config = array_filter(
+            FixtureHelper::getMailMessageSmtpConfigurationArray(),
+            fn ($index) => $index !== 'attachments',
+            ARRAY_FILTER_USE_KEY
+        );
         $mailMessage = FixtureHelper::getMailMessage();
 
         foreach ($config as $attribute => $value) {
@@ -31,20 +35,5 @@ class MailMessageTest extends PHPUnit_Framework_TestCase
         $decodedMailMessage = MailMessage::fromArray(json_decode($json, true));
 
         $this->assertEquals($mailMessage, $decodedMailMessage);
-    }
-
-    public function testAsSwiftMessageMethod()
-    {
-        $mailMessage = FixtureHelper::getMailMessage();
-        $swift = $mailMessage->asSwiftMessage();
-
-        $this->assertTrue($swift instanceof Swift_Message);
-
-        $this->assertEquals([$mailMessage->to => null], $swift->getTo());
-        $this->assertEquals([$mailMessage->from => null], $swift->getFrom());
-        $this->assertEquals([$mailMessage->cc => null], $swift->getCc());
-        $this->assertEquals([$mailMessage->bcc => null], $swift->getBcc());
-        $this->assertEquals($mailMessage->subject, $swift->getSubject());
-        $this->assertEquals($mailMessage->bodyHtml, $swift->getBody());
     }
 }

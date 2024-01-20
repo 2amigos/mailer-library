@@ -44,7 +44,7 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
         $queue = $this->getConnection()->getInstance()->createQueue([
             'QueueName' => $this->queueName,
         ]);
-        $this->queueUrl = $queue->get('QueueUrl');
+        $this->queueUrl = $queue['QueueUrl'];
 
         return $this;
     }
@@ -70,7 +70,7 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
             'DelaySeconds' => $mailJob->getDelaySeconds(),
             'Attempt' => $mailJob->getAttempt(),
         ]);
-        $messageId = $result->get('MessageId');
+        $messageId = $result['MessageId'];
 
         return $messageId !== null && is_string($messageId);
     }
@@ -86,9 +86,11 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
             'QueueUrl' => $this->queueUrl,
         ]);
 
-        if (($result = $result->getPath('Messages/*')) === null) {
+        if (empty($result['Messages'])) {
             return null;
         }
+
+        $result = array_shift($result['Messages']);
 
         return new SqsMailJob([
             'id' => $result['MessageId'],
@@ -132,13 +134,13 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
-        $attributes = $this->getConnection()->getInstance()->getQueueAttributes([
+        $response = $this->getConnection()->getInstance()->getQueueAttributes([
             'QueueUrl' => $this->queueUrl,
             'AttributeNames' => ['ApproximateNumberOfMessages'],
         ]);
 
-        return $attributes->getPath('Attributes/ApproximateNumberOfMessages') == 0;
+        return $response['Attributes']['ApproximateNumberOfMessages'] === 0;
     }
 }

@@ -8,3 +8,8 @@ Thumbs.db
 nbproject
 switch
 index
+.env
+.phpunit.result.cache
+.composer.lock
+.phpunit.cache
+composer.lock

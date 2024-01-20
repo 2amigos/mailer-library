@@ -2,11 +2,11 @@
 namespace Da\Mailer\Test\Queue\Backend\Redis;
 
 use Da\Mailer\Queue\Backend\Redis\RedisQueueStoreConnection;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Predis\Client;
 use ReflectionClass;
 
-class RedisQueueStoreConnectionTest extends PHPUnit_Framework_TestCase
+class RedisQueueStoreConnectionTest extends TestCase
 {
     public function testGetConfigurationValue()
     {

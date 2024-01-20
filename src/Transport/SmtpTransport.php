@@ -1,12 +1,14 @@
 <?php
 namespace Da\Mailer\Transport;
 
-use Swift_SmtpTransport;
+use Symfony\Component\Mailer\Transport\Dsn;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
 
 class SmtpTransport implements TransportInterface
 {
     /**
-     * @var Swift_SmtpTransport
+     * @var EsmtpTransport
      */
     private $instance;
     /**
@@ -37,19 +39,26 @@ class SmtpTransport implements TransportInterface
     }
 
     /**
-     * Returns the Swift_SmtpTransport instance.
-     *
-     * @return Swift_SmtpTransport
+     * @return EsmtpTransport
      */
-    public function getSwiftTransportInstance()
+    public function getInstance(): EsmtpTransport
     {
         if ($this->instance === null) {
-            $this->instance = Swift_SmtpTransport::newInstance($this->host, $this->port);
-            foreach ($this->options as $option => $value) {
-                $this->instance->{'set' . ucfirst($option)}($value);
-            }
+            $user = $this->options['username'] ?? null;
+            $password = $this->options['password'] ?? null;
+
+            $this->instance = (new EsmtpTransportFactory())->create(
+                new Dsn('smtp', $this->host, $user, $password, $this->port, $this->options)
+            );
         }
 
         return $this->instance;
+    }
+
+    private function getScheme()
+    {
+        return $this->options['tls']
+            ? 'smtps'
+            : 'smtp';
     }
 }

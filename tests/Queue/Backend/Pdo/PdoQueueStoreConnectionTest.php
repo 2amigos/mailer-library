@@ -4,10 +4,10 @@ namespace Da\Mailer\Test\Queue\Backend\Pdo;
 use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreConnection;
 use Da\Mailer\Test\Fixture\FixtureHelper;
 use PDO;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class PdoQueueStoreConnectionTest extends PHPUnit_Framework_TestCase
+class PdoQueueStoreConnectionTest extends TestCase
 {
     public function testGetConfigurationValue()
     {

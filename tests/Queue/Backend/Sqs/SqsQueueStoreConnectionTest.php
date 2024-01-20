@@ -3,10 +3,10 @@ namespace Da\Mailer\Test\Queue\Backend\Sqs;
 
 use Aws\Sqs\SqsClient;
 use Da\Mailer\Queue\Backend\Sqs\SqsQueueStoreConnection;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class SqsQueueStoreConnectionTest extends PHPUnit_Framework_TestCase
+class SqsQueueStoreConnectionTest extends TestCase
 {
     public function testGetConfigurationValue()
     {

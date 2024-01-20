@@ -1,6 +1,8 @@
 <?php
 namespace Da\Mailer\Transport;
 
+use Da\Mailer\Transport\TransportInterface;
+
 class MailTransportFactory extends AbstractTransportFactory
 {
     /**
@@ -16,15 +18,10 @@ class MailTransportFactory extends AbstractTransportFactory
     /**
      * Creates a MailTransport instance.
      *
-     * @return MailTransport
+     * @return TransportInterface
      */
     public function create()
     {
-        $extraParams = isset($this->options['options']) ? $this->options['options'] : '';
-        if (empty($extraParams) || !is_string($extraParams)) {
-            $extraParams = '-f%s';
-        }
-
-        return new MailTransport($extraParams);
+        return new MailTransport($this->options['dsn']);
     }
 }

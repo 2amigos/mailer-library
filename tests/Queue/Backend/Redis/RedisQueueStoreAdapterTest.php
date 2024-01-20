@@ -6,14 +6,14 @@ use Da\Mailer\Queue\Backend\Redis\RedisQueueStoreAdapter;
 use Da\Mailer\Queue\Backend\Redis\RedisQueueStoreConnection;
 use Da\Mailer\Test\Fixture\FixtureHelper;
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RedisQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
+class RedisQueueStoreAdapterTest extends TestCase
 {
     private $mailJob;
     private $payload;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mailJob = FixtureHelper::getRedisMailJob();
@@ -22,6 +22,13 @@ class RedisQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
             'attempt' => $this->mailJob->getAttempt(),
             'message' => $this->mailJob->getMessage(),
         ]);
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        Mockery::close();
     }
 
     public function testEnqueueDequeueAndAcknowledge()
@@ -188,11 +195,10 @@ class RedisQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($redisQueueStore->isEmpty());
     }
 
-    /**
-     * @expectedException \Da\Mailer\Exception\InvalidCallException
-     */
     public function testBadMethodCallExceptionOnAck()
     {
+        $this->expectException(\Da\Mailer\Exception\InvalidCallException::class);
+
         $mailJob = FixtureHelper::getRedisMailJob();
         $connection = new RedisQueueStoreConnection([]);
         $redisQueueStore = new RedisQueueStoreAdapter($connection);

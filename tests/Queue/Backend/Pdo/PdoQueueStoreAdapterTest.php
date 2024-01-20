@@ -13,7 +13,7 @@ class PdoQueueStoreAdapterTest extends AbstractMySqlDatabaseTestCase
      */
     private $pdoQueueStore;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -66,11 +66,10 @@ class PdoQueueStoreAdapterTest extends AbstractMySqlDatabaseTestCase
         $this->assertTrue($this->pdoQueueStore->isEmpty() === false);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testBadMethodCallExceptionOnAck()
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $mailJob = FixtureHelper::getPdoMailJob();
         $this->pdoQueueStore->ack($mailJob);
     }

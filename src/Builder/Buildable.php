@@ -20,5 +20,5 @@ abstract class Buildable
      * @param $config
      * @return void
      */
-    public abstract static function make($config = null);
+    abstract public static function make($config = null);
 }

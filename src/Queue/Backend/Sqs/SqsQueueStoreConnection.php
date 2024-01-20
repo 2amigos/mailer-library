@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Queue\Backend\Sqs;
 
 use Aws\Sqs\SqsClient;
@@ -25,13 +26,11 @@ class SqsQueueStoreConnection extends AbstractQueueStoreConnection
         $key = $this->getConfigurationValue('key');
         $secret = $this->getConfigurationValue('secret');
         $region = $this->getConfigurationValue('region');
-
         $this->instance = new SqsClient([
             'key' => $key,
             'secret' => $secret,
             'region' => $region,
         ]);
-
         return $this;
     }
 

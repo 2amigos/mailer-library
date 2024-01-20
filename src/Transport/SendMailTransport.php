@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Transport;
 
 use Symfony\Component\Mailer\Transport\Dsn;
@@ -9,12 +10,10 @@ class SendMailTransport implements TransportInterface
      * @var \Symfony\Component\Mailer\Transport\SendmailTransport
      */
     private $instance;
-
-    /**
+/**
      * @var string
      */
     private string $dsn;
-
     public function __construct(string $dsn)
     {
         $this->dsn = $dsn;
@@ -29,7 +28,6 @@ class SendMailTransport implements TransportInterface
     {
         if ($this->instance === null) {
             $sendMailFactory = new \Symfony\Component\Mailer\Transport\SendmailTransportFactory();
-
             $this->instance = $sendMailFactory->create(Dsn::fromString($this->dsn));
         }
 

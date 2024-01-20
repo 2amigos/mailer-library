@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Helper;
 
 class RecipientsHelper

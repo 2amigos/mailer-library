@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Queue\Backend\Beanstalkd;
 
 use Da\Mailer\Model\MailJob;
@@ -10,12 +11,11 @@ class BeanstalkdMailJob extends MailJob
      * @var int the unix timestamp the job should be processed
      */
     private $timeToSend;
-    /**
+/**
      * @var PheanstalkJob
      */
     private $pheanstalkJob;
-
-    /**
+/**
      * @return int the timestamp
      */
     public function getTimeToSend()

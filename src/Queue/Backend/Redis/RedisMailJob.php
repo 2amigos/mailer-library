@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Queue\Backend\Redis;
 
 use Da\Mailer\Event\EventHandlerTrait;
@@ -8,12 +9,13 @@ class RedisMailJob extends MailJob
 {
     use EventHandlerTrait;
 
-    /**
+/**
      * @var int the unix timestamp the job should be processed
      */
-    private $timeToSend;
 
-    /**
+
+    private $timeToSend;
+/**
      * @return int the timestamp
      */
     public function getTimeToSend()

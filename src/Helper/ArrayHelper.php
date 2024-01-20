@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Helper;
 
 use Closure;
@@ -96,7 +97,6 @@ class ArrayHelper
         if (is_array($array) && (isset($array[$key]) || array_key_exists($key, $array))) {
             $value = $array[$key];
             unset($array[$key]);
-
             return $value;
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Queue\Backend\Beanstalkd;
 
 use Da\Mailer\Exception\InvalidCallException;
@@ -14,15 +15,15 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
      * @var string the queue name
      */
     protected $queueName;
-    /**
+/**
      * @var int the time to run. Defaults to Pheanstalkd::DEFAULT_TTR.
      */
     protected $timeToRun;
-    /**
+/**
      * @var BeanstalkdQueueStoreConnection
      */
     protected $connection;
-    /**
+/**
      * @var int Reserves/locks a ready job in a watched tube. A timeout value of 0 will cause the server to immediately
      * return either a response or TIMED_OUT.  A positive value of timeout will limit the amount of time the client will
      * block on the reserve request until a job becomes available.
@@ -30,8 +31,7 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
      * We highly recommend a non-zero value. Defaults to 5.
      */
     protected $reserveTimeout;
-
-    /**
+/**
      * BeanstalkdQueueStoreAdapter constructor.
      *
      * @param BeanstalkdQueueStoreConnection $connection
@@ -39,12 +39,8 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
      * @param int $timeToRun
      * @param int $reserveTimeOut
      */
-    public function __construct(
-        BeanstalkdQueueStoreConnection $connection,
-        $queueName = 'mail_queue',
-        $timeToRun = Pheanstalk::DEFAULT_TTR,
-        $reserveTimeOut = 5
-    ) {
+    public function __construct(BeanstalkdQueueStoreConnection $connection, $queueName = 'mail_queue', $timeToRun = Pheanstalk::DEFAULT_TTR, $reserveTimeOut = 5)
+    {
         $this->connection = $connection;
         $this->queueName = $queueName;
         $this->timeToRun = $timeToRun;
@@ -58,7 +54,6 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
     public function init()
     {
         $this->getConnection()->connect();
-
         return $this;
     }
 
@@ -80,7 +75,6 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
         $timestamp = $mailJob->getTimeToSend();
         $payload = $this->createPayload($mailJob);
         $delay = (int) max(Pheanstalk::DEFAULT_DELAY, $timestamp - time());
-
         return $this->getConnection()
             ->getInstance()
             ->useTube($this->queueName)
@@ -96,15 +90,12 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
         $job = $this->getConnection()->getInstance()->watch($this->queueName)->reserveWithTimeout($this->reserveTimeout);
         if ($job instanceof PheanstalkJob) {
             $data = json_decode($job->getData(), true);
-
-            return new BeanstalkdMailJob(
-                [
+            return new BeanstalkdMailJob([
                     'id' => $data['id'],
                     'attempt' => $data['attempt'],
                     'message' => $data['message'],
                     'pheanstalkJob' => $job,
-                ]
-            );
+                ]);
         }
 
         return null;
@@ -123,17 +114,14 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
         $pheanstalk = $this->getConnection()->getInstance()->useTube($this->queueName);
         if ($mailJob->isCompleted()) {
             $pheanstalk->delete($mailJob->getPheanstalkJob());
-
             return null;
         }
 
         $timestamp = $mailJob->getTimeToSend();
         $delay = max(0, $timestamp - time());
-
-        // add back to the queue as it wasn't completed maybe due to some transitory error
+// add back to the queue as it wasn't completed maybe due to some transitory error
         // could also be failed.
         $pheanstalk->release($mailJob->getPheanstalkJob(), Pheanstalk::DEFAULT_PRIORITY, $delay);
-
         return null;
     }
 
@@ -144,7 +132,6 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
     public function isEmpty()
     {
         $stats = $this->getConnection()->getInstance()->statsTube($this->queueName);
-
         return (int) $stats->current_jobs_delayed === 0
         && (int) $stats->current_jobs_urgent === 0
         && (int) $stats->current_jobs_ready === 0;
@@ -157,12 +144,10 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
      */
     protected function createPayload(MailJobInterface $mailJob)
     {
-        return json_encode(
-            [
+        return json_encode([
                 'id' => $mailJob->isNewRecord() ? sha1(Random::string(32)) : $mailJob->getId(),
                 'attempt' => $mailJob->getAttempt(),
                 'message' => $mailJob->getMessage(),
-            ]
-        );
+            ]);
     }
 }

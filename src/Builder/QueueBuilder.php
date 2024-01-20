@@ -45,7 +45,7 @@ class QueueBuilder extends Buildable
         $config = self::getConfig();
         $connectionValues = $config['brokers'][$messageBroker] ?? [];
 
-        switch($messageBroker) {
+        switch ($messageBroker) {
             case MessageBrokerEnum::BROKER_REDIS:
                 return new RedisQueueStoreAdapter(
                     new RedisQueueStoreConnection($connectionValues)
@@ -66,7 +66,8 @@ class QueueBuilder extends Buildable
                 return new RabbitMqQueueStoreAdapter(
                     new RabbitMqQueueConnection($connectionValues)
                 );
-            default: throw new UndefinedMessageBrokerException();
+            default:
+                throw new UndefinedMessageBrokerException();
         }
     }
 }

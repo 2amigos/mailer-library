@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Queue\Backend\Pdo;
 
 use Da\Mailer\Queue\Backend\AbstractQueueStoreConnection;
@@ -20,12 +21,7 @@ class PdoQueueStoreConnection extends AbstractQueueStoreConnection
     protected function defineConnectionString()
     {
         if (! isset($this->configuration['dsn'])) {
-            $this->configuration['dsn'] = sprintf(
-                "mysql:host=%s;dbname=%s;port=%s",
-                $this->configuration['host'] ?? '',
-                $this->configuration['db'] ?? '',
-                $this->configuration['port'] ?? 3306
-            );
+            $this->configuration['dsn'] = sprintf("mysql:host=%s;dbname=%s;port=%s", $this->configuration['host'] ?? '', $this->configuration['db'] ?? '', $this->configuration['port'] ?? 3306);
         }
     }
 
@@ -35,14 +31,11 @@ class PdoQueueStoreConnection extends AbstractQueueStoreConnection
     public function connect()
     {
         $this->disconnect();
-
         $username = $this->getConfigurationValue('username');
         $password = $this->getConfigurationValue('password');
         $options = $this->getConfigurationValue('options');
-
         $this->instance = new PDO($this->getConfigurationValue('dsn'), $username, $password, $options);
         $this->instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         return $this;
     }
 

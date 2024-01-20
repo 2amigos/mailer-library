@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Queue\Backend\Pdo;
 
 use Da\Mailer\Exception\InvalidCallException;
@@ -12,12 +13,11 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
      * @var string the name of the table to store the messages. If not created, please use
      */
     private $tableName;
-    /**
+/**
      * @var PdoQueueStoreConnection
      */
     protected $connection;
-
-    /**
+/**
      * PdoQueueStoreAdapter constructor.
      *
      * @param PdoQueueStoreConnection $connection
@@ -36,7 +36,6 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
     public function init()
     {
         $this->getConnection()->connect();
-
         return $this;
     }
 
@@ -57,14 +56,10 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
      */
     public function enqueue(MailJobInterface $mailJob)
     {
-        $sql = sprintf(
-            'INSERT INTO `%s` (`message`, `timeToSend`) VALUES (:message, :timeToSend)',
-            $this->tableName
-        );
+        $sql = sprintf('INSERT INTO `%s` (`message`, `timeToSend`) VALUES (:message, :timeToSend)', $this->tableName);
         $query = $this->getConnection()->getInstance()->prepare($sql);
         $query->bindValue(':message', $mailJob->getMessage());
         $query->bindValue(':timeToSend', $mailJob->getTimeToSend());
-
         return $query->execute();
     }
 
@@ -76,33 +71,28 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
     public function dequeue()
     {
         $this->getConnection()->getInstance()->beginTransaction();
-
         $mailJob = null;
         $sqlText = 'SELECT `id`, `message`, `attempt`
             FROM `%s` WHERE `timeToSend` <= :timeToSend AND `state`=:state
             ORDER BY id ASC LIMIT 1 FOR UPDATE';
         $sql = sprintf($sqlText, $this->tableName);
         $query = $this->getConnection()->getInstance()->prepare($sql);
-
         $query->bindValue(':state', PdoMailJob::STATE_NEW);
         $query->bindValue(':timeToSend', date('Y-m-d H:i:s'), time());
         $query->execute();
         $queryResult = $query->fetch(PDO::FETCH_ASSOC);
-
         if ($queryResult) {
-            //
+        //
             $sqlText = 'UPDATE `%s` SET `state`=:state WHERE `id`=:id';
             $sql = sprintf($sqlText, $this->tableName);
             $query = $this->getConnection()->getInstance()->prepare($sql);
             $query->bindValue(':state', PdoMailJob::STATE_ACTIVE);
             $query->bindValue(':id', $queryResult['id'], PDO::PARAM_INT);
             $query->execute();
-
             $mailJob = new PdoMailJob($queryResult);
         }
 
         $this->getConnection()->getInstance()->commit();
-
         return $mailJob;
     }
 
@@ -128,13 +118,11 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
         $sql = sprintf($sqlText, $this->tableName);
         $sentTime = $mailJob->isCompleted() ? date('Y-m-d H:i:s', time()) : null;
         $query = $this->getConnection()->getInstance()->prepare($sql);
-
         $query->bindValue(':id', $mailJob->getId(), PDO::PARAM_INT);
         $query->bindValue(':attempt', $mailJob->getAttempt(), PDO::PARAM_INT);
         $query->bindValue(':state', $mailJob->getState());
         $query->bindValue(':timeToSend', $mailJob->getTimeToSend());
         $query->bindValue(':sentTime', $sentTime);
-
         return $query->execute();
     }
 
@@ -143,16 +131,11 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
      */
     public function isEmpty()
     {
-        $sql = sprintf(
-            'SELECT COUNT(`id`) FROM `%s` WHERE `timeToSend` <= :timeToSend AND `state`=:state ORDER BY id ASC LIMIT 1',
-            $this->tableName
-        );
+        $sql = sprintf('SELECT COUNT(`id`) FROM `%s` WHERE `timeToSend` <= :timeToSend AND `state`=:state ORDER BY id ASC LIMIT 1', $this->tableName);
         $query = $this->getConnection()->getInstance()->prepare($sql);
-
         $query->bindValue(':state', PdoMailJob::STATE_NEW);
         $query->bindValue(':timeToSend', date('Y-m-d H:i:s'), time());
         $query->execute();
-
         return intval($query->fetchColumn(0)) === 0;
     }
 }

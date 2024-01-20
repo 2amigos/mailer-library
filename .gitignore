@@ -13,3 +13,4 @@ index
 .composer.lock
 .phpunit.cache
 composer.lock
+PHP_CodeSniffer

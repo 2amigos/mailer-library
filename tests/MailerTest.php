@@ -1,25 +1,25 @@
 <?php
 namespace Da\Mailer\Test;
 
+use Da\Mailer\Enum\TransportType;
 use Da\Mailer\Mailer;
+use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Test\Fixture\FixtureHelper;
 use Da\Mailer\Transport\MailTransport;
-use Da\Mailer\Transport\MailTransportFactory;
 use Da\Mailer\Transport\SendMailTransport;
-use Da\Mailer\Transport\SendMailTransportFactory;
 use Da\Mailer\Transport\SmtpTransport;
 use Da\Mailer\Transport\SmtpTransportFactory;
 use Da\Mailer\Transport\TransportFactory;
 use Mockery;
-use PHPUnit_Framework_TestCase;
-use Swift_Events_CommandEvent;
-use Swift_Mailer;
+use PHPUnit\Framework\TestCase;
+use Da\Mailer\Builder\MailerBuilder;
+use Symfony\Component\Mailer\Transport\TransportInterface;
 
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class MailerTest extends PHPUnit_Framework_TestCase
+class MailerTest extends TestCase
 {
     public function testFromMailMessageMethod()
     {
@@ -49,55 +49,67 @@ class MailerTest extends PHPUnit_Framework_TestCase
     public function testConstructionOptions()
     {
         $mailMessage = FixtureHelper::getMailMessage();
-        $mailTransport = (new MailTransportFactory([]))->create();
-        $mailer = new Mailer($mailTransport, true);
+        // TODO Update to use Native instead.
+        $mailer = MailerBuilder::make(TransportType::MAIL);
 
         $this->assertTrue($mailer->getTransport() instanceof MailTransport);
-        $this->assertTrue($mailer->getSwiftMailerInstance() instanceof Swift_Mailer);
+        $this->assertTrue($mailer->getTransportInstance() instanceof TransportInterface);
         $this->assertTrue($mailer->getLog() === null);
 
-        $sendMailTransport = (new SendMailTransportFactory([]))->create();
-        $mailer->updateTransport($sendMailTransport);
+        $sendMailTransport = MailerBuilder::make(TransportType::SEND_MAIL);
 
-        $this->assertTrue($mailer->getTransport() instanceof SendMailTransport);
-        $this->assertTrue($mailer->getSwiftMailerInstance() instanceof Swift_Mailer);
-
-        $plugin = new TestSwiftPlugin();
-        $this->assertSame($mailer, $mailer->addPlugin($plugin));
-        $this->assertSame($mailer, $mailer->registerPlugins());
-        $this->assertEquals('', $mailer->getLog());
-        // is dry run, should be fine sending as it will return number of message sent
-
-        $this->assertEquals(
-            1,
-            $mailer->send(
-                $mailMessage,
-                ['text' => __DIR__ . '/data/test_view.php'],
-                ['force' => 'force', 'with' => 'with', 'you' => 'you']
-            )
-        );
-        $this->assertEquals(1, $mailer->sendSwiftMessage($mailMessage->asSwiftMessage()));
+        $this->assertTrue($sendMailTransport->getTransport() instanceof SendMailTransport);
+        $this->assertTrue($sendMailTransport->getTransportInstance() instanceof TransportInterface);
     }
 
-    public function testSendSwiftMailer()
+    public function testSetTransport()
     {
-        $mailMessage = FixtureHelper::getMailMessage()->asSwiftMessage();
-        Mockery::mock('overload:Swift_Mailer')
-            ->shouldIgnoreMissing()
+        $mailer = MailerBuilder::make(TransportType::SMTP);
+
+        $mailer2 = MailerBuilder::make(TransportType::MAIL);
+
+        $mailer->setTransport($mailer2->getTransport());
+
+        $this->assertInstanceOf(MailTransport::class, $mailer->getTransport());
+    }
+
+    public function testSend()
+    {
+        $message = MailMessage::make([
+            'from' => 'from@me.com',
+            'to' => 'to@me.com',
+            'subject' => 'mailing test',
+            'bodyHtml' => 'whats up?',
+        ]);
+
+        $smtpTransport = (new SmtpTransportFactory([
+            'host' => '',
+            'port' => '',
+            'username' => '',
+            'password' => ''
+        ]))->create();
+
+        /** @var Mailer $mailer */
+        $mailer = Mockery::mock(Mailer::class, [$smtpTransport])
             ->shouldReceive('send')
-            ->withAnyArgs()
-            ->once();
-        $mailTransport = (new MailTransportFactory([]))->create();
-        $mailer = new Mailer($mailTransport);
-        date_default_timezone_set('UTC');
-        $this->assertEquals(null, $mailer->sendSwiftMessage($mailMessage));
-    }
-}
+            ->with($message)
+            ->getMock();
 
-class TestSwiftPlugin implements \Swift_Events_CommandListener
-{
-    public function commandSent(Swift_Events_CommandEvent $evt)
+        //TODO enhance this test on future
+        $s = $mailer->send($message);
+
+        $this->assertNull($s);
+    }
+
+    public function testTransportException()
     {
-        // TODO: Implement commandSent() method.
+        $this->expectException(\Symfony\Component\Mailer\Exception\TransportException::class);
+
+        MailerBuilder::make()->send(new MailMessage([
+            'from' => 'from@me.com',
+            'to' => 'to@me.com',
+            'subject' => 'mailing test',
+            'bodyHtml' => 'whats up?',
+        ]));
     }
 }

@@ -14,6 +14,19 @@ class PdoQueueStoreConnection extends AbstractQueueStoreConnection
     public function __construct(array $configuration)
     {
         parent::__construct($configuration);
+        $this->defineConnectionString();
+    }
+
+    protected function defineConnectionString()
+    {
+        if (! isset($this->configuration['dsn'])) {
+            $this->configuration['dsn'] = sprintf(
+                "mysql:host=%s;dbname=%s;port=%s",
+                $this->configuration['host'] ?? '',
+                $this->configuration['db'] ?? '',
+                $this->configuration['port'] ?? 3306
+            );
+        }
     }
 
     /**
@@ -22,12 +35,12 @@ class PdoQueueStoreConnection extends AbstractQueueStoreConnection
     public function connect()
     {
         $this->disconnect();
-        $connectionString = $this->getConfigurationValue('connectionString');
+
         $username = $this->getConfigurationValue('username');
         $password = $this->getConfigurationValue('password');
         $options = $this->getConfigurationValue('options');
 
-        $this->instance = new PDO($connectionString, $username, $password, $options);
+        $this->instance = new PDO($this->getConfigurationValue('dsn'), $username, $password, $options);
         $this->instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         return $this;

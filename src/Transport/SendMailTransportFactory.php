@@ -1,6 +1,8 @@
 <?php
 namespace Da\Mailer\Transport;
 
+use Symfony\Component\Mailer\Transport\Dsn;
+
 class SendMailTransportFactory extends AbstractTransportFactory
 {
     /**
@@ -18,11 +20,6 @@ class SendMailTransportFactory extends AbstractTransportFactory
      */
     public function create()
     {
-        $aCommandPath = isset($this->options['options']) ? $this->options['options'] : '';
-        if (empty($aCommandPath) || !is_string($aCommandPath)) {
-            $aCommandPath = '/usr/sbin/sendmail -bs';
-        }
-
-        return new SendMailTransport($aCommandPath);
+        return new SendMailTransport($this->options['dsn']);
     }
 }

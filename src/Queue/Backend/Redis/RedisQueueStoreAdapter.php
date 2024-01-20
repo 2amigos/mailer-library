@@ -4,7 +4,7 @@ namespace Da\Mailer\Queue\Backend\Redis;
 use Da\Mailer\Exception\InvalidCallException;
 use Da\Mailer\Queue\Backend\MailJobInterface;
 use Da\Mailer\Queue\Backend\QueueStoreAdapterInterface;
-use phpseclib\Crypt\Random;
+use phpseclib3\Crypt\Random;
 
 class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
 {

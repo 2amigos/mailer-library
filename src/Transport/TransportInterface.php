@@ -1,18 +1,11 @@
 <?php
-namespace Da\Mailer\Transport;
 
-use Swift_Transport;
+namespace Da\Mailer\Transport;
 
 interface TransportInterface
 {
-    const TYPE_MAIL = 'mail';
-    const TYPE_SEND_MAIL = 'sendMail';
-    const TYPE_SMTP = 'smtp';
-
     /**
-     * Returns the Swift_Transport instance.
-     *
-     * @return Swift_Transport
+     * @return \Symfony\Component\Mailer\Transport\TransportInterface
      */
-    public function getSwiftTransportInstance();
+    public function getInstance(): \Symfony\Component\Mailer\Transport\TransportInterface;
 }

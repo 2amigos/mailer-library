@@ -6,44 +6,42 @@ use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Backend\Sqs\SqsQueueStoreAdapter;
 use Da\Mailer\Queue\Backend\Sqs\SqsQueueStoreConnection;
 use Da\Mailer\Test\Fixture\FixtureHelper;
-use Guzzle\Common\Collection;
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
+class SqsQueueStoreAdapterTest extends TestCase
 {
     /**
      * @var SqsQueueStoreAdapter
      */
     private $sqsQueueStore1, $sqsQueueStore2;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // prepare sqs response collections - begin
-        $createQueueResult = new Collection([
+        $createQueueResult = [
             'MessageId' => 'createQueueResultId',
             'QueueUrl' => 'http://queue.url/path/',
-        ]);
+        ];
 
-        $sendMessageResult = new Collection([
+        $sendMessageResult = [
             'MessageId' => 'sendMessageResultId',
+        ];
 
-        ]);
-
-        $getQueueAttributesResult1 = new Collection([
+        $getQueueAttributesResult1 = [
             'MessageId' => 'getQueueAttributesResult1Id',
             'Attributes' => [
                 'ApproximateNumberOfMessages' => 1,
             ],
-        ]);
-        $getQueueAttributesResult2 = new Collection([
+        ];
+        $getQueueAttributesResult2 = [
             'MessageId' => 'getQueueAttributesResult2Id',
             'Attributes' => [
                 'ApproximateNumberOfMessages' => 0,
             ],
-        ]);
+        ];
 
-        $receiveMessageResult1 = new Collection([
+        $receiveMessageResult1 = [
             'Messages' => [
                 [
                     'MessageId' => 'receiveMessageResult1Id',
@@ -52,10 +50,10 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
                     'Attempt' => 1,
                 ],
             ],
-        ]);
-        $receiveMessageResult2 = new Collection([
+        ];
+        $receiveMessageResult2 = [
             // no message(s) returned by Amazon SQS
-        ]);
+        ];
         // prepare sqs response collections - end
 
         // ------------------------------------------------------------
@@ -142,7 +140,7 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
         // prepare queue store 2 - end
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Mockery::close();
 
@@ -206,20 +204,18 @@ class SqsQueueStoreAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->sqsQueueStore2->isEmpty());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testBadMethodCallExceptionOnAck()
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $mailJob = FixtureHelper::getPdoMailJob();
         $this->sqsQueueStore1->ack($mailJob);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testBadMethodCallExceptionOnSetDelaySeconds()
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $mailJob = FixtureHelper::getSqsMailJob();
         $mailJob->setDelaySeconds(900);
         $this->assertEquals(900, $mailJob->getDelaySeconds());

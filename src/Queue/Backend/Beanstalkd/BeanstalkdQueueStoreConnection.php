@@ -2,7 +2,9 @@
 namespace Da\Mailer\Queue\Backend\Beanstalkd;
 
 use Da\Mailer\Queue\Backend\AbstractQueueStoreConnection;
+use Pheanstalk\Connection;
 use Pheanstalk\Pheanstalk;
+use Pheanstalk\SocketFactory;
 
 class BeanstalkdQueueStoreConnection extends AbstractQueueStoreConnection
 {
@@ -28,7 +30,9 @@ class BeanstalkdQueueStoreConnection extends AbstractQueueStoreConnection
         $port = $this->getConfigurationValue('port', Pheanstalk::DEFAULT_PORT);
         $connectionTimeout = $this->getConfigurationValue('connectionTimeout');
         $connectPersistent = $this->getConfigurationValue('connectPersistent', false);
-        $this->instance = new Pheanstalk($host, $port, $connectionTimeout, $connectPersistent);
+
+        $connection = new Connection(new SocketFactory($host, $port ?: Pheanstalk::DEFAULT_PORT, $connectionTimeout ?? 0, $connectPersistent ?? SocketFactory::AUTODETECT));
+        $this->instance = new Pheanstalk($connection);
 
         return $this;
     }

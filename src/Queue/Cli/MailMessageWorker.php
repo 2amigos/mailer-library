@@ -32,7 +32,7 @@ class MailMessageWorker
     }
 
     /**
-     * Sends the MailMessage as a SwiftMessage. It does triggers the following events:.
+     * Sends the MailMessage. It does triggers the following events:.
      *
      * - onSuccess: If the sending has been successful
      * - onFailure: If the sending has failed
@@ -43,18 +43,16 @@ class MailMessageWorker
      */
     public function run()
     {
-        $failedRecipients = [];
         $event = 'onSuccess';
 
         try {
-            $failedRecipients = $this->mailer->sendSwiftMessage($this->mailMessage->asSwiftMessage());
-            if (!empty($failedRecipients)) {
+            $sentMessage = $this->mailer->send($this->mailMessage);
+            if (is_null($sentMessage)) {
                 $event = 'onFailure';
             }
         } catch (Exception $e) {
             $event = 'onFailure';
-            $failedRecipients[] = $this->mailMessage->to;
         }
-        $this->trigger($event, [$this->mailMessage, $failedRecipients]);
+        $this->trigger($event, [$this->mailMessage, $sentMessage ?? null]);
     }
 }

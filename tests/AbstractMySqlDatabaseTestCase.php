@@ -3,9 +3,9 @@ namespace Da\Mailer\Test;
 
 use Da\Mailer\Queue\Backend\Pdo\PdoQueueStoreConnection;
 use Da\Mailer\Test\Fixture\FixtureHelper;
-use PHPUnit_Extensions_Database_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractMySqlDatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
+abstract class AbstractMySqlDatabaseTestCase extends TestCase
 {
     protected static function getPdoQueueStoreConnection()
     {
@@ -39,7 +39,7 @@ abstract class AbstractMySqlDatabaseTestCase extends PHPUnit_Extensions_Database
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $sql = file_get_contents(__DIR__ . '/migrations/mysql.sql');
 

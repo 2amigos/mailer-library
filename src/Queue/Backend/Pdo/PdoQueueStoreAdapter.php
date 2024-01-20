@@ -79,12 +79,13 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
 
         $mailJob = null;
         $sqlText = 'SELECT `id`, `message`, `attempt`
-            FROM `%s` WHERE `timeToSend` <= NOW() AND `state`=:state
+            FROM `%s` WHERE `timeToSend` <= :timeToSend AND `state`=:state
             ORDER BY id ASC LIMIT 1 FOR UPDATE';
         $sql = sprintf($sqlText, $this->tableName);
         $query = $this->getConnection()->getInstance()->prepare($sql);
 
         $query->bindValue(':state', PdoMailJob::STATE_NEW);
+        $query->bindValue(':timeToSend', date('Y-m-d H:i:s'), time());
         $query->execute();
         $queryResult = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -143,12 +144,13 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
     public function isEmpty()
     {
         $sql = sprintf(
-            'SELECT COUNT(`id`) FROM `%s` WHERE `timeToSend` <= NOW() AND `state`=:state ORDER BY id ASC LIMIT 1',
+            'SELECT COUNT(`id`) FROM `%s` WHERE `timeToSend` <= :timeToSend AND `state`=:state ORDER BY id ASC LIMIT 1',
             $this->tableName
         );
         $query = $this->getConnection()->getInstance()->prepare($sql);
 
         $query->bindValue(':state', PdoMailJob::STATE_NEW);
+        $query->bindValue(':timeToSend', date('Y-m-d H:i:s'), time());
         $query->execute();
 
         return intval($query->fetchColumn(0)) === 0;

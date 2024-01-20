@@ -2,6 +2,7 @@
 
 namespace Da\Mailer\Queue;
 
+use Da\Mailer\Builder\QueueBuilder;
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Backend\AbstractQueueStoreConnection;
 use Da\Mailer\Queue\Backend\MailJobInterface;
@@ -26,6 +27,15 @@ final class MailQueue implements QueueStoreAdapterInterface
     public function __construct(QueueStoreAdapterInterface $adapter)
     {
         $this->adapter = $adapter;
+    }
+
+    /**
+     * @return MailQueue
+     * @throws \Da\Mailer\Exception\UndefinedMessageBrokerException
+     */
+    public static function make()
+    {
+        return QueueBuilder::make();
     }
 
     /**

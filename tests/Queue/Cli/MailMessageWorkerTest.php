@@ -6,123 +6,73 @@ use Da\Mailer\Mailer;
 use Da\Mailer\Model\MailMessage;
 use Da\Mailer\Queue\Cli\MailMessageWorker;
 use Mockery;
-use PHPUnit_Framework_TestCase;
-use Swift_Message;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Mailer\SentMessage;
 
-class MailMessageWorkerTest extends PHPUnit_Framework_TestCase
+class MailMessageWorkerTest extends TestCase
 {
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        Mockery::close();
+    }
+
     public function testRunMethodOnSuccess()
     {
-        $swift = new Swift_Message();
-        $mockedMailMessage = Mockery::mock(MailMessage::class);
+        $mailMessage = Mockery::mock(MailMessage::class);
+        $sentMessage = Mockery::mock(SentMessage::class);
 
-        $mockedMailMessage
-            ->shouldReceive('asSwiftMessage')
-            ->once()
-            ->andReturn($swift);
+        /** @var Mailer $mailer */
+        $mailer = Mockery::mock(Mailer::class)
+            ->shouldReceive(['send' => $sentMessage])
+            ->getMock();
 
-        $mockedMailer = Mockery::mock(Mailer::class);
+        $worker = new MailMessageWorker($mailer, $mailMessage);
 
-        $mockedMailer
-            ->shouldReceive('sendSwiftMessage')
-            ->once()
-            ->with($swift)
-            ->andReturn(null);
+        $worker->attach('onSuccess', new Event(function($evt) {
+            $this->assertInstanceOf(SentMessage::class, $evt->getData()[1]);
+        }));
 
-        $mailMessageWorker = new MailMessageWorker($mockedMailer, $mockedMailMessage);
-        $eventResponse = null;
-        $failedRecipientsResponse = 0;
-
-        $handler = function (Event $event) use (&$eventResponse, &$failedRecipientsResponse) {
-            $data = $event->getData();
-            $eventResponse = $data[0];
-            $failedRecipientsResponse = $data[1];
-        };
-        $onSuccessEvent = new Event($handler);
-
-        $mailMessageWorker->attach('onSuccess', $onSuccessEvent);
-
-        $mailMessageWorker->run();
-
-        $this->assertEquals($eventResponse, $mockedMailMessage);
-        $this->assertEquals($failedRecipientsResponse, null);
+        $worker->run();
     }
 
     public function testRunMethodOnFailure()
     {
-        $swift = new Swift_Message();
-        $mockedMailMessage = Mockery::mock(MailMessage::class);
+        $mailMessage = Mockery::mock(MailMessage::class);
+        $sentMessage = null;
 
-        $mockedMailMessage
-            ->shouldReceive('asSwiftMessage')
-            ->once()
-            ->andReturn($swift);
+        /** @var Mailer $mailer */
+        $mailer = Mockery::mock(Mailer::class)
+            ->shouldReceive(['send' => $sentMessage])
+            ->getMock();
 
-        $mockedMailMessage->to = 'failed@mail.com';
+        $worker = new MailMessageWorker($mailer, $mailMessage);
 
-        $mockedMailer = Mockery::mock(Mailer::class);
+        $worker->attach('onFailure', new Event(function($evt) {
+            $this->assertNull($evt->getData()[1]);
+        }));
 
-        $mockedMailer
-            ->shouldReceive('sendSwiftMessage')
-            ->once()
-            ->with($swift)
-            ->andReturn(['failed@mail.com']);
-
-        $mailMessageWorker = new MailMessageWorker($mockedMailer, $mockedMailMessage);
-        $eventResponse = null;
-        $failedRecipientsResponse = 0;
-
-        $handler = function (Event $event) use (&$eventResponse, &$failedRecipientsResponse) {
-            $data = $event->getData();
-            $eventResponse = $data[0];
-            $failedRecipientsResponse = $data[1];
-        };
-        $onSuccessEvent = new Event($handler);
-
-        $mailMessageWorker->attach('onFailure', $onSuccessEvent);
-
-        $mailMessageWorker->run();
-
-        $this->assertEquals($eventResponse, $mockedMailMessage);
-        $this->assertEquals($failedRecipientsResponse, ['failed@mail.com']);
+        $worker->run();
     }
 
     public function testRunMethodOnFailureDueToException()
     {
-        $swift = new Swift_Message();
-        $mockedMailMessage = Mockery::mock(MailMessage::class);
+        $mailMessage = Mockery::mock(MailMessage::class);
+        $sentMessage = Mockery::mock(SentMessage::class);
 
-        $mockedMailMessage
-            ->shouldReceive('asSwiftMessage')
-            ->once()
-            ->andReturn($swift);
+        /** @var Mailer $mailer */
+        $mailer = Mockery::mock(Mailer::class)
+            ->shouldReceive(['send' => $sentMessage])
+            ->andThrow(new \Exception())
+            ->getMock();
 
-        $mockedMailMessage->to = 'failed@mail.com';
+        $worker = new MailMessageWorker($mailer, $mailMessage);
 
-        $mockedMailer = Mockery::mock(Mailer::class);
+        $worker->attach('onFailure', new Event(function($evt) {
+            $this->assertNull($evt->getData()[1]);
+        }));
 
-        $mockedMailer
-            ->shouldReceive('sendSwiftMessage')
-            ->once()
-            ->with($swift)
-            ->andThrow('Exception');
-
-        $mailMessageWorker = new MailMessageWorker($mockedMailer, $mockedMailMessage);
-        $eventResponse = null;
-        $failedRecipientsResponse = 0;
-
-        $handler = function (Event $event) use (&$eventResponse, &$failedRecipientsResponse) {
-            $data = $event->getData();
-            $eventResponse = $data[0];
-            $failedRecipientsResponse = $data[1];
-        };
-        $onSuccessEvent = new Event($handler);
-
-        $mailMessageWorker->attach('onFailure', $onSuccessEvent);
-
-        $mailMessageWorker->run();
-
-        $this->assertEquals($eventResponse, $mockedMailMessage);
-        $this->assertEquals($failedRecipientsResponse, ['failed@mail.com']);
+        $worker->run();
     }
 }

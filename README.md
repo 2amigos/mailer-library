@@ -1,4 +1,5 @@
 # Mailer 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ad074d5a75e4dbcba5cc017489280f3)](https://app.codacy.com/gh/2amigos/mailer-library?utm_source=github.com&utm_medium=referral&utm_content=2amigos/mailer-library&utm_campaign=Badge_Grade)
 [![Build Status](https://img.shields.io/travis/2amigos/mailer-library/master.svg?style=flat-square)](https://travis-ci.org/2amigos/mailer-library)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/2amigos/mailer-library/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/2amigos/mailer-library/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/2amigos/mailer-library/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/2amigos/mailer-library/?branch=master)

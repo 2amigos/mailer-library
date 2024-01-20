@@ -24,7 +24,7 @@ class MailJobBuilder extends Buildable
         $config = self::getConfig();
         $messageBroker = $broker ?? $config['config']['message_broker'];
 
-        switch($messageBroker) {
+        switch ($messageBroker) {
             case MessageBrokerEnum::BROKER_REDIS:
                 return new RedisMailJob($jobAttributes);
             case MessageBrokerEnum::BROKER_SQS:
@@ -35,7 +35,8 @@ class MailJobBuilder extends Buildable
                 return new PdoMailJob($jobAttributes);
             case MessageBrokerEnum::BROKER_RABBITMQ:
                 return new RabbitMqJob($jobAttributes);
-            default: throw new UndefinedMessageBrokerException();
+            default:
+                throw new UndefinedMessageBrokerException();
         }
     }
 }

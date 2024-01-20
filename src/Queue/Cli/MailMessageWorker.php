@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Queue\Cli;
 
 use Da\Mailer\Event\EventHandlerTrait;
@@ -10,16 +11,17 @@ class MailMessageWorker
 {
     use EventHandlerTrait;
 
-    /**
+/**
      * @var Mailer instance to the send the mails
      */
+
+
     private $mailer;
-    /**
+/**
      * @var MailMessage the mail message to be sent
      */
     private $mailMessage;
-
-    /**
+/**
      * MailMessageWorker constructor.
      *
      * @param Mailer $mailer
@@ -44,7 +46,6 @@ class MailMessageWorker
     public function run()
     {
         $event = 'onSuccess';
-
         try {
             $sentMessage = $this->mailer->send($this->mailMessage);
             if (is_null($sentMessage)) {

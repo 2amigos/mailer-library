@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Queue\Backend\Redis;
 
 use Da\Mailer\Exception\InvalidCallException;
@@ -12,16 +13,15 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
      * @var int
      */
     private $expireTime;
-    /**
+/**
      * @var string
      */
     private $queueName;
-    /**
+/**
      * @var RedisQueueStoreConnection
      */
     protected $connection;
-
-    /**
+/**
      * RedisQueueStoreAdapter constructor.
      *
      * @param RedisQueueStoreConnection $connection
@@ -43,7 +43,6 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
     {
         $this->getConnection()
             ->connect();
-
         return $this;
     }
 
@@ -64,7 +63,6 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
     {
         $timestamp = $mailJob->getTimeToSend();
         $payload = $this->createPayload($mailJob);
-
         return $timestamp !== null && $timestamp > time()
             ? $this->getConnection()->getInstance()->zadd($this->queueName . ':delayed', $timestamp, $payload)
             : $this->getConnection()->getInstance()->rpush($this->queueName, $payload);
@@ -76,23 +74,17 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
     public function dequeue()
     {
         $this->migrateExpiredJobs();
-
         $job = $this->getConnection()->getInstance()->lpop($this->queueName);
-
         if ($job !== null) {
             $this->getConnection()
                 ->getInstance()
                 ->zadd($this->queueName . ':reserved', time() + $this->expireTime, $job);
-
             $data = json_decode($job, true);
-
-            return new RedisMailJob(
-                [
+            return new RedisMailJob([
                     'id' => $data['id'],
                     'attempt' => $data['attempt'],
                     'message' => $data['message'],
-                ]
-            );
+                ]);
         }
 
         return null;
@@ -108,7 +100,6 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
         }
 
         $this->removeReserved($mailJob);
-
         if (!$mailJob->isCompleted()) {
             if ($mailJob->getTimeToSend() === null || $mailJob->getTimeToSend() < time()) {
                 $mailJob->setTimeToSend(time() + $this->expireTime);
@@ -141,13 +132,11 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
      */
     protected function createPayload(MailJobInterface $mailJob)
     {
-        return json_encode(
-            [
+        return json_encode([
                 'id' => $mailJob->isNewRecord() ? sha1(Random::string(32)) : $mailJob->getId(),
                 'attempt' => $mailJob->getAttempt(),
                 'message' => $mailJob->getMessage(),
-            ]
-        );
+            ]);
     }
 
     /**
@@ -168,24 +157,21 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
     protected function migrateJobs($from, $to)
     {
         $options = ['cas' => true, 'watch' => $from, 'retry' => 10];
+        $this->getConnection()->getInstance()->transaction($options, function ($transaction) use ($from, $to) {
 
-        $this->getConnection()->getInstance()->transaction(
-            $options,
-            function ($transaction) use ($from, $to) {
                 $time = time();
-                // First we need to get all of jobs that have expired based on the current time
+        // First we need to get all of jobs that have expired based on the current time
                 // so that we can push them onto the main queue. After we get them we simply
                 // remove them from this "delay" queues. All of this within a transaction.
                 $jobs = $this->getExpiredJobs($transaction, $from, $time);
-                // If we actually found any jobs, we will remove them from the old queue and we
+        // If we actually found any jobs, we will remove them from the old queue and we
                 // will insert them onto the new (ready) "queue". This means they will stand
                 // ready to be processed by the queue worker whenever their turn comes up.
-                if (count($jobs) > 0) {
-                    $this->removeExpiredJobs($transaction, $from, $time);
-                    $this->pushExpiredJobsOntoNewQueue($transaction, $to, $jobs);
-                }
+            if (count($jobs) > 0) {
+                $this->removeExpiredJobs($transaction, $from, $time);
+                $this->pushExpiredJobsOntoNewQueue($transaction, $to, $jobs);
             }
-        );
+        });
     }
 
     /**

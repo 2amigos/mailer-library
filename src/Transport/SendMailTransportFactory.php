@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Transport;
 
 use Symfony\Component\Mailer\Transport\Dsn;

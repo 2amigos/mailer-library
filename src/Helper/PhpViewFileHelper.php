@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Helper;
 
 final class PhpViewFileHelper
@@ -20,7 +21,6 @@ final class PhpViewFileHelper
         ob_implicit_flush(false);
         extract($params, EXTR_OVERWRITE);
         require $file;
-
         return ob_get_clean();
     }
 }

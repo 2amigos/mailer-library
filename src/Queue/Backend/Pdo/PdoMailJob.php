@@ -1,4 +1,5 @@
 <?php
+
 namespace Da\Mailer\Queue\Backend\Pdo;
 
 use Da\Mailer\Event\EventHandlerTrait;
@@ -8,29 +9,30 @@ class PdoMailJob extends MailJob
 {
     use EventHandlerTrait;
 
-    /**
+/**
      * State new.
      */
+
+
     const STATE_NEW = 'N';
-    /**
+/**
      * State active or in process.
      */
     const STATE_ACTIVE = 'A';
-    /**
+/**
      * State completed.
      */
     const STATE_COMPLETED = 'C';
-    /**
+/**
      * @var string the date value to when to send the email when processing the queue from a daemon. The format is
      * `Y-m-d H:i:s`
      */
     private $timeToSend;
-    /**
+/**
      * @var string
      */
     private $state = self::STATE_NEW;
-
-    /**
+/**
      * {@inheritdoc}
      */
     public function __construct(array $config = [])
@@ -69,7 +71,6 @@ class PdoMailJob extends MailJob
     public function markAsCompleted()
     {
         $this->state = self::STATE_COMPLETED;
-
         parent::markAsCompleted();
     }
 

@@ -150,4 +150,29 @@ class BeanstalkdQueueStoreAdapter implements QueueStoreAdapterInterface
                 'message' => $mailJob->getMessage(),
             ]);
     }
+
+    public function removeFailedJobs()
+    {
+        try {
+            $pheanstalk = $this->getConnection()->getInstance()->watch($this->queueName);
+            while (true) {
+                $job = $pheanstalk->reserveWithTimeout($this->reserveTimeout);
+
+                if (!$job) {
+                    break;
+                }
+
+                $jobData = json_decode($job->getData(), true);
+
+                if($jobData['attempt'] >= $_ENV['MAX_ATTEMPTS_DEFAULT']){
+                    $pheanstalk->delete($job);
+                }
+
+            }
+
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
+    }
 }

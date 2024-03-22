@@ -64,10 +64,10 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
     {
         $result = $this->getConnection()->getInstance()->sendMessage([
             'QueueUrl' => $this->queueUrl,
-            'MessageBody' => $mailJob->getMessage(),
+            'MessageBody' => json_encode(['message' => $mailJob->getMessage(), 'attempt' => $mailJob->getAttempt()]),
             'DelaySeconds' => $mailJob->getDelaySeconds(),
-            'Attempt' => $mailJob->getAttempt(),
         ]);
+
         $messageId = $result['MessageId'];
         return $messageId !== null && is_string($messageId);
     }
@@ -91,7 +91,7 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
             'id' => $result['MessageId'],
             'receiptHandle' => $result['ReceiptHandle'],
             'message' => $result['Body'],
-            'attempt' => $result['Attempt'],
+//            'attempt' => $result['Attempt'],
         ]);
     }
 
@@ -134,5 +134,34 @@ class SqsQueueStoreAdapter implements QueueStoreAdapterInterface
             'AttributeNames' => ['ApproximateNumberOfMessages'],
         ]);
         return $response['Attributes']['ApproximateNumberOfMessages'] === 0;
+    }
+
+    public function removeFailedJobs()
+    {
+        try {
+            do {
+                $result = $this->getConnection()->getInstance()->receiveMessage([
+                    'QueueUrl' => $this->queueUrl,
+                    'MaxNumberOfMessages' => 10,
+                ]);
+
+                if(is_array($result->get('Messages'))){
+                    foreach ($result->get('Messages') as $message) {
+                        $messageBody = json_decode($message['Body']);
+                        if(isset($messageBody->attempt) && $messageBody->attempt >= $_ENV['MAX_ATTEMPTS_DEFAULT']){
+                            $this->getConnection()->getInstance()->deleteMessage([
+                                'QueueUrl' => $this->queueUrl,
+                                'ReceiptHandle' => $message['ReceiptHandle'],
+                            ]);
+                        }
+                    }
+                }
+
+            } while (is_array($result->get('Messages')));
+
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
     }
 }

@@ -30,4 +30,6 @@ interface QueueStoreAdapterInterface
      * @return bool
      */
     public function isEmpty();
+
+//    public function removeFailedJobs();
 }

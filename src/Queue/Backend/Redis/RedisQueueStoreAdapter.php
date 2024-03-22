@@ -214,4 +214,21 @@ class RedisQueueStoreAdapter implements QueueStoreAdapterInterface
     {
         call_user_func_array([$transaction, 'rpush'], array_merge([$to], $jobs));
     }
+
+    public function removeFailedJobs()
+    {
+        try {
+            $members = $this->getConnection()->getInstance()->zrange($this->queueName  . ':reserved', 0, -1);
+            foreach($members as $member){
+                $memberValue = json_decode($member);
+                if ($memberValue->attempt >= $_ENV['MAX_ATTEMPTS_DEFAULT']){
+                    $this->getConnection()->getInstance()->zrem($this->queueName  . ':reserved', $member);
+                }
+            }
+
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
+    }
 }

@@ -27,8 +27,10 @@ class SqsQueueStoreConnection extends AbstractQueueStoreConnection
         $secret = $this->getConfigurationValue('secret');
         $region = $this->getConfigurationValue('region');
         $this->instance = new SqsClient([
-            'key' => $key,
-            'secret' => $secret,
+            'credentials' => [
+                'key'    => $key,
+                'secret' => $secret,
+            ],
             'region' => $region,
         ]);
         return $this;

@@ -138,4 +138,19 @@ class PdoQueueStoreAdapter implements QueueStoreAdapterInterface
         $query->execute();
         return intval($query->fetchColumn(0)) === 0;
     }
+
+    public function removeFailedJobs()
+    {
+        try {
+            $sqlText = 'DELETE FROM mail_queue WHERE attempt >= :max_attempt;';
+            $sql = sprintf($sqlText, $this->tableName);
+            $query = $this->getConnection()->getInstance()->prepare($sql);
+            $query->bindValue(':max_attempt', $_ENV['MAX_ATTEMPTS_DEFAULT']);
+            $query->execute();
+
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
+    }
 }

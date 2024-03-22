@@ -144,4 +144,24 @@ class RabbitMqQueueStoreAdapter implements QueueStoreAdapterInterface
             'delivery_tag' => null,
         ]);
     }
+
+    public function removeFailedJobs()
+    {
+        try {
+            /** @var AMQPChannel $channel */
+            $channel = $this->getConnection()->getInstance();
+
+            while ($message = $channel->basic_get($this->queueName, false)) {
+                $body = json_decode($message->body, true);
+                if ($body['attempt'] >= $_ENV['MAX_ATTEMPTS_DEFAULT']) {
+
+                    $channel->basic_ack($message->delivery_info['delivery_tag'], false);
+                }
+            }
+
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
+    }
 }
